@@ -625,9 +625,32 @@
           "port": "A"
         },
         "signal": {
-          "instance": "GPIOA",
-          "name": "GPIO",
-          "type": "user_gpio"
+          "instance": "LPUART1",
+          "name": "LPUART1_RTS",
+          "type": "alternate",
+          "alternateFunctionId": "AF8"
+        },
+        "pinned": true
+      },
+      {
+        "pin": {
+          "name": "PA7",
+          "position": "17",
+          "type": "gpio",
+          "powerSource": "VDD",
+          "ioStructureOptions": [
+            "a"
+          ],
+          "ioType": "I/O",
+          "ioStructure": "FT",
+          "index": 7,
+          "port": "A"
+        },
+        "signal": {
+          "instance": "SPI2",
+          "name": "I2S2_SDI",
+          "type": "alternate",
+          "alternateFunctionId": "AF6"
         },
         "pinned": true
       }
@@ -648,21 +671,7 @@
     {
       "id": "default_gpio_group_id",
       "name": "gpio_default",
-      "pins": [
-        {
-          "name": "PA6",
-          "position": "16",
-          "type": "gpio",
-          "powerSource": "VDD",
-          "ioStructureOptions": [
-            "a"
-          ],
-          "ioType": "I/O",
-          "ioStructure": "FT",
-          "index": 6,
-          "port": "A"
-        }
-      ]
+      "pins": []
     }
   ],
   "pinout-gpio-needs": [],
@@ -1738,17 +1747,7 @@ solution:
                 "layer": "HAL",
                 "init_type": "called"
               },
-              "pins": [
-                {
-                  "_foreignKey": "PA6",
-                  "basic": {
-                    "mode": "INPUT",
-                    "pull": "NO",
-                    "enable_exti": false
-                  },
-                  "label_name": []
-                }
-              ]
+              "pins": []
             }
           }
         }
