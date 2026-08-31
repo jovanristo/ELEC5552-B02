@@ -527,6 +527,11 @@
     },
     "HAL_GPIO_PROJECT_USE_HAL": {
       "name": "HAL_GPIO_PROJECT_USE_HAL",
+      "value": 4,
+      "originator": "sw-config-semaphore"
+    },
+    "HAL_I2S_PROJECT_USE_HAL": {
+      "name": "HAL_I2S_PROJECT_USE_HAL",
       "value": 1,
       "originator": "sw-config-semaphore"
     }
@@ -625,17 +630,63 @@
           "port": "A"
         },
         "signal": {
-          "instance": "LPUART1",
-          "name": "LPUART1_RTS",
+          "instance": "SPI1",
+          "name": "SPI1_MISO",
           "type": "alternate",
-          "alternateFunctionId": "AF8"
+          "alternateFunctionId": "AF5"
         },
         "pinned": true
       },
       {
         "pin": {
-          "name": "PA7",
-          "position": "17",
+          "name": "PA13(JTMS/SWDIO)",
+          "position": "34",
+          "type": "gpio",
+          "powerSource": "VDD",
+          "ioStructureOptions": [],
+          "ioType": "I/O",
+          "ioStructure": "FT",
+          "index": 13,
+          "port": "A"
+        },
+        "signal": {
+          "instance": "GPIOA",
+          "name": "GPIO",
+          "type": "user_gpio"
+        },
+        "pinned": true
+      }
+    ],
+    "needConfigurations": [
+      {
+        "id": "3afd44a2-7586-4ce8-838b-410fe8ec52db",
+        "needId": "3afd44a2-7586-4ce8-838b-410fe8ec52db",
+        "pin": {
+          "name": "PA15(JTDI)",
+          "position": "38",
+          "type": "gpio",
+          "powerSource": "VDD",
+          "ioStructureOptions": [],
+          "ioType": "I/O",
+          "ioStructure": "FT",
+          "index": 15,
+          "port": "A"
+        },
+        "signal": {
+          "instance": "SPI1",
+          "name": "I2S1_WS",
+          "type": "alternate",
+          "alternateFunctionId": "AF5"
+        },
+        "pinned": false,
+        "ownedByUser": false
+      },
+      {
+        "id": "5febe8d6-b137-4685-a8fd-db4af161ce2e",
+        "needId": "5febe8d6-b137-4685-a8fd-db4af161ce2e",
+        "pin": {
+          "name": "PA5",
+          "position": "15",
           "type": "gpio",
           "powerSource": "VDD",
           "ioStructureOptions": [
@@ -643,19 +694,44 @@
           ],
           "ioType": "I/O",
           "ioStructure": "FT",
-          "index": 7,
+          "index": 5,
           "port": "A"
         },
         "signal": {
-          "instance": "SPI2",
-          "name": "I2S2_SDI",
+          "instance": "SPI1",
+          "name": "I2S1_CK",
           "type": "alternate",
-          "alternateFunctionId": "AF6"
+          "alternateFunctionId": "AF5"
         },
-        "pinned": true
+        "pinned": false,
+        "ownedByUser": false
+      },
+      {
+        "id": "76595406-9274-4543-bbd6-70dae4cd5c8c",
+        "needId": "76595406-9274-4543-bbd6-70dae4cd5c8c",
+        "pin": {
+          "name": "PB4(NJTRST)",
+          "position": "40",
+          "type": "gpio",
+          "powerSource": "VDD",
+          "ioStructureOptions": [
+            "f"
+          ],
+          "ioType": "I/O",
+          "ioStructure": "FT",
+          "index": 4,
+          "port": "B"
+        },
+        "signal": {
+          "instance": "SPI1",
+          "name": "I2S1_SDI",
+          "type": "alternate",
+          "alternateFunctionId": "AF5"
+        },
+        "pinned": false,
+        "ownedByUser": false
       }
-    ],
-    "needConfigurations": []
+    ]
   },
   "pinout-excluded-pins": [],
   "pinout-labels": [],
@@ -671,10 +747,50 @@
     {
       "id": "default_gpio_group_id",
       "name": "gpio_default",
-      "pins": []
+      "pins": [
+        {
+          "name": "PA13(JTMS/SWDIO)",
+          "position": "34",
+          "type": "gpio",
+          "powerSource": "VDD",
+          "ioStructureOptions": [],
+          "ioType": "I/O",
+          "ioStructure": "FT",
+          "index": 13,
+          "port": "A"
+        }
+      ]
     }
   ],
-  "pinout-gpio-needs": [],
+  "pinout-gpio-needs": [
+    {
+      "id": "5febe8d6-b137-4685-a8fd-db4af161ce2e",
+      "needId": "5febe8d6-b137-4685-a8fd-db4af161ce2e",
+      "softwareProjectId": "221b8ddd-b2b7-4a03-94c0-e5989cd20a84",
+      "componentInstanceId": "42cbe358-0539-421d-a07c-884de8b30e73",
+      "componentId": "STMicroelectronics.stm32c5xx_hal_drivers.2.1.0$STMicroelectronics::Device:STM32CubeMX2 Config:I2S@2.1.0#HAL CORE GPIO DMA Init and I2S",
+      "signal": "I2S1_CK",
+      "instanceName": "SPI1"
+    },
+    {
+      "id": "3afd44a2-7586-4ce8-838b-410fe8ec52db",
+      "needId": "3afd44a2-7586-4ce8-838b-410fe8ec52db",
+      "softwareProjectId": "221b8ddd-b2b7-4a03-94c0-e5989cd20a84",
+      "componentInstanceId": "42cbe358-0539-421d-a07c-884de8b30e73",
+      "componentId": "STMicroelectronics.stm32c5xx_hal_drivers.2.1.0$STMicroelectronics::Device:STM32CubeMX2 Config:I2S@2.1.0#HAL CORE GPIO DMA Init and I2S",
+      "signal": "I2S1_WS",
+      "instanceName": "SPI1"
+    },
+    {
+      "id": "76595406-9274-4543-bbd6-70dae4cd5c8c",
+      "needId": "76595406-9274-4543-bbd6-70dae4cd5c8c",
+      "softwareProjectId": "221b8ddd-b2b7-4a03-94c0-e5989cd20a84",
+      "componentInstanceId": "42cbe358-0539-421d-a07c-884de8b30e73",
+      "componentId": "STMicroelectronics.stm32c5xx_hal_drivers.2.1.0$STMicroelectronics::Device:STM32CubeMX2 Config:I2S@2.1.0#HAL CORE GPIO DMA Init and I2S",
+      "signal": "I2S1_SDI",
+      "instanceName": "SPI1"
+    }
+  ],
   "pinout-user-settings": {}
 }"""
 "File: Microcontroller_TeamB02.csolution.yml" = """
@@ -797,8 +913,13 @@ solution:
       "driverConfigurationId": "abca66f8-09d5-4866-9ba0-0b2ff018ef22"
     },
     "NVIC": {
-      "driverConfigurationId": "afeed797-5f6c-45ad-8fd8-0affb43677e5",
-      "driverId": "STMicroelectronics::Device:STM32CubeMX2 Config:CORTEX NVIC"
+      "driverId": "STMicroelectronics::Device:STM32CubeMX2 Config:CORTEX NVIC",
+      "driverConfigurationId": "afeed797-5f6c-45ad-8fd8-0affb43677e5"
+    },
+    "SPI1": {
+      "driverConfigurationId": "42cbe358-0539-421d-a07c-884de8b30e73",
+      "driverId": "STMicroelectronics::Device:STM32CubeMX2 Config:I2S",
+      "mode": "I2S"
     }
   }
 }"""
@@ -910,6 +1031,22 @@ solution:
         "id": "44fa57c9-afd9-4f73-9dbc-e36ea7b82466",
         "componentDescriptionId": "STMicroelectronics.stm32c5xx_hal_drivers.2.1.0$STMicroelectronics::Device:STM32CubeMX2 Config:GPIO@2.1.0#HAL GPIO Init",
         "label": "STM32CubeMX2 Config:GPIO",
+        "expanded": true,
+        "userAdded": true
+      },
+      {
+        "$type": "http://st.com/schema/sw-composer#//MultiInstanceSWComponent",
+        "id": "c9324793-9dab-4ae8-b7c8-3fb48747da0d",
+        "componentDescriptionId": "STMicroelectronics.stm32c5xx_hal_drivers.2.1.0$STMicroelectronics::Device:STM32CubeMX2 Config:SPI@2.1.0#HAL CORE GPIO DMA Init and SPI",
+        "label": "STM32CubeMX2 Config:SPI",
+        "expanded": true,
+        "userAdded": true
+      },
+      {
+        "$type": "http://st.com/schema/sw-composer#//MultiInstanceSWComponent",
+        "id": "7529873c-9111-45e3-8201-50fcdb7daf45",
+        "componentDescriptionId": "STMicroelectronics.stm32c5xx_hal_drivers.2.1.0$STMicroelectronics::Device:STM32CubeMX2 Config:I2S@2.1.0#HAL CORE GPIO DMA Init and I2S",
+        "label": "STM32CubeMX2 Config:I2S",
         "expanded": true,
         "userAdded": true
       }
@@ -1697,6 +1834,17 @@ solution:
                   "mode": "",
                   "name": "mx_gpio_default_init",
                   "peripheral": "GPIO"
+                },
+                {
+                  "_foreignKey": "SPI1",
+                  "_rank": 1,
+                  "callable": true,
+                  "generated": true,
+                  "hw_instance": "SPI1",
+                  "layer": "HAL",
+                  "mode": "I2S",
+                  "name": "mx_spi1_i2s_init",
+                  "peripheral": "I2S"
                 }
               ],
               "code_generation": {
@@ -1747,7 +1895,172 @@ solution:
                 "layer": "HAL",
                 "init_type": "called"
               },
-              "pins": []
+              "pins": [
+                {
+                  "_foreignKey": "PA13(JTMS/SWDIO)",
+                  "basic": {
+                    "mode": "INPUT",
+                    "pull": "UP",
+                    "enable_exti": false
+                  },
+                  "label_name": []
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "STMicroelectronics.stm32c5xx_hal_drivers.2.1.0$STMicroelectronics::Device:STM32CubeMX2 Config:I2S@2.1.0#HAL CORE GPIO DMA Init and I2S": [
+        {
+          "index": 8,
+          "instanceId": "42cbe358-0539-421d-a07c-884de8b30e73",
+          "entity": "peripheral.spi",
+          "settings": {
+            "parameters": {
+              "info": {
+                "labels": [],
+                "layer": "HAL",
+                "init_type": "called",
+                "function_type": "I2S"
+              },
+              "basic": {
+                "mode": "SLAVE_TX",
+                "standard": "PHILIPS",
+                "data_format": "16_BIT",
+                "audio_frequency": 8000,
+                "clock_polarity": "LOW",
+                "bit_order": "MSB_FIRST",
+                "clock_source": "APB2_Peripheral_Clock",
+                "clock_source_frequency": "144 MHz"
+              },
+              "additional": {
+                "enable_ws_inversion": false,
+                "set_fifo_threshold": 1,
+                "i2s_io_configuration": {
+                  "enable_io_swap": false,
+                  "lock_io_config": false,
+                  "enable_master_keep_io_state": false
+                },
+                "enable_channel_detection_err": false,
+                "enable_mclk_output": false
+              },
+              "system": {
+                "gpio": {
+                  "gpio_ck": {
+                    "needs": [
+                      {
+                        "needType": "need.pinout.signals",
+                        "projectUri": "cube:30e90b3d-edc8-4c8b-be71-36d3cffeff06/221b8ddd-b2b7-4a03-94c0-e5989cd20a84",
+                        "componentId": "STMicroelectronics.stm32c5xx_hal_drivers.2.1.0$STMicroelectronics::Device:STM32CubeMX2 Config:I2S@2.1.0#HAL CORE GPIO DMA Init and I2S",
+                        "componentInstanceId": "42cbe358-0539-421d-a07c-884de8b30e73",
+                        "selector": "CK",
+                        "id": "5febe8d6-b137-4685-a8fd-db4af161ce2e",
+                        "owner": "SPI1",
+                        "constraints": {
+                          "mode": {
+                            "const": "ALTERNATE"
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  "gpio_ws": {
+                    "needs": [
+                      {
+                        "needType": "need.pinout.signals",
+                        "projectUri": "cube:30e90b3d-edc8-4c8b-be71-36d3cffeff06/221b8ddd-b2b7-4a03-94c0-e5989cd20a84",
+                        "componentId": "STMicroelectronics.stm32c5xx_hal_drivers.2.1.0$STMicroelectronics::Device:STM32CubeMX2 Config:I2S@2.1.0#HAL CORE GPIO DMA Init and I2S",
+                        "componentInstanceId": "42cbe358-0539-421d-a07c-884de8b30e73",
+                        "selector": "WS",
+                        "id": "3afd44a2-7586-4ce8-838b-410fe8ec52db",
+                        "owner": "SPI1",
+                        "constraints": {
+                          "mode": {
+                            "const": "ALTERNATE"
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  "gpio_sdi": {
+                    "needs": [
+                      {
+                        "needType": "need.pinout.signals",
+                        "projectUri": "cube:30e90b3d-edc8-4c8b-be71-36d3cffeff06/221b8ddd-b2b7-4a03-94c0-e5989cd20a84",
+                        "componentId": "STMicroelectronics.stm32c5xx_hal_drivers.2.1.0$STMicroelectronics::Device:STM32CubeMX2 Config:I2S@2.1.0#HAL CORE GPIO DMA Init and I2S",
+                        "componentInstanceId": "42cbe358-0539-421d-a07c-884de8b30e73",
+                        "selector": "SDI",
+                        "id": "76595406-9274-4543-bbd6-70dae4cd5c8c",
+                        "owner": "SPI1",
+                        "constraints": {
+                          "mode": {
+                            "const": "ALTERNATE"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                },
+                "dma": {
+                  "enable_dma_tx": false
+                },
+                "nvic": {
+                  "enable_interrupt": false
+                }
+              }
+            }
+          }
+        }
+      ],
+      "STMicroelectronics.stm32c5xx_hal_drivers.2.1.0$STMicroelectronics::Device:STM32 LL:GPIO@2.1.0#LL": [
+        {
+          "index": 0,
+          "needId": "5febe8d6-b137-4685-a8fd-db4af161ce2e",
+          "rootId": "42cbe358-0539-421d-a07c-884de8b30e73",
+          "needType": "need.pinout.signals",
+          "parentId": "42cbe358-0539-421d-a07c-884de8b30e73",
+          "settings": {
+            "label_name": [],
+            "basic": {
+              "mode": "ALTERNATE",
+              "pull": "NO",
+              "enable_exti": false,
+              "output_type": "PUSHPULL",
+              "speed": "LOW"
+            }
+          }
+        },
+        {
+          "index": 1,
+          "needId": "3afd44a2-7586-4ce8-838b-410fe8ec52db",
+          "rootId": "42cbe358-0539-421d-a07c-884de8b30e73",
+          "needType": "need.pinout.signals",
+          "parentId": "42cbe358-0539-421d-a07c-884de8b30e73",
+          "settings": {
+            "label_name": [],
+            "basic": {
+              "mode": "ALTERNATE",
+              "pull": "UP",
+              "enable_exti": false,
+              "output_type": "PUSHPULL",
+              "speed": "LOW"
+            }
+          }
+        },
+        {
+          "index": 2,
+          "needId": "76595406-9274-4543-bbd6-70dae4cd5c8c",
+          "rootId": "42cbe358-0539-421d-a07c-884de8b30e73",
+          "needType": "need.pinout.signals",
+          "parentId": "42cbe358-0539-421d-a07c-884de8b30e73",
+          "settings": {
+            "label_name": [],
+            "basic": {
+              "mode": "ALTERNATE",
+              "pull": "UP",
+              "enable_exti": false,
+              "output_type": "PUSHPULL",
+              "speed": "LOW"
             }
           }
         }
@@ -2008,8 +2321,10 @@ project:
     - component: STMicroelectronics::Device:STM32CubeMX2 Config:CORTEX MPU@2.1.0
     - component: STMicroelectronics::Device:STM32CubeMX2 Config:CORTEX NVIC@2.1.0
     - component: STMicroelectronics::Device:STM32CubeMX2 Config:GPIO@2.1.0
+    - component: STMicroelectronics::Device:STM32CubeMX2 Config:I2S@2.1.0
     - component: STMicroelectronics::Device:STM32CubeMX2 Config:ICACHE@2.1.0
     - component: STMicroelectronics::Device:STM32CubeMX2 Config:RCC@2.1.0
+    - component: STMicroelectronics::Device:STM32CubeMX2 Config:SPI@2.1.0
     - component: STMicroelectronics::Device:STM32CubeMX2 Config:System@2.1.0
     - component: STMicroelectronics::Utility:STM32CubeMX2 Config:syscalls@1.0.0
 """
