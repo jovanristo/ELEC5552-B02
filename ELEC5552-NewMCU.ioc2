@@ -2236,12 +2236,6 @@
       ]
     },
     {
-      "position": "32",
-      "labels": [
-        "THG_ADC12"
-      ]
-    },
-    {
       "position": "21",
       "labels": [
         "I_ADC_SIDE12"
@@ -2395,6 +2389,12 @@
       "position": "42",
       "labels": [
         "MODE_SEL"
+      ]
+    },
+    {
+      "position": "32",
+      "labels": [
+        "TH_ADC12"
       ]
     }
   ],

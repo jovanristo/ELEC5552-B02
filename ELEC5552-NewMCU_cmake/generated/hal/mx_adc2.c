@@ -168,11 +168,11 @@ hal_adc_handle_t *mx_adc2_init(void)
 
        PB0     ------>   ADC2_IN6   ------>  TH_ADC10
        PB1     ------>   ADC2_IN7   ------>  TH_ADC11
-       PB2     ------>   ADC2_IN8   ------>  THG_ADC12
+       PB2     ------>   ADC2_IN8   ------>  TH_ADC12
     **/
   gpio_config.mode        = HAL_GPIO_MODE_ANALOG;
   gpio_config.pull        = HAL_GPIO_PULL_NO;
-  HAL_GPIO_Init(HAL_GPIOB, TH_ADC10_PIN | TH_ADC11_PIN | THG_ADC12_PIN, &gpio_config);
+  HAL_GPIO_Init(HAL_GPIOB, TH_ADC10_PIN | TH_ADC11_PIN | TH_ADC12_PIN, &gpio_config);
 
   /**
     [GPIO Pin] ------> [Signal Name] ------> [Labels]
@@ -205,7 +205,7 @@ void mx_adc2_deinit(void)
   HAL_GPIO_DeInit(HAL_GPIOC, TH_ADC1_PIN | TH_ADC2_PIN | TH_ADC3_PIN | TH_ADC8_PIN | TH_ADC9_PIN);
 
   /* De-initialize all GPIOB pins associated with ADC2 */
-  HAL_GPIO_DeInit(HAL_GPIOB, TH_ADC10_PIN | TH_ADC11_PIN | THG_ADC12_PIN);
+  HAL_GPIO_DeInit(HAL_GPIOB, TH_ADC10_PIN | TH_ADC11_PIN | TH_ADC12_PIN);
 
   /* De-initialize all GPIOH pins associated with ADC2 */
   HAL_GPIO_DeInit(TH_ADC4_PORT, TH_ADC4_PIN);

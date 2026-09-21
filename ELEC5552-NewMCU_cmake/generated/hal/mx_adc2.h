@@ -47,8 +47,8 @@ extern "C" {
 #define TH_ADC11_PIN                          HAL_GPIO_PIN_1
 
 /** Primary aliases for ADC2_IN8 pin */
-#define THG_ADC12_PORT                        HAL_GPIOB
-#define THG_ADC12_PIN                         HAL_GPIO_PIN_2
+#define TH_ADC12_PORT                         HAL_GPIOB
+#define TH_ADC12_PIN                          HAL_GPIO_PIN_2
 
 /** Primary aliases for ADC2_IN13 pin */
 #define TH_ADC4_PORT                          HAL_GPIOH
