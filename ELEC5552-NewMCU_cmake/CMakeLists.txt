@@ -10,17 +10,21 @@ include(cmake/${TOOLCHAIN_FILE})
 
 project(ELEC5552-NewMCU)
 add_executable(ELEC5552-NewMCU)
+
 include(cmake/files.cmake)
 include(cmake/flags.cmake)
 include(cmake/components.cmake)
 
-# Stubs to be able to add compiler flag overrides, e.g. -Os
+# Add our own firmware source files
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE
-  # Add additional source files here
+  user_modifiable/app/app.c
+  user_modifiable/inputs/inputs.c
 )
 
+# Add our own firmware header locations
 target_include_directories(${CMAKE_PROJECT_NAME} PUBLIC
-  # Add additional include directories here
+  ${CMAKE_CURRENT_SOURCE_DIR}/user_modifiable/app
+  ${CMAKE_CURRENT_SOURCE_DIR}/user_modifiable/inputs
 )
 
 target_compile_definitions(${CMAKE_PROJECT_NAME} PUBLIC
