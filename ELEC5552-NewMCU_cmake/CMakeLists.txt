@@ -19,12 +19,18 @@ include(cmake/components.cmake)
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE
   user_modifiable/app/app.c
   user_modifiable/inputs/inputs.c
+  user_modifiable/outputs/outputs.c
+  user_modifiable/timers/timers.c
+  user_modifiable/fan/fan.c
 )
 
 # Add our own firmware header locations
 target_include_directories(${CMAKE_PROJECT_NAME} PUBLIC
   ${CMAKE_CURRENT_SOURCE_DIR}/user_modifiable/app
   ${CMAKE_CURRENT_SOURCE_DIR}/user_modifiable/inputs
+  ${CMAKE_CURRENT_SOURCE_DIR}/user_modifiable/outputs
+  ${CMAKE_CURRENT_SOURCE_DIR}/user_modifiable/timers
+  ${CMAKE_CURRENT_SOURCE_DIR}/user_modifiable/fan
 )
 
 target_compile_definitions(${CMAKE_PROJECT_NAME} PUBLIC

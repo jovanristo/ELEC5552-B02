@@ -32,6 +32,10 @@ typedef struct
     bool button_right;
     bool button_ok;
 
+    /* Hardware selection inputs */
+    bool sw_sel;
+    bool mode_sel;
+    
 
     /* =====================================================
      * USB
@@ -45,27 +49,29 @@ typedef struct
      * ===================================================== */
 
     uint16_t i_adc_side12_raw;   /* PA3 / ADC1_IN3 */
-    uint16_t dut_adc_raw;        /* PA5 / ADC1_IN5 */
     uint16_t i_adc_side21_raw;   /* PA6 / ADC1_IN6 */
     uint16_t i_adc_side11_raw;   /* PA7 / ADC1_IN7 */
     uint16_t i_adc_side22_raw;   /* PC0 / ADC1_IN8 */
-
+    uint16_t dut_adc_raw;        /* PA5 / ADC1_IN5 */
 
     /* =====================================================
-     * Converted stage currents
+     * Converted electrical measurements
      * ===================================================== */
 
     float current_side12_a;
     float current_side21_a;
     float current_side11_a;
     float current_side22_a;
+    float dut_voltage_v;
 
 
     /* =====================================================
-     * ADC2 raw temperature measurements
+     * ADC2 temperature measurements
      * ===================================================== */
 
     uint16_t thermistor_raw[NUM_THERMISTORS];
+    float thermistor_temp_c[NUM_THERMISTORS];
+    bool thermistor_valid[NUM_THERMISTORS];
 
 } Inputs_t;
 

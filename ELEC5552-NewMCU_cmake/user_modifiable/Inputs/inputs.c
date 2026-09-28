@@ -4,6 +4,8 @@
 #include "mx_adc1.h"
 #include "mx_adc2.h"
 
+#include <math.h>
+
 /* ---------------------------------------------------------
  * ADC / current-sense conversion constants
  * --------------------------------------------------------- */
@@ -16,7 +18,7 @@
 #define CURRENT_A_PER_V \
     (CURRENT_STAGE_MAX_A / CURRENT_SENSE_MAX_V)
 
-    //offset and scale values to chnange later 
+    //offset and scale values to change later 
 #define CURRENT_SIDE12_OFFSET_V     0.0f
 #define CURRENT_SIDE12_SCALE        1.0f
 
@@ -32,6 +34,14 @@
 #define CURRENT_SIDE22_OFFSET_V     0.0f
 #define CURRENT_SIDE22_SCALE        1.0f
 
+/* ---------------------------------------------------------
+ * ADC / DUT conversion constants
+ * --------------------------------------------------------- */
+
+#define DUT_VOLTAGE_DIVIDER_RATIO   60.0f
+
+#define DUT_VOLTAGE_OFFSET_V        0.0f
+#define DUT_VOLTAGE_SCALE           1.0f
 
 
 /* Latest processed input values */
@@ -47,7 +57,23 @@ static hal_adc_handle_t *adc2_handle;
 static void Inputs_ReadButtons(void);
 static void Inputs_ReadADC1(void);
 static float Inputs_ConvertCurrent(uint16_t raw_adc, float offset_v, float scale);
+static float Inputs_ConvertDUTVoltage(uint16_t raw_adc, float offset_v, float scale);
 static void Inputs_ReadADC2(void);
+static bool Inputs_ConvertThermistor(uint16_t raw_adc, float beta_k, float *temperature_c);
+
+
+/* ---------------------------------------------------------
+ * Thermistor conversion constants
+ * --------------------------------------------------------- */
+
+#define THERMISTOR_SUPPLY_V      2.5f
+#define THERMISTOR_PULLDOWN_OHM  5100.0f
+#define THERMISTOR_R25_OHM       10000.0f
+#define THERMISTOR_T25_K         298.15f
+
+/* Thermistor-specific parameters */
+#define INTERNAL_THERMISTOR_BETA_K   3950.0f   /* Replace with actual value */
+#define EXTERNAL_THERMISTOR_BETA_K   3950.0f 
 
 
 
@@ -162,6 +188,20 @@ static void Inputs_ReadButtons(void)
 
     inputs.button_ok =
         (HAL_GPIO_ReadPin(BUTTON_OK_PORT, BUTTON_OK_PIN) == HAL_GPIO_PIN_RESET);
+
+    /*
+    * Selection inputs use pull-downs:
+    *
+    * LOW  = inactive / 0
+    * HIGH = active / 1
+    */
+    inputs.sw_sel =
+        (HAL_GPIO_ReadPin(SW_SEL_PORT,
+                        SW_SEL_PIN) == HAL_GPIO_PIN_SET);
+
+    inputs.mode_sel =
+        (HAL_GPIO_ReadPin(MODE_SEL_PORT,
+                        MODE_SEL_PIN) == HAL_GPIO_PIN_SET);
 }
 
 
@@ -253,6 +293,11 @@ static void Inputs_ReadADC1(void)
         Inputs_ConvertCurrent(inputs.i_adc_side22_raw,
                             CURRENT_SIDE22_OFFSET_V,
                             CURRENT_SIDE22_SCALE);
+
+    inputs.dut_voltage_v =
+    Inputs_ConvertDUTVoltage(inputs.dut_adc_raw,
+                             DUT_VOLTAGE_OFFSET_V,
+                             DUT_VOLTAGE_SCALE);
     
 }
 
@@ -285,7 +330,105 @@ static float Inputs_ConvertCurrent(uint16_t raw_adc, float offset_v, float scale
     return current_a;
 }
 
-/* Convert raw ADC values to stage currents */
+static float Inputs_ConvertDUTVoltage(uint16_t raw_adc,
+                                      float offset_v,
+                                      float scale)
+{
+    float adc_voltage;
+    float dut_voltage;
+
+    /* Convert ADC count to ADC pin voltage */
+    adc_voltage =
+        ((float)raw_adc / ADC_MAX_COUNT) * ADC_VREF_V;
+
+    /* Remove ADC-side voltage offset */
+    adc_voltage -= offset_v;
+
+    /* Reverse the 60:1 divider and apply calibration scale */
+    dut_voltage =
+        adc_voltage * DUT_VOLTAGE_DIVIDER_RATIO * scale;
+
+    return dut_voltage;
+}
+
+
+
+
+static bool Inputs_ConvertThermistor(uint16_t raw_adc,
+                                     float beta_k,
+                                     float *temperature_c)
+{
+    float voltage;
+    float resistance;
+    float inverse_kelvin;
+    float result;
+
+    /* Reject invalid ADC readings */
+    if (temperature_c == NULL ||
+        raw_adc == 0u ||
+        raw_adc >= 4095u)
+    {
+        return false;
+    }
+
+    /* Convert ADC count to ADC pin voltage */
+    voltage =
+        ((float)raw_adc / ADC_MAX_COUNT) * ADC_VREF_V;
+
+    if (voltage <= 0.0f ||
+        voltage >= THERMISTOR_SUPPLY_V)
+    {
+        return false;
+    }
+
+    /*
+     * High-side NTC:
+     *
+     * 2.5 V
+     *   |
+     *  NTC
+     *   |
+     *   +---- ADC
+     *   |
+     * 5.1k
+     *   |
+     *  GND
+     */
+    resistance =
+        THERMISTOR_PULLDOWN_OHM *
+        (THERMISTOR_SUPPLY_V / voltage - 1.0f);
+
+    if (resistance <= 0.0f)
+    {
+        return false;
+    }
+
+    /* Beta equation */
+    inverse_kelvin =
+        (1.0f / THERMISTOR_T25_K) +
+        logf(resistance / THERMISTOR_R25_OHM) / beta_k;
+
+    if (inverse_kelvin <= 0.0f ||
+        !isfinite(inverse_kelvin))
+    {
+        return false;
+    }
+
+    result = (1.0f / inverse_kelvin) - 273.15f;
+
+    /* Reject unreasonable temperatures */
+    if (!isfinite(result) ||
+        result < -40.0f ||
+        result > 150.0f)
+    {
+        return false;
+    }
+
+    *temperature_c = result;
+
+    return true;
+}
+
 
 
 /* ---------------------------------------------------------
@@ -324,7 +467,38 @@ static void Inputs_ReadADC2(void)
 
 
     HAL_ADC_REG_StopConv(adc2_handle);
+
+
+        /* Convert thermistor ADC readings to temperatures */
+    for (uint32_t i = 0; i < NUM_THERMISTORS; i++)
+    {
+        float beta_k;
+
+        /* Thermistors 1-8 are internal, 9-12 are external */
+        if (i < 8)
+        {
+            beta_k = INTERNAL_THERMISTOR_BETA_K;
+        }
+        else
+        {
+            beta_k = EXTERNAL_THERMISTOR_BETA_K;
+        }
+
+        inputs.thermistor_valid[i] =
+            Inputs_ConvertThermistor(
+                inputs.thermistor_raw[i],
+                beta_k,
+                &inputs.thermistor_temp_c[i]);
+
+        if (!inputs.thermistor_valid[i])
+        {
+            inputs.thermistor_temp_c[i] = NAN;
+        }
+    }
+
 }
+
+
 
 
 /* ---------------------------------------------------------

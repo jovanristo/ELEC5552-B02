@@ -16,6 +16,8 @@
   */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "inputs.h" //inputs.h gives main.c access to Inputs_Init(), Inputs_Update(), Inputs_Get(), and Inputs_t.
+#include "fan.h"
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
@@ -40,10 +42,30 @@ int main(void)
   }
   else
   {
-    /*
-      * You can start your application code here
-      */
-    while (1) {}
+
+
+
+    //initialisation here
+    Inputs_Init();
+
+    if (!Fan_Init())
+    {
+        return -1;
+    }
+
+
+
+
+
+    while (1) {
+
+      Inputs_Update();
+      Fan_Update();
+
+
+
+
+    }
   }
 } /* end main */
 
