@@ -63,6 +63,7 @@ typedef struct
     float current_side11_a;
     float current_side22_a;
     float dut_voltage_v;
+  
 
 
     /* =====================================================
