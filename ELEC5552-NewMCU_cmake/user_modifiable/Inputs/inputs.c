@@ -15,7 +15,7 @@
 #define CURRENT_SENSE_MAX_V         2.25f
 #define CURRENT_BRANCH_MAX_A         7.5f
 
-#define CURRENT_A_PER_V \c
+#define CURRENT_A_PER_V \
     (CURRENT_BRANCH_MAX_A / CURRENT_SENSE_MAX_V)
 
 //offset and scale values to change later 
@@ -67,13 +67,28 @@ static bool Inputs_ConvertThermistor(uint16_t raw_adc, float beta_k, float *temp
  * Thermistor conversion constants
  * --------------------------------------------------------- */
 
+// Thermistor 1  -> index 0  -> internal
+// Thermistor 2  -> index 1  -> internal
+// Thermistor 3  -> index 2  -> internal
+
+// Thermistor 4  -> index 3  -> EXTERNAL
+// Thermistor 5  -> index 4  -> EXTERNAL
+// Thermistor 6  -> index 5  -> EXTERNAL
+// Thermistor 7  -> index 6  -> EXTERNAL
+
+// Thermistor 8  -> index 7  -> internal
+// Thermistor 9  -> index 8  -> internal
+// Thermistor 10 -> index 9  -> internal
+// Thermistor 11 -> index 10 -> internal
+// Thermistor 12 -> index 11 -> internal
+ 
 #define THERMISTOR_SUPPLY_V      2.5f
 #define THERMISTOR_PULLDOWN_OHM  5100.0f
 #define THERMISTOR_R25_OHM       10000.0f
 #define THERMISTOR_T25_K         298.15f
 
 /* Thermistor-specific parameters */
-#define INTERNAL_THERMISTOR_BETA_K   3950.0f   /* Replace with actual value */
+#define INTERNAL_THERMISTOR_BETA_K   3950.0f  
 #define EXTERNAL_THERMISTOR_BETA_K   3950.0f 
 
 
@@ -481,16 +496,24 @@ static void Inputs_ReadADC2(void)
     {
         float beta_k;
 
-        /* Thermistors 1-8 are internal, 9-12 are external */
-        if (i < 8)
-        {
-            beta_k = INTERNAL_THERMISTOR_BETA_K;
-        }
-        else
+        /*
+        * External DUT thermistors:
+        *
+        * Thermistor 4 -> index 3
+        * Thermistor 5 -> index 4
+        * Thermistor 6 -> index 5
+        * Thermistor 7 -> index 6
+        *
+        * All other thermistors are internal.
+        */
+        if ((i >= 3U) && (i <= 6U))
         {
             beta_k = EXTERNAL_THERMISTOR_BETA_K;
         }
-
+        else
+        {
+            beta_k = INTERNAL_THERMISTOR_BETA_K;
+        }
         inputs.thermistor_valid[i] =
             Inputs_ConvertThermistor(
                 inputs.thermistor_raw[i],
