@@ -60,13 +60,17 @@ CurrentResult protection_check_current(
         return (CurrentResult){CURRENT_INVALID_INPUT, 0u};
     }
 
+    float total_current_a = 0.0f;
+
     for (unsigned i = 0; i < PROTECTION_CURRENT_CHANNEL_COUNT; ++i) {
         if (!isfinite(current_a[i]) || current_a[i] < 0.0f) {
             return (CurrentResult){CURRENT_INVALID_CHANNEL, i};
         }
-        if (current_a[i] >= PROTECTION_CURRENT_LIMIT_A) {
-            return (CurrentResult){CURRENT_OVER_LIMIT, i};
-        }
+        total_current_a += current_a[i];
+    }
+
+    if (total_current_a >= PROTECTION_TOTAL_CURRENT_LIMIT_A) {
+        return (CurrentResult){CURRENT_OVER_LIMIT, 0u};
     }
 
     return (CurrentResult){CURRENT_OK, 0u};

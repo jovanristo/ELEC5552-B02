@@ -56,7 +56,7 @@ bool protection_internal_temperature_is_ok(InternalTempResult result);
  * Confirm whether 4 A applies per channel or to their combined current.
  */
 #define PROTECTION_CURRENT_CHANNEL_COUNT 4u
-#define PROTECTION_CURRENT_LIMIT_A 4.0f
+#define PROTECTION_CURRENT_LIMIT_A 32.0f
 
 typedef enum {
     CURRENT_OK,
