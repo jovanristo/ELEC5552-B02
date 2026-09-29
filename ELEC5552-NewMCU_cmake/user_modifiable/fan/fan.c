@@ -6,43 +6,42 @@
 #include "mx_tim8.h"
 
 
-/* ---------------------------------------------------------
- * Fan configuration
- * --------------------------------------------------------- */
+/* Internal/heatsink thermistors:
+ * Thermistors 1, 2, 3, 8, 9, 10, 11, 12
+ *
+ * Thermistors 4, 5, 6, 7 are external/DUT thermistors
+ * and are not used for fan control.
+ */
+static const uint8_t internal_thermistor_indices[] =
+{
+    0U,  /* Thermistor 1  */
+    1U,  /* Thermistor 2  */
+    2U,  /* Thermistor 3  */
+    7U,  /* Thermistor 8  */
+    8U,  /* Thermistor 9  */
+    9U,  /* Thermistor 10 */
+    10U, /* Thermistor 11 */
+    11U  /* Thermistor 12 */
+};
 
-/* Internal thermistors around heatsink */
-#define NUM_INTERNAL_THERMISTORS     8U
+#define NUM_INTERNAL_THERMISTORS \
+    (sizeof(internal_thermistor_indices) / sizeof(internal_thermistor_indices[0]))
 
-/* Temperature control range */
+
+/* Fan temperature range */
 #define FAN_TEMP_LOW_C               30.0f
 #define FAN_TEMP_HIGH_C              70.0f
 
-/* Normal minimum fan duty */
+/* Minimum fan speed */
 #define FAN_MIN_DUTY                 30.0f
 
-/* ARCTIC P12 Pro PST speed range */
 #define FAN_MIN_RPM                  600U
 #define FAN_MAX_RPM                  3000U
 
-/*
- * Fan can stop below about 5% PWM.
- * We do not normally use this because our minimum is 30%.
- */
-#define FAN_STOP_DUTY                5.0f
-
-/* Tachometer update period */
+/* Tachometer */
 #define FAN_TACH_PERIOD_MS           1000U
-
-/*
- * Tach pulses per revolution.
- * Keep as 2 for now, but verify later.
- */
 #define FAN_PULSES_PER_REV           2U
 
-
-/* ---------------------------------------------------------
- * Module variables
- * --------------------------------------------------------- */
 
 static float fan_duty = 0.0f;
 static uint32_t fan_rpm = 0U;
@@ -50,7 +49,7 @@ static uint32_t last_tach_time = 0U;
 
 
 /* ---------------------------------------------------------
- * Initialise fan PWM and tachometer
+ * Initialise fan PWM and tach counter
  * --------------------------------------------------------- */
 
 bool Fan_Init(void)
@@ -63,13 +62,9 @@ bool Fan_Init(void)
         return false;
     }
 
-    /* Reset tach counter */
-    if (HAL_TIM_SetCounter(tim1, 0U) != HAL_OK)
-    {
-        return false;
-    }
+    /* Start tach pulse counter */
+    HAL_TIM_SetCounter(tim1, 0U);
 
-    /* Start tach counter */
     if (HAL_TIM_Start(tim1) != HAL_OK)
     {
         return false;
@@ -81,13 +76,12 @@ bool Fan_Init(void)
         return false;
     }
 
-    /* Start PWM output on TIM8 Channel 1 */
     if (HAL_TIM_OC_StartChannel(tim8, HAL_TIM_CHANNEL_1) != HAL_OK)
     {
         return false;
     }
 
-    /* Safe startup condition */
+    /* Safe startup speed */
     Fan_SetDuty(100.0f);
 
     last_tach_time = Timers_GetMillis();
@@ -108,15 +102,17 @@ void Fan_Update(void)
     bool valid_temp = false;
 
 
-    /* Find hottest internal heatsink thermistor */
+    /* Find hottest internal/heatsink thermistor */
     for (uint32_t i = 0U; i < NUM_INTERNAL_THERMISTORS; i++)
     {
-        if (inputs->thermistor_valid[i])
+        uint8_t index = internal_thermistor_indices[i];
+
+        if (inputs->thermistor_valid[index])
         {
             if ((!valid_temp) ||
-                (inputs->thermistor_temp_c[i] > hottest_temp))
+                (inputs->thermistor_temp_c[index] > hottest_temp))
             {
-                hottest_temp = inputs->thermistor_temp_c[i];
+                hottest_temp = inputs->thermistor_temp_c[index];
             }
 
             valid_temp = true;
@@ -125,12 +121,12 @@ void Fan_Update(void)
 
 
     /* -----------------------------------------------------
-     * Temperature-based fan control
+     * Fan temperature control
      * ----------------------------------------------------- */
 
     if (!valid_temp)
     {
-        /* Sensor fault -> full fan speed */
+        /* Sensor problem -> run fan at full speed */
         Fan_SetDuty(100.0f);
     }
     else if (hottest_temp <= FAN_TEMP_LOW_C)
@@ -165,7 +161,7 @@ void Fan_Update(void)
 
 
     /* -----------------------------------------------------
-     * Tachometer / RPM measurement
+     * Tachometer measurement
      * ----------------------------------------------------- */
 
     if (Timers_HasElapsed(last_tach_time,
@@ -173,19 +169,13 @@ void Fan_Update(void)
     {
         hal_tim_handle_t *tim1 = mx_tim1_gethandle();
 
-        if (tim1 == NULL)
-        {
-            return;
-        }
-
         uint32_t now = Timers_GetMillis();
         uint32_t elapsed_ms = now - last_tach_time;
 
-        uint32_t pulses =
-            HAL_TIM_GetCounter(tim1);
+        uint32_t pulses = HAL_TIM_GetCounter(tim1);
 
-        /* Reset counter for next measurement period */
-        (void)HAL_TIM_SetCounter(tim1, 0U);
+        HAL_TIM_SetCounter(tim1, 0U);
+
 
         if (elapsed_ms > 0U)
         {
@@ -194,7 +184,7 @@ void Fan_Update(void)
                     ((uint64_t)pulses * 60000ULL)
                     /
                     ((uint64_t)FAN_PULSES_PER_REV *
-                     (uint64_t)elapsed_ms)
+                     elapsed_ms)
                 );
         }
 
@@ -204,19 +194,14 @@ void Fan_Update(void)
 
 
 /* ---------------------------------------------------------
- * Set fan PWM duty
+ * Set PWM duty cycle
  * --------------------------------------------------------- */
 
 void Fan_SetDuty(float duty_percent)
 {
     hal_tim_handle_t *tim8 = mx_tim8_gethandle();
 
-    if (tim8 == NULL)
-    {
-        return;
-    }
-
-    /* Limit duty to 0-100% */
+    /* Limit to 0-100% */
     if (duty_percent < 0.0f)
     {
         duty_percent = 0.0f;
@@ -227,22 +212,24 @@ void Fan_SetDuty(float duty_percent)
         duty_percent = 100.0f;
     }
 
-    uint32_t period =
-        HAL_TIM_GetPeriod(tim8);
+
+    uint32_t period = HAL_TIM_GetPeriod(tim8);
 
     uint32_t pulse =
         (uint32_t)(
-            ((float)(period + 1U) * duty_percent)
+            ((period + 1U) * duty_percent)
             / 100.0f
         );
 
-    if (HAL_TIM_OC_SetCompareUnitPulse(
-            tim8,
-            HAL_TIM_OC_COMPARE_UNIT_1,
-            pulse) == HAL_OK)
-    {
-        fan_duty = duty_percent;
-    }
+
+    HAL_TIM_OC_SetCompareUnitPulse(
+        tim8,
+        HAL_TIM_OC_COMPARE_UNIT_1,
+        pulse
+    );
+
+
+    fan_duty = duty_percent;
 }
 
 
