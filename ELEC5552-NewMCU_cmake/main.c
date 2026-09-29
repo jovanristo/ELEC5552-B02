@@ -16,9 +16,12 @@
   */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "inputs.h" //inputs.h gives main.c access to Inputs_Init(), Inputs_Update(), Inputs_Get(), and Inputs_t.
+
+#include "inputs.h"
+#include "outputs.h"
+#include "protection.h"
 #include "fan.h"
-#include "logger.h"
+#include "control.h"
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
@@ -46,14 +49,25 @@ int main(void)
 
 
 
-    //initialisation here
     Inputs_Init();
+
+
+    if (!Outputs_Init())
+    {
+        return -1;
+    }
+
+
+    Protection_Init();
+
 
     if (!Fan_Init())
     {
         return -1;
     }
 
+
+    Control_Init();
 
 
 
@@ -63,6 +77,7 @@ int main(void)
       Inputs_Update();
       Fan_Update();
       Logger_Update();
+      Control_Update();
 
 
 

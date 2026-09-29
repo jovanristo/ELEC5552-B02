@@ -26,6 +26,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
   user_modifiable/usb/usb.c
   user_modifiable/storage/storage.c
   user_modifiable/logger/logger.c
+  user_modifiable/control/control.c
 )
 
 # Add our own firmware header locations
@@ -39,6 +40,7 @@ target_include_directories(${CMAKE_PROJECT_NAME} PUBLIC
   ${CMAKE_CURRENT_SOURCE_DIR}/user_modifiable/usb
   ${CMAKE_CURRENT_SOURCE_DIR}/user_modifiable/storage
   ${CMAKE_CURRENT_SOURCE_DIR}/user_modifiable/logger
+  ${CMAKE_CURRENT_SOURCE_DIR}/user_modifiable/control
 )
 
 target_compile_definitions(${CMAKE_PROJECT_NAME} PUBLIC
