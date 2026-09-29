@@ -18,6 +18,7 @@
 #include "main.h"
 #include "inputs.h" //inputs.h gives main.c access to Inputs_Init(), Inputs_Update(), Inputs_Get(), and Inputs_t.
 #include "fan.h"
+#include "logger.h"
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/

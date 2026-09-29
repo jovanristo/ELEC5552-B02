@@ -2,112 +2,246 @@
 
 #include "inputs.h"
 #include "storage.h"
-#include "usb.h"
 #include "timers.h"
+#include "usb.h"
 
 #include <stdio.h>
 
 
-static bool running = false;
+/* ---------------------------------------------------------
+ * Logger state
+ * --------------------------------------------------------- */
 
-static uint32_t start_time_ms = 0U;
+static bool logger_running = false;
+
+static uint32_t requested_sample_period_ms = 100U;
+static uint32_t actual_sample_period_ms = 100U;
+
 static uint32_t last_sample_ms = 0U;
 
-static uint32_t run_time_ms = 0U;
-static uint32_t sample_period_ms = 100U;
+static bool previous_usb_connected = false;
 
 
 /* ---------------------------------------------------------
- * Start a logging run
+ * Calculate minimum sample period required to fit the
+ * remaining run into the remaining local storage.
  * --------------------------------------------------------- */
 
-bool Logger_Start(uint32_t requested_run_time_ms,
-                  uint32_t requested_sample_period_ms)
+static uint32_t Logger_CalculateStoragePeriod(void)
 {
-    if ((requested_run_time_ms == 0U) ||
-        (requested_sample_period_ms == 0U))
+    uint32_t capacity =
+        Storage_GetCapacity();
+
+    uint32_t used =
+        Storage_GetCount();
+
+    if (capacity <= used)
+    {
+        return 0U;
+    }
+
+    uint32_t free_samples =
+        capacity - used;
+
+    uint32_t remaining_ms =
+        Timers_RunTimerGetRemainingMs();
+
+    if (remaining_ms == 0U)
+    {
+        return requested_sample_period_ms;
+    }
+
+    /*
+     * Rounded-up division:
+     *
+     * remaining time / available samples
+     */
+    uint32_t minimum_period_ms =
+        (remaining_ms + free_samples - 1U)
+        / free_samples;
+
+    /*
+     * Never sample faster than the user requested.
+     */
+    if (minimum_period_ms <
+        requested_sample_period_ms)
+    {
+        minimum_period_ms =
+            requested_sample_period_ms;
+    }
+
+    return minimum_period_ms;
+}
+
+
+/* ---------------------------------------------------------
+ * Start logger
+ * --------------------------------------------------------- */
+
+bool Logger_Start(uint32_t sample_period_ms)
+{
+    if (sample_period_ms == 0U)
     {
         return false;
     }
 
-    run_time_ms = requested_run_time_ms;
-
-    /*
-     * If USB is connected, use the user's requested
-     * sample period because samples can be streamed.
-     */
-    if (USB_IsConnected())
+    if (Timers_RunTimerGetDurationMs() == 0U)
     {
-        sample_period_ms = requested_sample_period_ms;
+        return false;
     }
 
+    requested_sample_period_ms =
+        sample_period_ms;
+
+    previous_usb_connected =
+        USB_IsConnected();
+
+
     /*
-     * If USB is not connected, make sure the entire
-     * run will fit in local storage.
+     * Start with empty local storage.
+     *
+     * Even if USB is initially connected, this means storage
+     * is ready if USB disconnects during the run.
      */
+    Storage_Clear();
+
+
+    if (previous_usb_connected)
+    {
+        /*
+         * Computer available:
+         * use user's requested sampling rate.
+         */
+        actual_sample_period_ms =
+            requested_sample_period_ms;
+    }
     else
     {
-        uint32_t capacity = Storage_GetCapacity();
+        /*
+         * No computer:
+         * choose a period that guarantees the run fits.
+         */
+        actual_sample_period_ms =
+            Logger_CalculateStoragePeriod();
 
-        if (capacity == 0U)
+        if (actual_sample_period_ms == 0U)
         {
             return false;
         }
-
-        uint32_t minimum_period_ms =
-            (run_time_ms + capacity - 1U) / capacity;
-
-        if (requested_sample_period_ms < minimum_period_ms)
-        {
-            sample_period_ms = minimum_period_ms;
-        }
-        else
-        {
-            sample_period_ms = requested_sample_period_ms;
-        }
-
-        Storage_Clear();
     }
 
-    start_time_ms = Timers_GetMillis();
-    last_sample_ms = start_time_ms;
 
-    running = true;
+    if (!Timers_RunTimerStart())
+    {
+        return false;
+    }
+
+
+    last_sample_ms =
+        Timers_GetMillis();
+
+    logger_running = true;
 
     return true;
 }
 
 
 /* ---------------------------------------------------------
- * Main logger update
+ * Main logger function
  * --------------------------------------------------------- */
 
 void Logger_Update(void)
 {
-    if (!running)
+    if (!logger_running)
     {
         return;
     }
 
-    uint32_t now = Timers_GetMillis();
 
-    /* Stop when run duration is complete */
-    if ((uint32_t)(now - start_time_ms) >= run_time_ms)
+    /* -----------------------------------------------------
+     * Stop when universal run timer finishes
+     * ----------------------------------------------------- */
+
+    if (Timers_RunTimerFinished())
     {
         Logger_Stop();
+
         return;
     }
 
-    /* Wait until the next sample time */
-    if ((uint32_t)(now - last_sample_ms) < sample_period_ms)
+
+    /* -----------------------------------------------------
+     * Check USB connection state
+     * ----------------------------------------------------- */
+
+    bool usb_connected =
+        USB_IsConnected();
+
+
+    /*
+     * USB has just disconnected.
+     *
+     * Recalculate a storage-safe logging period using:
+     *
+     * remaining run time
+     * remaining storage capacity
+     */
+    if ((!usb_connected) &&
+        previous_usb_connected)
+    {
+        uint32_t storage_period =
+            Logger_CalculateStoragePeriod();
+
+        if (storage_period != 0U)
+        {
+            actual_sample_period_ms =
+                storage_period;
+        }
+    }
+
+
+    /*
+     * USB has just reconnected.
+     *
+     * We can return to the user's requested period.
+     */
+    if (usb_connected &&
+        (!previous_usb_connected))
+    {
+        actual_sample_period_ms =
+            requested_sample_period_ms;
+    }
+
+
+    previous_usb_connected =
+        usb_connected;
+
+
+    /* -----------------------------------------------------
+     * Wait for next sample
+     * ----------------------------------------------------- */
+
+    uint32_t now =
+        Timers_GetMillis();
+
+
+    if ((uint32_t)(now - last_sample_ms)
+        < actual_sample_period_ms)
     {
         return;
     }
+
 
     last_sample_ms = now;
 
 
-    const Inputs_t *inputs = Inputs_Get();
+    /* -----------------------------------------------------
+     * Get latest measurements
+     * ----------------------------------------------------- */
+
+    const Inputs_t *inputs =
+        Inputs_Get();
+
 
     if (inputs == NULL)
     {
@@ -115,43 +249,81 @@ void Logger_Update(void)
     }
 
 
+    /* -----------------------------------------------------
+     * Create measurement record
+     * ----------------------------------------------------- */
+
     LogSample_t sample;
 
-    sample.time_ms = now - start_time_ms;
 
-    sample.dut_voltage_v = inputs->dut_voltage_v;
+    sample.time_ms =
+        Timers_RunTimerGetElapsedMs();
 
-    sample.current_side11_a = inputs->current_side11_a;
-    sample.current_side12_a = inputs->current_side12_a;
-    sample.current_side21_a = inputs->current_side21_a;
-    sample.current_side22_a = inputs->current_side22_a;
 
-    for (uint32_t i = 0U; i < 12U; i++)
+    sample.dut_voltage_v =
+        inputs->dut_voltage_v;
+
+
+    sample.total_current_a =
+        inputs->total_current_a;
+
+
+    sample.current_side11_a =
+        inputs->current_side11_a;
+
+    sample.current_side12_a =
+        inputs->current_side12_a;
+
+    sample.current_side21_a =
+        inputs->current_side21_a;
+
+    sample.current_side22_a =
+        inputs->current_side22_a;
+
+
+    for (uint32_t i = 0U;
+         i < NUM_THERMISTORS;
+         i++)
     {
         sample.temperature_c[i] =
             inputs->thermistor_temp_c[i];
     }
 
 
-    /*
-     * USB connected:
-     * stream sample to computer.
-     */
-    if (USB_IsConnected())
-    {
-        char line[160];
+    /* -----------------------------------------------------
+     * Computer connected
+     *
+     * Stream measurement over USB.
+     * ----------------------------------------------------- */
 
-        int length = snprintf(
-            line,
-            sizeof(line),
-            "%lu,%.3f,%.3f,%.3f,%.3f,%.3f\r\n",
-            (unsigned long)sample.time_ms,
-            sample.dut_voltage_v,
-            sample.current_side11_a,
-            sample.current_side12_a,
-            sample.current_side21_a,
-            sample.current_side22_a
-        );
+    if (usb_connected)
+    {
+        char line[200];
+
+        int length =
+            snprintf(
+                line,
+                sizeof(line),
+
+                "%lu,"
+                "%.3f,"
+                "%.3f,"
+                "%.3f,"
+                "%.3f,"
+                "%.3f,"
+                "%.3f\r\n",
+
+                (unsigned long)sample.time_ms,
+
+                sample.dut_voltage_v,
+                sample.total_current_a,
+
+                sample.current_side11_a,
+                sample.current_side12_a,
+                sample.current_side21_a,
+                sample.current_side22_a
+            );
+
 
         if (length > 0)
         {
@@ -162,10 +334,13 @@ void Logger_Update(void)
         }
     }
 
-    /*
-     * No USB:
-     * save locally.
-     */
+
+    /* -----------------------------------------------------
+     * No computer
+     *
+     * Store measurement locally.
+     * ----------------------------------------------------- */
+
     else
     {
         Storage_Write(&sample);
@@ -174,30 +349,42 @@ void Logger_Update(void)
 
 
 /* ---------------------------------------------------------
- * Stop logging
+ * Stop logger and universal run timer
  * --------------------------------------------------------- */
 
 void Logger_Stop(void)
 {
-    running = false;
+    logger_running = false;
+
+    Timers_RunTimerStop();
 }
 
 
 /* ---------------------------------------------------------
- * Get current logger state
+ * Check logger state
  * --------------------------------------------------------- */
 
 bool Logger_IsRunning(void)
 {
-    return running;
+    return logger_running;
 }
 
 
 /* ---------------------------------------------------------
- * Return actual logging period being used
+ * User-requested sampling period
+ * --------------------------------------------------------- */
+
+uint32_t Logger_GetRequestedSamplePeriod(void)
+{
+    return requested_sample_period_ms;
+}
+
+
+/* ---------------------------------------------------------
+ * Actual sampling period
  * --------------------------------------------------------- */
 
 uint32_t Logger_GetSamplePeriod(void)
 {
-    return sample_period_ms;
+    return actual_sample_period_ms;
 }
