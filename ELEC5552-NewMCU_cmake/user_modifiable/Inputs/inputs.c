@@ -13,12 +13,13 @@
 #define ADC_MAX_COUNT               4095.0f
 #define ADC_VREF_V                  2.5f
 #define CURRENT_SENSE_MAX_V         2.25f
-#define CURRENT_STAGE_MAX_A         3.75f
+#define CURRENT_BRANCH_MAX_A         7.5f
 
-#define CURRENT_A_PER_V \
-    (CURRENT_STAGE_MAX_A / CURRENT_SENSE_MAX_V)
+#define CURRENT_A_PER_V \c
+    (CURRENT_BRANCH_MAX_A / CURRENT_SENSE_MAX_V)
 
-    //offset and scale values to change later 
+//offset and scale values to change later 
+/* SIDE12 */
 #define CURRENT_SIDE12_OFFSET_V     0.0f
 #define CURRENT_SIDE12_SCALE        1.0f
 
@@ -295,9 +296,15 @@ static void Inputs_ReadADC1(void)
                             CURRENT_SIDE22_SCALE);
 
     inputs.dut_voltage_v =
-    Inputs_ConvertDUTVoltage(inputs.dut_adc_raw,
-                             DUT_VOLTAGE_OFFSET_V,
-                             DUT_VOLTAGE_SCALE);
+        Inputs_ConvertDUTVoltage(inputs.dut_adc_raw,
+                            DUT_VOLTAGE_OFFSET_V,
+                            DUT_VOLTAGE_SCALE);
+
+    inputs.total_current_a =
+        inputs.current_side11_a +
+        inputs.current_side12_a +
+        inputs.current_side21_a +
+        inputs.current_side22_a;
     
 }
 

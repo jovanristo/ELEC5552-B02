@@ -54,7 +54,7 @@ typedef struct
     uint16_t i_adc_side22_raw;   /* PC0 / ADC1_IN8 */
     uint16_t dut_adc_raw;        /* PA5 / ADC1_IN5 */
 
-    
+
 
     /* =====================================================
      * Converted electrical measurements
@@ -64,6 +64,7 @@ typedef struct
     float current_side21_a;
     float current_side11_a;
     float current_side22_a;
+    float total_current_a;
     float dut_voltage_v;
   
 
