@@ -61,6 +61,7 @@ int main(void)
 
       Inputs_Update();
       Fan_Update();
+      Logger_Update();
 
 
 

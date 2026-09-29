@@ -54,6 +54,8 @@ typedef struct
     uint16_t i_adc_side22_raw;   /* PC0 / ADC1_IN8 */
     uint16_t dut_adc_raw;        /* PA5 / ADC1_IN5 */
 
+    
+
     /* =====================================================
      * Converted electrical measurements
      * ===================================================== */
