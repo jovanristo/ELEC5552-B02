@@ -1,6 +1,7 @@
 #include "outputs.h"
 
 #include "mx_dac1.h"
+#include "mx_gpio_default.h"
 
 #include <math.h>
 #include <stddef.h>
@@ -99,6 +100,9 @@ static bool Outputs_WriteDACRaw(uint16_t raw_value)
 
 bool Outputs_Init(void)
 {
+    Outputs_ClampEnable(); //default enable clamp
+    Outputs_SelectCC();  //default CC for MUX
+
     dac1_handle =
         mx_dac1_gethandle();
 
@@ -368,6 +372,10 @@ float Outputs_GetDACVoltage(void)
 
 void Outputs_SetSafe(void)
 {
+    Outputs_ClampEnable();
+
+    Outputs_SelectCC();
+
     if (dac1_handle != NULL)
     {
         (void)HAL_DAC_SetChannelData(
@@ -376,8 +384,42 @@ void Outputs_SetSafe(void)
             0U);
     }
 
-
     dac_raw = 0U;
-
     dac_voltage_v = 0.0f;
+}
+
+void Outputs_ClampEnable(void)
+{
+    HAL_GPIO_WritePin(
+        SW_SEL_PORT,
+        SW_SEL_PIN,
+        HAL_GPIO_PIN_SET
+    );
+}
+
+void Outputs_ClampDisable(void)
+{
+    HAL_GPIO_WritePin(
+        SW_SEL_PORT,
+        SW_SEL_PIN,
+        HAL_GPIO_PIN_RESET
+    );
+}
+
+void Outputs_SelectCC(void)
+{
+    HAL_GPIO_WritePin(
+        MODE_SEL_PORT,
+        MODE_SEL_PIN,
+        HAL_GPIO_PIN_SET
+    );
+}
+
+void Outputs_SelectCV(void)
+{
+    HAL_GPIO_WritePin(
+        MODE_SEL_PORT,
+        MODE_SEL_PIN,
+        HAL_GPIO_PIN_RESET
+    );
 }

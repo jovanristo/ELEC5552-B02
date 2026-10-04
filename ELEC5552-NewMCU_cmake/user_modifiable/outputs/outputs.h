@@ -95,5 +95,17 @@ float Outputs_GetDACVoltage(void);
 
 void Outputs_SetSafe(void);
 
+/* ---------------------------------------------------------
+ * Set clamp
+ * --------------------------------------------------------- */
+void Outputs_ClampEnable(void);
+void Outputs_ClampDisable(void);
+
+/* ---------------------------------------------------------
+ * Select mode
+ * --------------------------------------------------------- */
+void Outputs_SelectCC(void);
+void Outputs_SelectCV(void);
+
 
 #endif /* OUTPUTS_H */

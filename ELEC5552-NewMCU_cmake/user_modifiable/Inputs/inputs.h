@@ -30,12 +30,7 @@ typedef struct
     bool button_down;
     bool button_left;
     bool button_right;
-    bool button_ok;
-
-    /* Hardware selection inputs */
-    bool sw_sel;
-    bool mode_sel;
-    
+    bool button_ok;    
 
     /* =====================================================
      * USB
@@ -66,7 +61,7 @@ typedef struct
     float current_side22_a;
     float total_current_a;
     float dut_voltage_v;
-  
+    float power_w;
 
 
     /* =====================================================

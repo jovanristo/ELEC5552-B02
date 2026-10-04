@@ -12,6 +12,7 @@ typedef enum
 {
     CONTROL_STATE_IDLE = 0,
     CONTROL_STATE_CC,
+    CONTROL_STATE_CC_TO_CV,
     CONTROL_STATE_CV
 
 } ControlState_t;

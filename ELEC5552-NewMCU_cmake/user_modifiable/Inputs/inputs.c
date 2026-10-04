@@ -205,19 +205,7 @@ static void Inputs_ReadButtons(void)
     inputs.button_ok =
         (HAL_GPIO_ReadPin(BUTTON_OK_PORT, BUTTON_OK_PIN) == HAL_GPIO_PIN_RESET);
 
-    /*
-    * Selection inputs use pull-downs:
-    *
-    * LOW  = inactive / 0
-    * HIGH = active / 1
-    */
-    inputs.sw_sel =
-        (HAL_GPIO_ReadPin(SW_SEL_PORT,
-                        SW_SEL_PIN) == HAL_GPIO_PIN_SET);
 
-    inputs.mode_sel =
-        (HAL_GPIO_ReadPin(MODE_SEL_PORT,
-                        MODE_SEL_PIN) == HAL_GPIO_PIN_SET);
 }
 
 
@@ -320,6 +308,9 @@ static void Inputs_ReadADC1(void)
         inputs.current_side12_a +
         inputs.current_side21_a +
         inputs.current_side22_a;
+
+    inputs.power_w =
+        inputs.dut_voltage_v * inputs.total_current_a;
     
 }
 
