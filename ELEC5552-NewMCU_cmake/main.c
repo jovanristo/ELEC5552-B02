@@ -22,6 +22,7 @@
 #include "protection.h"
 #include "fan.h"
 #include "control.h"
+#include "logger.h"
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
