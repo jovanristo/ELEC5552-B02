@@ -2396,6 +2396,18 @@
       "labels": [
         "TH_ADC12"
       ]
+    },
+    {
+      "position": "49",
+      "labels": [
+        "LCD_DC"
+      ]
+    },
+    {
+      "position": "50",
+      "labels": [
+        "LCD_RST"
+      ]
     }
   ],
   "pinout-gpio-assignations": [
@@ -4593,18 +4605,26 @@ solution:
                 {
                   "_foreignKey": "PC6",
                   "basic": {
-                    "mode": "INPUT",
+                    "mode": "OUTPUT",
                     "pull": "NO",
-                    "enable_exti": false
+                    "enable_exti": false,
+                    "output_active_state": "SET",
+                    "output_init_state": "RESET",
+                    "output_type": "PUSHPULL",
+                    "speed": "LOW"
                   },
                   "label_name": []
                 },
                 {
                   "_foreignKey": "PC7",
                   "basic": {
-                    "mode": "INPUT",
+                    "mode": "OUTPUT",
                     "pull": "NO",
-                    "enable_exti": false
+                    "enable_exti": false,
+                    "output_active_state": "RESET",
+                    "output_init_state": "SET",
+                    "output_type": "PUSHPULL",
+                    "speed": "LOW"
                   },
                   "label_name": []
                 },
