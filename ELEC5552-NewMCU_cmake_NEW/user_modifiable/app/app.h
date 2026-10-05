@@ -4,6 +4,8 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+#include "inputs.h"
+
 #define NUM_STAGES       8U
 
 typedef struct

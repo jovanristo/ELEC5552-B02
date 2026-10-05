@@ -17,6 +17,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "mx_usbx_device_cdc_acm.h"
+#include "usb.h"
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
@@ -31,7 +32,7 @@
   */
 VOID usbd_cdc_acm_activate(VOID *cdc_acm_instance)
 {
-  UX_PARAMETER_NOT_USED(cdc_acm_instance);
+  USB_CDC_Activate((UX_SLAVE_CLASS_CDC_ACM *)cdc_acm_instance);
 
   return;
 }
@@ -44,7 +45,9 @@ VOID usbd_cdc_acm_activate(VOID *cdc_acm_instance)
   */
 VOID usbd_cdc_acm_deactivate(VOID *cdc_acm_instance)
 {
+  
   UX_PARAMETER_NOT_USED(cdc_acm_instance);
+  USB_CDC_Deactivate();
 
   return;
 }

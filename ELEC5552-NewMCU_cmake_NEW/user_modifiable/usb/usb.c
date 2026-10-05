@@ -53,14 +53,14 @@ bool USB_Send(const uint8_t *data, uint32_t length)
     }
 
     UINT status =
-        ux_device_class_cdc_acm_write(
+        ux_device_class_cdc_acm_write_run(
             cdc_acm,
             (UCHAR *)data,
             (ULONG)length,
             &actual_length
         );
 
-    return ((status == UX_SUCCESS) &&
+    return ((status == UX_STATE_NEXT) &&
             (actual_length == length));
 }
 

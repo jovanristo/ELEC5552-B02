@@ -34,7 +34,7 @@ void App_Update(void)
         app_state.current_stage_a[2] = inputs->current_side21_a;
         app_state.current_stage_a[3] = inputs->current_side22_a;
 
-        for (uint32_t i = 0U; i < 12U; i++)
+        for (uint32_t i = 0U; i < NUM_THERMISTORS; i++)
         {
             app_state.temperature_c[i] =
                 inputs->thermistor_temp_c[i];
