@@ -17,6 +17,13 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 
+#include "inputs.h"
+#include "outputs.h"
+#include "protection.h"
+#include "fan.h"
+#include "control.h"
+#include "logger.h"
+
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
@@ -40,10 +47,43 @@ int main(void)
   }
   else
   {
-    /*
-      * You can start your application code here
-      */
-    while (1) {}
+
+
+
+    Inputs_Init();
+
+
+    if (!Outputs_Init())
+    {
+        return -1;
+    }
+
+
+    Protection_Init();
+
+
+    if (!Fan_Init())
+    {
+        return -1;
+    }
+
+
+    Control_Init();
+
+
+
+
+    while (1) {
+
+      Inputs_Update();
+      Fan_Update();
+      Logger_Update();
+      Control_Update();
+
+
+
+
+    }
   }
 } /* end main */
 

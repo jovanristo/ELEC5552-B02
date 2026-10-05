@@ -1,7 +1,7 @@
 {
   "disclaimer": "Do not modify this file as it is used by STM32CubeMX2 to determine what and how to update your project with new configuration",
   "version": "1.0.0",
-  "timestamp": "2026-10-05T03:53:06.977Z",
+  "timestamp": "2026-09-21T10:18:01.903Z",
   "files": [
     {
       "fileGroup": "project_file",
@@ -79,7 +79,7 @@
       "fileGroup": "project_file",
       "checksum": {
         "algo": "sha256",
-        "digest": "8edd503c731e0b2b457699d746ac15e516122a465625296e60702b394d2071b7"
+        "digest": "1c1a9bf9f9eb7a45d15c12a2d509ce2b61f35065289f6e3ce5990cc980c8261d"
       },
       "file": "stm32c5xx_dfp/CMakeLists.txt"
     },
@@ -103,7 +103,7 @@
       "fileGroup": "pack",
       "checksum": {
         "algo": "sha256",
-        "digest": "23a6cd6dec61f4feca7b05a8851aea7f6c0a3a530c6c872b95767ac8f0fc3901"
+        "digest": "253316e5a48335df29db61a884d2a49834d74784130e486bbb7bc0b5f3152dd1"
       },
       "file": "stm32c5xx_dfp/RTE_Components.h"
     },
@@ -279,7 +279,7 @@
       "fileGroup": "generated",
       "checksum": {
         "algo": "sha256",
-        "digest": "c6eae07c579360890751c5629b00f9add75f0a347bbac055874d7152996595cb"
+        "digest": "698030ccd8492b3904c88c166f3481ac298fecc94e91c80a0f6b5409ae47d62d"
       },
       "file": "generated/hal/mx_gpio_default.c"
     },
@@ -287,7 +287,7 @@
       "fileGroup": "generated",
       "checksum": {
         "algo": "sha256",
-        "digest": "b8e4e4472decc6171f7527970f668feeacbf36f31a9618efeb1f28d8518d6dc1"
+        "digest": "84702a79598432c7f4367ca93278de53d68413527edc1653d523ae71171d0006"
       },
       "file": "generated/hal/mx_gpio_default.h"
     },

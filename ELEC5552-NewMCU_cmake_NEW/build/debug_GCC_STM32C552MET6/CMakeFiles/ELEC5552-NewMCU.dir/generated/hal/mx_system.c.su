@@ -1,0 +1,4 @@
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW/generated/hal/mx_system.c:32:17:mx_system_init	8	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW/generated/hal/mx_system.c:164:6:SysTick_Handler	8	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW/generated/hal/mx_system.c:174:24:pre_system_init_hook	4	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW/generated/hal/mx_system.c:186:24:post_system_init_hook	4	static
