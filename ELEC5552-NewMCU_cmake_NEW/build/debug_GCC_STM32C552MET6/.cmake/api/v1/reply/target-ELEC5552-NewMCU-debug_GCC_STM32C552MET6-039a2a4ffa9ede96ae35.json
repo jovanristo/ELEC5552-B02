@@ -102,7 +102,7 @@
 			{
 				"command" : 6,
 				"file" : 0,
-				"line" : 33,
+				"line" : 34,
 				"parent" : 0
 			},
 			{
@@ -604,6 +604,10 @@
 					"path" : "/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW/user_modifiable/control"
 				},
 				{
+					"backtrace" : 13,
+					"path" : "/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW/user_modifiable/display"
+				},
+				{
 					"backtrace" : 8,
 					"path" : "/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW/generated/hal/."
 				},
@@ -750,7 +754,8 @@
 				133,
 				134,
 				135,
-				136
+				136,
+				137
 			]
 		}
 	],
@@ -1019,7 +1024,8 @@
 				133,
 				134,
 				135,
-				136
+				136,
+				137
 			]
 		},
 		{
@@ -1101,6 +1107,12 @@
 			"backtrace" : 17,
 			"compileGroupIndex" : 0,
 			"path" : "user_modifiable/control/control.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 17,
+			"compileGroupIndex" : 0,
+			"path" : "user_modifiable/display/display.c",
 			"sourceGroupIndex" : 0
 		},
 		{

@@ -23,6 +23,7 @@
 #include "fan.h"
 #include "control.h"
 #include "logger.h"
+#include "display.h"
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
@@ -69,6 +70,7 @@ int main(void)
 
 
     Control_Init();
+    Display_Init();
 
 
 

@@ -2,7 +2,7 @@
 12	122	1791175231281287332	CMakeFiles/ELEC5552-NewMCU.dir/user_modifiable/storage/storage.c.obj	d9e3bcb5425ef4e0
 5	97	1791179144672278708	CMakeFiles/ELEC5552-NewMCU.dir/user_modifiable/app/app.c.obj	2ae1c5d62ca5b388
 12	126	1791175231281159582	CMakeFiles/ELEC5552-NewMCU.dir/user_modifiable/protection/protection.c.obj	a3541678f4b303c4
-5	78	1791175085337981371	CMakeFiles/ELEC5552-NewMCU.dir/user_modifiable/usb/usb.c.obj	632e3cd3fae033ef
+5	67	1791180024396140110	CMakeFiles/ELEC5552-NewMCU.dir/user_modifiable/usb/usb.c.obj	632e3cd3fae033ef
 12	126	1791175231281397541	CMakeFiles/ELEC5552-NewMCU.dir/user_modifiable/logger/logger.c.obj	c4142f7271010d64
 5	96	1791179144672527916	CMakeFiles/ELEC5552-NewMCU.dir/user_modifiable/control/control.c.obj	c07b81544e811078
 6	205	1791175085339687872	CMakeFiles/ELEC5552-NewMCU.dir/generated/hal/mx_adc1.c.obj	efe16197dca632e6
@@ -135,5 +135,4 @@
 1611	1660	1791175086944746128	CMakeFiles/ELEC5552-NewMCU.dir/middleware/usbx/common/usbx_device_classes/src/ux_device_class_cdc_acm_write_run.c.obj	a699e02981a9cd86
 1260	1661	1791175086593564670	CMakeFiles/ELEC5552-NewMCU.dir/middleware/usbx/interfaces/usbx_stm32_device_controllers/ux_dcd_stm32_transfer_run.c.obj	17f9302a564d459a
 1240	1672	1791175086573341565	CMakeFiles/ELEC5552-NewMCU.dir/middleware/usbx/interfaces/usbx_stm32_device_controllers/ux_dcd_stm32_register_callback.c.obj	25d7e51459940085
-5	67	1791180024396140110	CMakeFiles/ELEC5552-NewMCU.dir/user_modifiable/usb/usb.c.obj	632e3cd3fae033ef
 67	324	1791180024458459018	ELEC5552-NewMCU.elf	adf3fbdd8d00899f
