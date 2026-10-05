@@ -20,6 +20,13 @@ void Control_Init(void)
     Outputs_SetSafe();
 
     control_state = CONTROL_STATE_IDLE;
+
+     AppState_t *app = App_GetState();
+
+    if (app != NULL)
+    {
+        app->running = false;
+    }
 }
 
 
@@ -303,6 +310,11 @@ bool Control_StartCC(void)
 
     control_state = CONTROL_STATE_CC;
 
+    control_state = CONTROL_STATE_CC;
+    app->running = true;
+
+    return true;
+
     return true;
 }
 
@@ -367,6 +379,9 @@ bool Control_StartCV(void)
     }
 
     control_state = CONTROL_STATE_CV;
+    app->running = true;
+
+    return true;
 
     return true;
 }
@@ -381,8 +396,15 @@ void Control_Stop(void)
     Outputs_SetSafe();
 
     Timers_RunTimerStop();
-    
+
     control_state = CONTROL_STATE_IDLE;
+
+    AppState_t *app = App_GetState();
+
+    if (app != NULL)
+    {
+        app->running = false;
+    }
 }
 
 
