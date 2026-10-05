@@ -1,0 +1,5 @@
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_DISPLAYTEST/user_modifiable/fan/fan.c:55:6:Fan_Init	16	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_DISPLAYTEST/user_modifiable/fan/fan.c:97:6:Fan_Update	104	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_DISPLAYTEST/user_modifiable/fan/fan.c:200:6:Fan_SetDuty	32	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_DISPLAYTEST/user_modifiable/fan/fan.c:240:7:Fan_GetDuty	4	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_DISPLAYTEST/user_modifiable/fan/fan.c:246:10:Fan_GetRPM	4	static

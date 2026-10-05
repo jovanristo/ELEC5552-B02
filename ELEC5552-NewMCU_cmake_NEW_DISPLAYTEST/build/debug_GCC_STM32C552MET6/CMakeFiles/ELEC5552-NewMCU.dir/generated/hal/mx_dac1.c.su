@@ -1,0 +1,11 @@
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_DISPLAYTEST/stm32c5xx_drivers/ll/stm32c5xx_ll_bus.h:878:22:LL_AHB2_GRP1_EnableClock	48	static,ignoring_inline_asm
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_DISPLAYTEST/stm32c5xx_drivers/ll/stm32c5xx_ll_bus.h:1016:22:LL_AHB2_GRP1_DisableClock	40	static,ignoring_inline_asm
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_DISPLAYTEST/stm32c5xx_drivers/ll/stm32c5xx_ll_bus.h:1076:22:LL_AHB2_GRP1_ForceReset	16	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_DISPLAYTEST/stm32c5xx_drivers/ll/stm32c5xx_ll_bus.h:1137:22:LL_AHB2_GRP1_ReleaseReset	16	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_DISPLAYTEST/stm32c5xx_drivers/hal/stm32c5xx_hal_rcc.h:1355:22:HAL_RCC_GPIOA_EnableClock	8	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_DISPLAYTEST/stm32c5xx_drivers/hal/stm32c5xx_hal_rcc.h:1430:22:HAL_RCC_DAC1_EnableClock	8	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_DISPLAYTEST/stm32c5xx_drivers/hal/stm32c5xx_hal_rcc.h:1579:22:HAL_RCC_DAC1_DisableClock	8	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_DISPLAYTEST/stm32c5xx_drivers/hal/stm32c5xx_hal_rcc.h:3253:22:HAL_RCC_DAC1_Reset	8	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_DISPLAYTEST/generated/hal/mx_dac1.c:32:19:mx_dac1_init	32	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_DISPLAYTEST/generated/hal/mx_dac1.c:96:6:mx_dac1_deinit	8	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_DISPLAYTEST/generated/hal/mx_dac1.c:108:19:mx_dac1_gethandle	4	static

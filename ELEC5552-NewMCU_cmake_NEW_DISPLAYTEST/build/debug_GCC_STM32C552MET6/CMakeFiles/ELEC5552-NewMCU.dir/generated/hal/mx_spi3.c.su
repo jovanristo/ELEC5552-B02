@@ -1,0 +1,13 @@
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_DISPLAYTEST/stm32c5xx_drivers/ll/stm32c5xx_ll_bus.h:878:22:LL_AHB2_GRP1_EnableClock	48	static,ignoring_inline_asm
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_DISPLAYTEST/stm32c5xx_drivers/ll/stm32c5xx_ll_bus.h:1586:22:LL_APB1_GRP1_EnableClock	48	static,ignoring_inline_asm
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_DISPLAYTEST/stm32c5xx_drivers/ll/stm32c5xx_ll_bus.h:1745:22:LL_APB1_GRP1_DisableClock	40	static,ignoring_inline_asm
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_DISPLAYTEST/stm32c5xx_drivers/ll/stm32c5xx_ll_bus.h:1814:22:LL_APB1_GRP1_ForceReset	16	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_DISPLAYTEST/stm32c5xx_drivers/ll/stm32c5xx_ll_bus.h:1883:22:LL_APB1_GRP1_ReleaseReset	16	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_DISPLAYTEST/stm32c5xx_drivers/hal/stm32c5xx_hal_rcc.h:1355:22:HAL_RCC_GPIOA_EnableClock	8	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_DISPLAYTEST/stm32c5xx_drivers/hal/stm32c5xx_hal_rcc.h:1371:22:HAL_RCC_GPIOC_EnableClock	8	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_DISPLAYTEST/stm32c5xx_drivers/hal/stm32c5xx_hal_rcc.h:1787:22:HAL_RCC_SPI3_EnableClock	8	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_DISPLAYTEST/stm32c5xx_drivers/hal/stm32c5xx_hal_rcc.h:1985:22:HAL_RCC_SPI3_DisableClock	8	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_DISPLAYTEST/stm32c5xx_drivers/hal/stm32c5xx_hal_rcc.h:3453:22:HAL_RCC_SPI3_Reset	8	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_DISPLAYTEST/generated/hal/mx_spi3.c:32:19:mx_spi3_init	64	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_DISPLAYTEST/generated/hal/mx_spi3.c:110:6:mx_spi3_deinit	8	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_DISPLAYTEST/generated/hal/mx_spi3.c:125:19:mx_spi3_gethandle	4	static

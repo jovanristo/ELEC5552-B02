@@ -1,0 +1,9 @@
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_DISPLAYTEST/user_modifiable/display/display.c:77:6:Display_Init	16	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_DISPLAYTEST/user_modifiable/display/display.c:160:13:Display_HardwareReset	8	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_DISPLAYTEST/user_modifiable/display/display.c:185:13:Display_SendCommand	16	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_DISPLAYTEST/user_modifiable/display/display.c:213:13:Display_SendData	16	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_DISPLAYTEST/user_modifiable/display/display.c:249:13:Display_SetAddressWindow	32	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_DISPLAYTEST/user_modifiable/display/display.c:306:13:Display_FillRect	32	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_DISPLAYTEST/user_modifiable/display/display.c:388:6:Display_FillScreen	32	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_DISPLAYTEST/user_modifiable/display/display.c:410:13:Display_DrawChar	56	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_DISPLAYTEST/user_modifiable/display/display.c:497:6:Display_DrawTest	40	static

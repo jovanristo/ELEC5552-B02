@@ -1,0 +1,6 @@
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_DISPLAYTEST/generated/middleware/mx_usbx_app.c:32:6:app_usbx_init	16	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_DISPLAYTEST/generated/middleware/mx_usbx_app.c:59:6:app_usbx_deinit	16	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_DISPLAYTEST/generated/middleware/mx_usbx_app.c:70:6:app_usbx_process	8	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_DISPLAYTEST/generated/middleware/mx_usbx_app.c:83:12:_ux_utility_interrupt_disable	16	static,ignoring_inline_asm
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_DISPLAYTEST/generated/middleware/mx_usbx_app.c:97:6:_ux_utility_interrupt_restore	24	static,ignoring_inline_asm
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_DISPLAYTEST/generated/middleware/mx_usbx_app.c:106:7:_ux_utility_time_get	8	static

@@ -1,0 +1,15 @@
+{
+	"InstallScripts" : 
+	[
+		"/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_DISPLAYTEST/build/debug_GCC_STM32C552MET6/cmake_install.cmake",
+		"/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_DISPLAYTEST/build/debug_GCC_STM32C552MET6/arch/cmsis/cmake_install.cmake",
+		"/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_DISPLAYTEST/build/debug_GCC_STM32C552MET6/middleware/usbx/cmake_install.cmake",
+		"/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_DISPLAYTEST/build/debug_GCC_STM32C552MET6/stm32c5xx_dfp/cmake_install.cmake",
+		"/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_DISPLAYTEST/build/debug_GCC_STM32C552MET6/stm32c5xx_drivers/cmake_install.cmake",
+		"/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_DISPLAYTEST/build/debug_GCC_STM32C552MET6/utilities/syscalls/cmake_install.cmake",
+		"/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_DISPLAYTEST/build/debug_GCC_STM32C552MET6/generated/hal/cmake_install.cmake",
+		"/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_DISPLAYTEST/build/debug_GCC_STM32C552MET6/generated/middleware/cmake_install.cmake",
+		"/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_DISPLAYTEST/build/debug_GCC_STM32C552MET6/generated/utilities/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

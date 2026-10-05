@@ -1,0 +1,6 @@
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_DISPLAYTEST/stm32c5xx_drivers/ll/stm32c5xx_ll_bus.h:2330:22:LL_APB2_GRP1_EnableClock	48	static,ignoring_inline_asm
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_DISPLAYTEST/stm32c5xx_drivers/hal/stm32c5xx_hal_rcc.h:2175:22:HAL_RCC_USB_EnableClock	8	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_DISPLAYTEST/generated/hal/mx_usb_drd_fs.c:33:19:mx_usb_drd_fs_device_init	16	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_DISPLAYTEST/generated/hal/mx_usb_drd_fs.c:71:6:mx_usb_drd_fs_device_deinit	8	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_DISPLAYTEST/generated/hal/mx_usb_drd_fs.c:81:19:mx_usb_drd_fs_device_gethandle	4	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_DISPLAYTEST/generated/hal/mx_usb_drd_fs.c:89:6:USB_DRD_FS_IRQHandler	8	static
