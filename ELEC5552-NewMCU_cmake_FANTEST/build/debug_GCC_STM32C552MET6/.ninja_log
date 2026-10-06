@@ -136,3 +136,5 @@
 1537	2048	1791102752834061475	CMakeFiles/ELEC5552-NewMCU.dir/middleware/usbx/interfaces/usbx_stm32_device_controllers/ux_dcd_stm32_transfer_abort.c.obj	40d98f845b85b831
 1543	2053	1791102752840207712	CMakeFiles/ELEC5552-NewMCU.dir/middleware/usbx/interfaces/usbx_stm32_device_controllers/ux_dcd_stm32_uninitialize.c.obj	a41b0e34de6d0d4b
 121	358	1791186859457471187	ELEC5552-NewMCU.elf	e5fde8fec1c273
+5	157	1791282533239637865	CMakeFiles/ELEC5552-NewMCU.dir/main.c.obj	762de49abf1f9cd7
+158	455	1791282533392073029	ELEC5552-NewMCU.elf	e5fde8fec1c273
