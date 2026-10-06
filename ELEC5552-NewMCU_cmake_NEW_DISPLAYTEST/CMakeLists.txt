@@ -61,6 +61,17 @@ target_link_directories(${CMAKE_PROJECT_NAME} PUBLIC
   # Add additional linker search directories here
 )
 
-target_link_libraries(${CMAKE_PROJECT_NAME} PUBLIC
-  # Add additional linker libraries here
+add_subdirectory(middleware/lvgl)
+
+target_compile_options(lvgl PRIVATE
+  -mcpu=cortex-m33
+  -mfpu=fpv5-sp-d16
+  -mfloat-abi=hard
+  -mthumb
+  -ffunction-sections
+  -fdata-sections
+)
+
+target_link_libraries(${CMAKE_PROJECT_NAME}
+  lvgl
 )
