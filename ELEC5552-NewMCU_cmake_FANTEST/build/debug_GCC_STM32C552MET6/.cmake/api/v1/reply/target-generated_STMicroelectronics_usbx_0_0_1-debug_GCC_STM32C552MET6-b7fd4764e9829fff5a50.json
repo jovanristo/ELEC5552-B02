@@ -1,0 +1,81 @@
+{
+	"abstract" : true,
+	"backtrace" : 3,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_library",
+			"include"
+		],
+		"files" : 
+		[
+			"generated/middleware/STMicroelectronics.usbx.cmake",
+			"generated/middleware/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 1
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 7,
+				"parent" : 0
+			},
+			{
+				"file" : 0,
+				"parent" : 1
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 5,
+				"parent" : 2
+			}
+		]
+	},
+	"codemodelVersion" : 
+	{
+		"major" : 2,
+		"minor" : 10
+	},
+	"id" : "generated_STMicroelectronics_usbx_0_0_1::@9331a3aa020d34f1d43d",
+	"interfaceSources" : 
+	[
+		{
+			"path" : "generated/middleware/mx_usbx_device_cdc_acm.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"path" : "generated/middleware/mx_usbx_device.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"path" : "generated/middleware/mx_usbx_app.c",
+			"sourceGroupIndex" : 0
+		}
+	],
+	"name" : "generated_STMicroelectronics_usbx_0_0_1",
+	"paths" : 
+	{
+		"build" : "generated/middleware",
+		"source" : "generated/middleware"
+	},
+	"sourceGroups" : 
+	[
+		{
+			"interfaceSourceIndexes" : 
+			[
+				0,
+				1,
+				2
+			],
+			"name" : "Source Files",
+			"sourceIndexes" : []
+		}
+	],
+	"sources" : [],
+	"type" : "INTERFACE_LIBRARY"
+}

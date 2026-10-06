@@ -1,0 +1,9 @@
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_FANTEST/user_modifiable/inputs/inputs.c:99:6:Inputs_Init	8	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_FANTEST/user_modifiable/inputs/inputs.c:130:6:Inputs_Update	8	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_FANTEST/user_modifiable/inputs/inputs.c:154:13:Inputs_ReadButtons	8	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_FANTEST/user_modifiable/inputs/inputs.c:223:13:Inputs_ReadADC1	8	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_FANTEST/user_modifiable/inputs/inputs.c:317:14:Inputs_ConvertCurrent	32	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_FANTEST/user_modifiable/inputs/inputs.c:346:14:Inputs_ConvertDUTVoltage	32	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_FANTEST/user_modifiable/inputs/inputs.c:370:13:Inputs_ConvertThermistor	40	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_FANTEST/user_modifiable/inputs/inputs.c:457:13:Inputs_ReadADC2	24	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_FANTEST/user_modifiable/inputs/inputs.c:528:17:Inputs_Get	4	static

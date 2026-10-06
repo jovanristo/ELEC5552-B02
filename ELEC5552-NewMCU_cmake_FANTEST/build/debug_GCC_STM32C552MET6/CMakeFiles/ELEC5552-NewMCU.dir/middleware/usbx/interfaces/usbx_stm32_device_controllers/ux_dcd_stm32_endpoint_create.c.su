@@ -1,0 +1,2 @@
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_FANTEST/middleware/usbx/interfaces/usbx_stm32_device_controllers/ux_dcd_stm32.h:140:46:_stm32_ed_get	24	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_FANTEST/middleware/usbx/interfaces/usbx_stm32_device_controllers/ux_dcd_stm32_endpoint_create.c:76:6:_ux_dcd_stm32_endpoint_create	24	static

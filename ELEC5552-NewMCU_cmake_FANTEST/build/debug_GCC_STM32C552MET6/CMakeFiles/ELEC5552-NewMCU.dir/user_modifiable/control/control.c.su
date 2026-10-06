@@ -1,0 +1,6 @@
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_FANTEST/user_modifiable/control/control.c:18:6:Control_Init	8	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_FANTEST/user_modifiable/control/control.c:30:6:Control_Update	32	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_FANTEST/user_modifiable/control/control.c:230:6:Control_StartCC	32	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_FANTEST/user_modifiable/control/control.c:314:6:Control_StartCV	16	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_FANTEST/user_modifiable/control/control.c:379:6:Control_Stop	8	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_FANTEST/user_modifiable/control/control.c:393:16:Control_GetState	4	static

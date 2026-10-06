@@ -1,0 +1,7 @@
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_FANTEST/stm32c5xx_drivers/ll/stm32c5xx_ll_bus.h:878:22:LL_AHB2_GRP1_EnableClock	48	static,ignoring_inline_asm
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_FANTEST/stm32c5xx_drivers/hal/stm32c5xx_hal_rcc.h:1355:22:HAL_RCC_GPIOA_EnableClock	8	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_FANTEST/stm32c5xx_drivers/hal/stm32c5xx_hal_rcc.h:1371:22:HAL_RCC_GPIOC_EnableClock	8	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_FANTEST/stm32c5xx_drivers/hal/stm32c5xx_hal_rcc.h:1422:22:HAL_RCC_ADC12_EnableClock	8	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_FANTEST/generated/hal/mx_adc1.c:31:19:mx_adc1_init	48	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_FANTEST/generated/hal/mx_adc1.c:131:6:mx_adc1_deinit	8	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_FANTEST/generated/hal/mx_adc1.c:142:19:mx_adc1_gethandle	4	static
