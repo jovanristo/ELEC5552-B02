@@ -137,3 +137,6 @@
 1378	1640	1791183694577069842	CMakeFiles/ELEC5552-NewMCU.dir/middleware/usbx/interfaces/usbx_stm32_device_controllers/ux_dcd_stm32_register_callback.c.obj	2868aad1d7de657a
 1869	1987	1791183695067545710	ELEC5552-NewMCU.elf	70b497d80e62d9a1
 11	343	1791183693209889722	CMakeFiles/ELEC5552-NewMCU.dir/user_modifiable/display/display.c.obj	8d7abc774234734e
+7	114	1791793589750578494	CMakeFiles/ELEC5552-NewMCU.dir/user_modifiable/control/control.c.obj	a03cd53f372db912
+7	127	1791793589750299121	CMakeFiles/ELEC5552-NewMCU.dir/main.c.obj	6be59e8889e27760
+127	429	1791793589870465540	ELEC5552-NewMCU.elf	70b497d80e62d9a1
