@@ -7,6 +7,7 @@
 #define DISPLAY_WIDTH   480U
 #define DISPLAY_HEIGHT  320U
 
+/* Requires lv_init() and lv_tick_set_cb() to be called first in main.c. */
 bool Display_Init(void);
 
 #endif /* DISPLAY_H */

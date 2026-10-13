@@ -17,3 +17,9 @@
 /Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW/build/debug_GCC_STM32C552MET6/generated/middleware/CMakeFiles/rebuild_cache.dir
 /Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW/build/debug_GCC_STM32C552MET6/generated/utilities/CMakeFiles/edit_cache.dir
 /Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW/build/debug_GCC_STM32C552MET6/generated/utilities/CMakeFiles/rebuild_cache.dir
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW/build/debug_GCC_STM32C552MET6/middleware/lvgl/CMakeFiles/lvgl.dir
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW/build/debug_GCC_STM32C552MET6/middleware/lvgl/CMakeFiles/lvgl_thorvg.dir
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW/build/debug_GCC_STM32C552MET6/middleware/lvgl/CMakeFiles/lvgl_examples.dir
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW/build/debug_GCC_STM32C552MET6/middleware/lvgl/CMakeFiles/lvgl_demos.dir
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW/build/debug_GCC_STM32C552MET6/middleware/lvgl/CMakeFiles/edit_cache.dir
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW/build/debug_GCC_STM32C552MET6/middleware/lvgl/CMakeFiles/rebuild_cache.dir

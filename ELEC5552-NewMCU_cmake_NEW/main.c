@@ -24,6 +24,9 @@
 #include "control.h"
 #include "logger.h"
 #include "display.h"
+#include "app.h"
+#include "timers.h"
+#include "lvgl.h"
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
@@ -48,42 +51,54 @@ int main(void)
   }
   else
   {
-
-
+    App_Init();
 
     Inputs_Init();
-
 
     if (!Outputs_Init())
     {
         return -1;
     }
 
-
     Protection_Init();
-
 
     if (!Fan_Init())
     {
         return -1;
     }
 
-
     Control_Init();
-    Display_Init();
 
 
+    lv_init();
 
+    // Use the existing firmware millisecond timer.
+    lv_tick_set_cb(Timers_GetMillis);
+
+    if (!Display_Init())
+    {
+        return -1;
+    }
+    lv_init();
+
+    uint32_t last_lvgl_ms = Timers_GetMillis();
 
     while (1) {
 
       Inputs_Update();
+      App_Update();
+
       Fan_Update();
       Logger_Update();
       Control_Update();
 
+      uint32_t now_ms = Timers_GetMillis();
 
-
+      if ((uint32_t)(now_ms - last_lvgl_ms) >= 5U)
+      {
+          lv_timer_handler();
+          last_lvgl_ms = now_ms;
+      }
 
     }
   }
