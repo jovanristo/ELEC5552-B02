@@ -334,6 +334,7 @@ void Control_Update(void)
             float current_a = app->total_current_a;
             // A voltage-only run requires an externally current-limited PSU.
             // Use 30 A solely as an emergency software abort threshold.
+            
             float requested_a = cv_auto_stop ?
                 app->current_setpoint_a : 30.0f;
 
@@ -526,7 +527,7 @@ void Control_Update(void)
                 voltage_v > 30.0f ||
                 current_a < 0.0f ||
                 target_v <= 0.0f ||
-                target_v > 30.0f)
+                target_v > app->max_voltage_v)
             {
                 Control_Stop();
                 break;
