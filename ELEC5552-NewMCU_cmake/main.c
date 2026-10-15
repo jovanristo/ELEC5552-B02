@@ -16,7 +16,7 @@
   */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-
+#include "app.h"
 #include "inputs.h"
 #include "outputs.h"
 #include "protection.h"
@@ -51,6 +51,7 @@ int main(void)
 
 
     Inputs_Init();
+    App_Init();
 
 
     if (!Outputs_Init())
@@ -76,6 +77,8 @@ int main(void)
     while (1) {
 
       Inputs_Update();
+      App_Update();
+      Protection_Update(Control_GetState() != CONTROL_STATE_IDLE);
       Fan_Update();
       Logger_Update();
       Control_Update();

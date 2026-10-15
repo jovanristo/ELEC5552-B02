@@ -16,6 +16,12 @@ void App_Init(void)
     app_state.run_time_ms = 60000U;
     app_state.sample_period_ms = 100U;
 
+    app_state.user_voltage_max_v      = 32.0f;
+    app_state.user_voltage_min_v      = 0.0f;
+    app_state.user_current_max_a      = 32.0f;
+    app_state.user_power_max_w        = 520.0f;
+    app_state.user_battery_temp_max_c = 60.0f;
+
     app_state.running = false;
     app_state.logging = false;
 }

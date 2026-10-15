@@ -23,9 +23,16 @@ typedef struct
     /* User settings */
     float current_setpoint_a;
     float voltage_setpoint_v;
-
+       
     uint32_t run_time_ms;
     uint32_t sample_period_ms;
+
+    /* User protection limits */
+    float user_voltage_max_v;
+    float user_voltage_min_v;
+    float user_current_max_a;
+    float user_power_max_w;
+    float user_battery_temp_max_c;
 
     /* Status */
     bool running;

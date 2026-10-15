@@ -59,6 +59,10 @@
  */
 #define PROTECTION_VOLTAGE_LIMIT_V       32.0f
 
+#define PROTECTION_POWER_LIMIT_W         520.0f
+
+#define PROTECTION_BATTERY_TEMP_LIMIT_C  60.0f
+
 
 /* =========================================================
  * External temperature faults
@@ -169,7 +173,9 @@ typedef enum
 
     VOLTAGE_INVALID_READING,
 
-    VOLTAGE_OVER_LIMIT
+    VOLTAGE_OVER_LIMIT,
+
+    VOLTAGE_UNDER_LIMIT
 
 } VoltageFault;
 
@@ -188,7 +194,9 @@ typedef enum
 
     PROTECTION_CURRENT_FAULT,
 
-    PROTECTION_VOLTAGE_FAULT
+    PROTECTION_VOLTAGE_FAULT,
+
+    PROTECTION_POWER_FAULT
 
 } ProtectionFault;
 
@@ -215,7 +223,7 @@ typedef struct
      * Current measured DUT power.
      *
      * This is calculated for monitoring.
-     * It is not currently used as a protection trip.
+     
      */
     float total_power_w;
 
@@ -237,12 +245,12 @@ void Protection_Init(void);
 
 
 /*
- * Run all protection checks using Inputs_Get().
+ * Run all protection checks using Inputs_Get()
+ * and the user limits in App_GetState().
  *
- * external_cutoff_c is the user-selected DUT/battery
- * temperature limit.
+ * test_running enables the lower voltage check.
  */
-void Protection_Update(float external_cutoff_c);
+void Protection_Update(bool test_running);
 
 
 /*
@@ -283,12 +291,15 @@ InternalTempResult Protection_CheckInternalTemperature(
 
 
 CurrentResult Protection_CheckCurrent(
-    const float current_a[PROTECTION_CURRENT_CHANNEL_COUNT]);
+    const float current_a[PROTECTION_CURRENT_CHANNEL_COUNT],
+    float limit_a);
 
 
 VoltageFault Protection_CheckVoltage(
-    float voltage_v);
-
+    float voltage_v,
+    float min_v,
+    float max_v,
+    bool check_min);
 
 bool Protection_CalculatePower(
     float voltage_v,

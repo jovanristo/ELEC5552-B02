@@ -2,7 +2,7 @@
 
 #include "inputs.h"
 #include "outputs.h"
-
+#include "app.h"
 #include <math.h>
 #include <stddef.h>
 
@@ -177,7 +177,8 @@ InternalTempResult Protection_CheckInternalTemperature(
  * ========================================================= */
 
 CurrentResult Protection_CheckCurrent(
-    const float current_a[PROTECTION_CURRENT_CHANNEL_COUNT])
+    const float current_a[PROTECTION_CURRENT_CHANNEL_COUNT],
+    float limit_a)
 {
     float total_current_a = 0.0f;
 
@@ -213,8 +214,7 @@ CurrentResult Protection_CheckCurrent(
     }
 
 
-    if (total_current_a >=
-        PROTECTION_TOTAL_CURRENT_LIMIT_A)
+    if (total_current_a >= limit_a)
     {
         return (CurrentResult)
         {
@@ -232,14 +232,14 @@ CurrentResult Protection_CheckCurrent(
         .total_current_a = total_current_a
     };
 }
-
-
 /* =========================================================
  * DUT voltage protection
  * ========================================================= */
-
 VoltageFault Protection_CheckVoltage(
-    float voltage_v)
+    float voltage_v,
+    float min_v,
+    float max_v,
+    bool check_min)
 {
     if ((!isfinite(voltage_v)) ||
         (voltage_v < 0.0f))
@@ -248,16 +248,24 @@ VoltageFault Protection_CheckVoltage(
     }
 
 
-    if (voltage_v >=
-        PROTECTION_VOLTAGE_LIMIT_V)
+    if (voltage_v >= max_v)
     {
         return VOLTAGE_OVER_LIMIT;
     }
 
 
+    /*
+     * Lower limit only applies while a test is running.
+     * Otherwise 0 V at idle would trip it.
+     */
+    if (check_min && (voltage_v < min_v))
+    {
+        return VOLTAGE_UNDER_LIMIT;
+    }
+
+
     return VOLTAGE_OK;
 }
-
 
 /* =========================================================
  * DUT power calculation
@@ -361,17 +369,20 @@ void Protection_Init(void)
 /* =========================================================
  * Run complete protection system
  * ========================================================= */
-
-void Protection_Update(float external_cutoff_c)
+void Protection_Update(bool test_running)
 {
     const Inputs_t *inputs =
         Inputs_Get();
 
+    const AppState_t *app =
+        App_GetState();
 
-    if (inputs == NULL)
+
+    if ((inputs == NULL) ||
+        (app == NULL))
     {
         /*
-         * Measurement system unavailable.
+         * Measurements or settings unavailable.
          *
          * Fail safe.
          */
@@ -387,6 +398,32 @@ void Protection_Update(float external_cutoff_c)
 
         return;
     }
+
+
+    /* =====================================================
+     * Effective limits
+     *
+     * Whichever is lower: user limit or hard limit.
+     * ===================================================== */
+
+    float voltage_max_v =
+        fminf(app->user_voltage_max_v,
+              PROTECTION_VOLTAGE_LIMIT_V);
+
+    float current_max_a =
+        fminf(app->user_current_max_a,
+              PROTECTION_TOTAL_CURRENT_LIMIT_A);
+
+    float power_max_w =
+        fminf(app->user_power_max_w,
+              PROTECTION_POWER_LIMIT_W);
+
+    float battery_temp_max_c =
+        fminf(app->user_battery_temp_max_c,
+              PROTECTION_BATTERY_TEMP_LIMIT_C);
+
+    float voltage_min_v =
+        app->user_voltage_min_v;
 
 
     /* =====================================================
@@ -468,7 +505,7 @@ void Protection_Update(float external_cutoff_c)
         Protection_CheckExternalTemperature(
             external_temp,
             external_valid,
-            external_cutoff_c);
+            battery_temp_max_c);
 
 
     /* =====================================================
@@ -477,17 +514,23 @@ void Protection_Update(float external_cutoff_c)
 
     protection_status.current =
         Protection_CheckCurrent(
-            current_a);
+            current_a,
+            current_max_a);
 
 
     protection_status.voltage =
         Protection_CheckVoltage(
-            inputs->dut_voltage_v);
+            inputs->dut_voltage_v,
+            voltage_min_v,
+            voltage_max_v,
+            test_running);
 
 
     /* =====================================================
-     * Calculate measured DUT power
+     * Calculate and check DUT power
      * ===================================================== */
+
+    bool power_over_limit = false;
 
     if (!Protection_CalculatePower(
             inputs->dut_voltage_v,
@@ -496,6 +539,11 @@ void Protection_Update(float external_cutoff_c)
     {
         protection_status.total_power_w =
             0.0f;
+    }
+    else if (protection_status.total_power_w >=
+             power_max_w)
+    {
+        power_over_limit = true;
     }
 
 
@@ -507,7 +555,8 @@ void Protection_Update(float external_cutoff_c)
      * 1. Internal temperature
      * 2. External DUT temperature
      * 3. Over-current
-     * 4. Over-voltage
+     * 4. Voltage (over or under)
+     * 5. Over-power
      * ===================================================== */
 
     if (protection_status.internal_temp.fault !=
@@ -538,6 +587,12 @@ void Protection_Update(float external_cutoff_c)
             PROTECTION_VOLTAGE_FAULT;
     }
 
+    else if (power_over_limit)
+    {
+        protection_status.fault =
+            PROTECTION_POWER_FAULT;
+    }
+
     else
     {
         protection_status.fault =
@@ -564,7 +619,6 @@ void Protection_Update(float external_cutoff_c)
         Outputs_SetSafe();
     }
 }
-
 
 /* =========================================================
  * Protection state
