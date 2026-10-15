@@ -18,6 +18,7 @@ typedef enum
 
 } ControlState_t;
 
+bool Control_Start(void);
 
 /* Initialise control state machine */
 void Control_Init(void);

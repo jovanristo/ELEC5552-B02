@@ -8,6 +8,15 @@
 
 #define NUM_STAGES       8U
 
+typedef enum
+{
+    APP_MODE_NONE = 0,
+    APP_MODE_CC,
+    APP_MODE_CV
+    
+} AppMode_t;
+
+
 typedef struct
 {
     /* Measurements */
@@ -22,8 +31,16 @@ typedef struct
     uint32_t fan_rpm;
 
     /* User settings */
+    AppMode_t selected_mode;
+
     float current_setpoint_a;
     float voltage_setpoint_v;
+
+    /* Calculated operating limits */
+    float max_current_a;
+    float max_voltage_v;
+
+    bool dut_connected;
 
     uint32_t run_time_ms;
     uint32_t sample_period_ms;
@@ -35,9 +52,16 @@ typedef struct
 
 } AppState_t;
 
+
 void App_Init(void);
 void App_Update(void);
 
 AppState_t *App_GetState(void);
+
+bool App_SelectMode(AppMode_t mode);
+
+bool App_SetRunTime(uint32_t hours,
+                    uint32_t minutes,
+                    uint32_t seconds);
 
 #endif

@@ -21,6 +21,7 @@ static uint32_t cc_last_update_ms = 0U;
 #define CV_SETTLE_MS 2000U
 #define CV_REBOUND_WAIT_MS 1000U
 #define CV_START_MARGIN_V 0.3f
+#define CV_SWITCH_SETTLE_MS 10U
 
 /* CV soft-start parameters (provisional; validate on hardware). */
 #define CV_RAMP_RATE_V_PER_S 0.1f
@@ -30,6 +31,7 @@ static uint32_t cc_last_update_ms = 0U;
 static uint32_t cv_last_update_ms = 0U;
 static bool cv_startup_enabled = false;
 static float cv_reference_v = 0.0f;
+static uint32_t cv_switch_start_ms = 0U;
 
 static uint32_t cv_rebound_start_ms = 0U;
 
@@ -100,6 +102,47 @@ void Control_Update(void)
             AppState_t *app = App_GetState();
 
             if (app == NULL)
+            {
+                Control_Stop();
+                break;
+            }
+
+            /* Validate DUT voltage and current setpoint */
+            if (!isfinite(app->dut_voltage_v) ||
+                !isfinite(app->current_setpoint_a) ||
+                app->dut_voltage_v <= 0.0f ||
+                app->dut_voltage_v > 30.0f ||
+                app->current_setpoint_a < 0.0f ||
+                app->current_setpoint_a > 30.0f)
+            {
+                Control_Stop();
+                break;
+            }
+
+            /* Validate measured current */
+            if (!isfinite(app->total_current_a) ||
+                app->total_current_a < 0.0f ||
+                app->total_current_a >= 30.0f)
+            {
+                Control_Stop();
+                break;
+            }
+
+            /* Check four current-sensing channels */
+            bool current_valid = true;
+
+            for (uint32_t i = 0U; i < 4U; i++)
+            {
+                if (!isfinite(app->current_stage_a[i]) ||
+                    app->current_stage_a[i] < 0.0f ||
+                    app->current_stage_a[i] >= 7.5f)
+                {
+                    current_valid = false;
+                    break;
+                }
+            }
+
+            if (!current_valid)
             {
                 Control_Stop();
                 break;
@@ -239,18 +282,19 @@ void Control_Update(void)
                 break;
             }
 
-            // Initial CV reference above measured DUT voltage.
+            // Set CV reference above recovered DUT voltage.
             cv_reference_v = rebound_voltage_v + CV_START_MARGIN_V;
 
-            // Select the CV analogue control path.
-            Outputs_SelectCV();
-
-            // Configure DAC to initial CV reference.
+            // Configure DAC while MOSFETs remain clamped.
             if (!Outputs_SetVoltage(cv_reference_v))
             {
                 Control_Stop();
                 break;
             }
+
+            // Select CV analogue control path.
+            Outputs_SelectCV();
+            cv_switch_start_ms = Timers_GetMillis();
 
             // Battery-discharge CV: terminate once current tapers.
             cv_auto_stop = true;
@@ -350,6 +394,13 @@ void Control_Update(void)
                 current_a * voltage_v >= 500.0f)
             {
                 Control_Stop();
+                break;
+            }
+
+            /* Allow analogue reference and MUX to settle */
+            if (!Timers_HasElapsed(cv_switch_start_ms,
+                                CV_SWITCH_SETTLE_MS))
+            {
                 break;
             }
 
@@ -592,6 +643,79 @@ void Control_Update(void)
     }
 }
 
+bool Control_Start(void)
+{
+    AppState_t *app = App_GetState();
+
+    if (app == NULL)
+    {
+        return false;
+    }
+
+    /* Only start from IDLE */
+    if (control_state != CONTROL_STATE_IDLE)
+    {
+        return false;
+    }
+
+    /* Require a valid DUT voltage */
+    if (!app->dut_connected)
+    {
+        return false;
+    }
+
+    /* Check protection before starting */
+    if (!Protection_IsOK())
+    {
+        return false;
+    }
+
+    /* Validate user setpoints */
+    float current_a = app->current_setpoint_a;
+    float voltage_v = app->voltage_setpoint_v;
+
+    if (!isfinite(current_a) ||
+        !isfinite(voltage_v) ||
+        current_a < 0.0f ||
+        current_a > 30.0f ||
+        voltage_v < 0.0f ||
+        voltage_v > 30.0f)
+    {
+        return false;
+    }
+
+    /* Explicit CC selection */
+    if (app->selected_mode == APP_MODE_CC)
+    {
+        if (current_a <= 0.0f)
+        {
+            return false;
+        }
+
+        if (voltage_v > 0.0f &&
+            voltage_v > app->max_voltage_v)
+        {
+            return false;
+        }
+
+        return Control_StartCC();
+    }
+
+    /* Explicit CV selection */
+    if (app->selected_mode == APP_MODE_CV)
+    {
+        if (voltage_v <= 0.0f ||
+            voltage_v > app->max_voltage_v)
+        {
+            return false;
+        }
+
+        return Control_StartCV();
+    }
+
+    /* No mode selected */
+    return false;
+}
 
 /* =========================================================
  * Start CC
@@ -624,15 +748,9 @@ bool Control_StartCC(void)
         return false;
     }
 
-    float max_current_a = 500.0f / dut_voltage_v;
-
-    if (max_current_a > 30.0f)
-    {
-        max_current_a = 30.0f;
-    }
-
-    if ((requested_current_a < 0.0f) ||
-        (requested_current_a > max_current_a))
+    if (!isfinite(requested_current_a) ||
+        requested_current_a <= 0.0f ||
+        requested_current_a > app->max_current_a)
     {
         return false;
     }
@@ -650,7 +768,16 @@ bool Control_StartCC(void)
         return false;
     }
 
-    // Start the run timer.
+    /* Configure timer from user-selected duration */
+    uint32_t total_seconds = app->run_time_ms / 1000U;
+
+    Timers_RunTimerSet(
+        total_seconds / 3600U,
+        (total_seconds % 3600U) / 60U,
+        total_seconds % 60U
+    );
+
+    /* Start run timer */
     if (!Timers_RunTimerStart())
     {
         Outputs_SetSafe();
@@ -719,6 +846,16 @@ bool Control_StartCV(void)
         return false;
     }
 
+    /* Configure timer from user-selected duration */
+    uint32_t total_seconds = app->run_time_ms / 1000U;
+
+    Timers_RunTimerSet(
+        total_seconds / 3600U,
+        (total_seconds % 3600U) / 60U,
+        total_seconds % 60U
+    );
+
+    /* Start run timer */
     if (!Timers_RunTimerStart())
     {
         Outputs_SetSafe();

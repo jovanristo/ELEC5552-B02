@@ -9,6 +9,8 @@
 
 static uint32_t run_duration_ms = 0U;
 static uint32_t run_start_ms = 0U;
+static uint32_t run_final_elapsed_ms = 0U;
+
 
 static bool run_timer_running = false;
 
@@ -87,6 +89,7 @@ bool Timers_RunTimerStart(void)
         return false;
     }
 
+    run_final_elapsed_ms = 0U;
     run_start_ms = Timers_GetMillis();
 
     run_timer_running = true;
@@ -101,7 +104,13 @@ bool Timers_RunTimerStart(void)
 
 void Timers_RunTimerStop(void)
 {
-    run_timer_running = false;
+    if (run_timer_running)
+    {
+        run_final_elapsed_ms =
+            Timers_GetMillis() - run_start_ms;
+
+        run_timer_running = false;
+    }
 }
 
 
@@ -149,11 +158,10 @@ uint32_t Timers_RunTimerGetElapsedMs(void)
 {
     if (!run_timer_running)
     {
-        return 0U;
+        return run_final_elapsed_ms;
     }
 
-    return (uint32_t)
-        (Timers_GetMillis() - run_start_ms);
+    return Timers_GetMillis() - run_start_ms;
 }
 
 
