@@ -1587,7 +1587,7 @@ Discarded input sections
  .text.Control_StartCC
                 0x00000000      0x168 CMakeFiles/ELEC5552-NewMCU.dir/user_modifiable/control/control.c.obj
  .text.Control_StartCV
-                0x00000000      0x1bc CMakeFiles/ELEC5552-NewMCU.dir/user_modifiable/control/control.c.obj
+                0x00000000      0x1cc CMakeFiles/ELEC5552-NewMCU.dir/user_modifiable/control/control.c.obj
  .text.Control_GetState
                 0x00000000       0x18 CMakeFiles/ELEC5552-NewMCU.dir/user_modifiable/control/control.c.obj
  .debug_macro   0x00000000      0xc4c CMakeFiles/ELEC5552-NewMCU.dir/user_modifiable/control/control.c.obj
@@ -32026,7 +32026,7 @@ LOAD /Users/tommorrissey/Library/Application Support/stm32cube/bundles/gnu-tools
  .debug_macro   0x0002cf8a      0x1dc CMakeFiles/ELEC5552-NewMCU.dir/middleware/usbx/common/core/src/ux_device_stack_transfer_run.c.obj
  .debug_macro   0x0002d166      0x1d9 CMakeFiles/ELEC5552-NewMCU.dir/middleware/usbx/common/usbx_device_classes/src/ux_device_class_cdc_acm_write_run.c.obj
 
-.debug_line     0x00000000    0x3a1b9
+.debug_line     0x00000000    0x3a1c5
  .debug_line    0x00000000     0x2f41 CMakeFiles/ELEC5552-NewMCU.dir/main.c.obj
  .debug_line    0x00002f41      0xae4 CMakeFiles/ELEC5552-NewMCU.dir/user_modifiable/app/app.c.obj
  .debug_line    0x00003a25      0xf0e CMakeFiles/ELEC5552-NewMCU.dir/user_modifiable/inputs/inputs.c.obj
@@ -32037,51 +32037,51 @@ LOAD /Users/tommorrissey/Library/Application Support/stm32cube/bundles/gnu-tools
  .debug_line    0x00007b69      0x81c CMakeFiles/ELEC5552-NewMCU.dir/user_modifiable/usb/usb.c.obj
  .debug_line    0x00008385      0x5a9 CMakeFiles/ELEC5552-NewMCU.dir/user_modifiable/storage/storage.c.obj
  .debug_line    0x0000892e      0xb4a CMakeFiles/ELEC5552-NewMCU.dir/user_modifiable/logger/logger.c.obj
- .debug_line    0x00009478      0xf36 CMakeFiles/ELEC5552-NewMCU.dir/user_modifiable/control/control.c.obj
- .debug_line    0x0000a3ae     0x2d97 CMakeFiles/ELEC5552-NewMCU.dir/user_modifiable/display/display.c.obj
- .debug_line    0x0000d145      0xc02 CMakeFiles/ELEC5552-NewMCU.dir/generated/hal/mx_adc1.c.obj
- .debug_line    0x0000dd47      0xc8b CMakeFiles/ELEC5552-NewMCU.dir/generated/hal/mx_adc2.c.obj
- .debug_line    0x0000e9d2      0xb3f CMakeFiles/ELEC5552-NewMCU.dir/generated/hal/mx_cortex_mpu.c.obj
- .debug_line    0x0000f511      0xae6 CMakeFiles/ELEC5552-NewMCU.dir/generated/hal/mx_cortex_nvic.c.obj
- .debug_line    0x0000fff7      0xc79 CMakeFiles/ELEC5552-NewMCU.dir/generated/hal/mx_dac1.c.obj
- .debug_line    0x00010c70      0xc91 CMakeFiles/ELEC5552-NewMCU.dir/generated/hal/mx_gpio_default.c.obj
- .debug_line    0x00011901      0xb08 CMakeFiles/ELEC5552-NewMCU.dir/generated/hal/mx_icache.c.obj
- .debug_line    0x00012409      0xbc4 CMakeFiles/ELEC5552-NewMCU.dir/generated/hal/mx_usb_drd_fs.c.obj
- .debug_line    0x00012fcd      0xb80 CMakeFiles/ELEC5552-NewMCU.dir/generated/hal/mx_rcc.c.obj
- .debug_line    0x00013b4d      0xd01 CMakeFiles/ELEC5552-NewMCU.dir/generated/hal/mx_spi3.c.obj
- .debug_line    0x0001484e      0xcce CMakeFiles/ELEC5552-NewMCU.dir/generated/hal/mx_system.c.obj
- .debug_line    0x0001551c      0xce5 CMakeFiles/ELEC5552-NewMCU.dir/generated/hal/mx_tim1.c.obj
- .debug_line    0x00016201      0xd0c CMakeFiles/ELEC5552-NewMCU.dir/generated/hal/mx_tim8.c.obj
- .debug_line    0x00016f0d      0x826 CMakeFiles/ELEC5552-NewMCU.dir/user_modifiable/Device/STM32C552MET6/system_stm32c5xx.c.obj
- .debug_line    0x00017733      0x741 CMakeFiles/ELEC5552-NewMCU.dir/user_modifiable/Device/STM32C552MET6/startup_stm32c552xx.c.obj
- .debug_line    0x00017e74      0xeac CMakeFiles/ELEC5552-NewMCU.dir/stm32c5xx_drivers/hal/stm32c5xx_hal.c.obj
- .debug_line    0x00018d20     0x34d7 CMakeFiles/ELEC5552-NewMCU.dir/stm32c5xx_drivers/hal/stm32c5xx_hal_adc.c.obj
- .debug_line    0x0001c1f7     0x1403 CMakeFiles/ELEC5552-NewMCU.dir/stm32c5xx_drivers/hal/stm32c5xx_hal_cortex.c.obj
- .debug_line    0x0001d5fa     0x1623 CMakeFiles/ELEC5552-NewMCU.dir/stm32c5xx_drivers/hal/stm32c5xx_hal_dac.c.obj
- .debug_line    0x0001ec1d     0x2004 CMakeFiles/ELEC5552-NewMCU.dir/stm32c5xx_drivers/hal/stm32c5xx_hal_flash_itf.c.obj
- .debug_line    0x00020c21     0x10c3 CMakeFiles/ELEC5552-NewMCU.dir/stm32c5xx_drivers/hal/stm32c5xx_hal_gpio.c.obj
- .debug_line    0x00021ce4     0x111d CMakeFiles/ELEC5552-NewMCU.dir/stm32c5xx_drivers/hal/stm32c5xx_hal_icache.c.obj
- .debug_line    0x00022e01     0x13ae CMakeFiles/ELEC5552-NewMCU.dir/stm32c5xx_drivers/hal/stm32c5xx_hal_pcd.c.obj
- .debug_line    0x000241af     0x30b0 CMakeFiles/ELEC5552-NewMCU.dir/stm32c5xx_drivers/hal/stm32c5xx_hal_rcc.c.obj
- .debug_line    0x0002725f     0x2ca8 CMakeFiles/ELEC5552-NewMCU.dir/stm32c5xx_drivers/hal/stm32c5xx_hal_spi.c.obj
- .debug_line    0x00029f07     0x512c CMakeFiles/ELEC5552-NewMCU.dir/stm32c5xx_drivers/hal/stm32c5xx_hal_tim.c.obj
- .debug_line    0x0002f033     0x224e CMakeFiles/ELEC5552-NewMCU.dir/stm32c5xx_drivers/hal/stm32c5xx_usb_drd_core.c.obj
- .debug_line    0x00031281      0x8c9 CMakeFiles/ELEC5552-NewMCU.dir/utilities/syscalls/syscalls.c.obj
- .debug_line    0x00031b4a      0x5a1 CMakeFiles/ELEC5552-NewMCU.dir/utilities/syscalls/sysmem.c.obj
- .debug_line    0x000320eb      0x706 CMakeFiles/ELEC5552-NewMCU.dir/middleware/usbx/common/core/src/ux_system_error_handler.c.obj
- .debug_line    0x000327f1      0x7b4 CMakeFiles/ELEC5552-NewMCU.dir/middleware/usbx/common/core/src/ux_system_initialize.c.obj
- .debug_line    0x00032fa5      0x7c0 CMakeFiles/ELEC5552-NewMCU.dir/middleware/usbx/common/core/src/ux_utility_descriptor_parse.c.obj
- .debug_line    0x00033765      0x714 CMakeFiles/ELEC5552-NewMCU.dir/middleware/usbx/common/core/src/ux_utility_long_get.c.obj
- .debug_line    0x00033e79      0x70b CMakeFiles/ELEC5552-NewMCU.dir/middleware/usbx/common/core/src/ux_utility_memory_copy.c.obj
- .debug_line    0x00034584      0x6ff CMakeFiles/ELEC5552-NewMCU.dir/middleware/usbx/common/core/src/ux_utility_short_get.c.obj
- .debug_line    0x00034c83     0x11f7 CMakeFiles/ELEC5552-NewMCU.dir/middleware/usbx/interfaces/usbx_stm32_device_controllers/ux_dcd_stm32_callback.c.obj
- .debug_line    0x00035e7a      0xd03 CMakeFiles/ELEC5552-NewMCU.dir/middleware/usbx/interfaces/usbx_stm32_device_controllers/ux_dcd_stm32_endpoint_stall.c.obj
- .debug_line    0x00036b7d      0xdd6 CMakeFiles/ELEC5552-NewMCU.dir/middleware/usbx/interfaces/usbx_stm32_device_controllers/ux_dcd_stm32_initialize_complete.c.obj
- .debug_line    0x00037953      0x771 CMakeFiles/ELEC5552-NewMCU.dir/middleware/usbx/common/core/src/ux_device_stack_disconnect.c.obj
- .debug_line    0x000380c4      0x922 CMakeFiles/ELEC5552-NewMCU.dir/middleware/usbx/common/core/src/ux_device_stack_initialize.c.obj
- .debug_line    0x000389e6      0x750 CMakeFiles/ELEC5552-NewMCU.dir/middleware/usbx/common/core/src/ux_device_stack_interface_delete.c.obj
- .debug_line    0x00039136      0x7c0 CMakeFiles/ELEC5552-NewMCU.dir/middleware/usbx/common/core/src/ux_device_stack_transfer_run.c.obj
- .debug_line    0x000398f6      0x8c3 CMakeFiles/ELEC5552-NewMCU.dir/middleware/usbx/common/usbx_device_classes/src/ux_device_class_cdc_acm_write_run.c.obj
+ .debug_line    0x00009478      0xf42 CMakeFiles/ELEC5552-NewMCU.dir/user_modifiable/control/control.c.obj
+ .debug_line    0x0000a3ba     0x2d97 CMakeFiles/ELEC5552-NewMCU.dir/user_modifiable/display/display.c.obj
+ .debug_line    0x0000d151      0xc02 CMakeFiles/ELEC5552-NewMCU.dir/generated/hal/mx_adc1.c.obj
+ .debug_line    0x0000dd53      0xc8b CMakeFiles/ELEC5552-NewMCU.dir/generated/hal/mx_adc2.c.obj
+ .debug_line    0x0000e9de      0xb3f CMakeFiles/ELEC5552-NewMCU.dir/generated/hal/mx_cortex_mpu.c.obj
+ .debug_line    0x0000f51d      0xae6 CMakeFiles/ELEC5552-NewMCU.dir/generated/hal/mx_cortex_nvic.c.obj
+ .debug_line    0x00010003      0xc79 CMakeFiles/ELEC5552-NewMCU.dir/generated/hal/mx_dac1.c.obj
+ .debug_line    0x00010c7c      0xc91 CMakeFiles/ELEC5552-NewMCU.dir/generated/hal/mx_gpio_default.c.obj
+ .debug_line    0x0001190d      0xb08 CMakeFiles/ELEC5552-NewMCU.dir/generated/hal/mx_icache.c.obj
+ .debug_line    0x00012415      0xbc4 CMakeFiles/ELEC5552-NewMCU.dir/generated/hal/mx_usb_drd_fs.c.obj
+ .debug_line    0x00012fd9      0xb80 CMakeFiles/ELEC5552-NewMCU.dir/generated/hal/mx_rcc.c.obj
+ .debug_line    0x00013b59      0xd01 CMakeFiles/ELEC5552-NewMCU.dir/generated/hal/mx_spi3.c.obj
+ .debug_line    0x0001485a      0xcce CMakeFiles/ELEC5552-NewMCU.dir/generated/hal/mx_system.c.obj
+ .debug_line    0x00015528      0xce5 CMakeFiles/ELEC5552-NewMCU.dir/generated/hal/mx_tim1.c.obj
+ .debug_line    0x0001620d      0xd0c CMakeFiles/ELEC5552-NewMCU.dir/generated/hal/mx_tim8.c.obj
+ .debug_line    0x00016f19      0x826 CMakeFiles/ELEC5552-NewMCU.dir/user_modifiable/Device/STM32C552MET6/system_stm32c5xx.c.obj
+ .debug_line    0x0001773f      0x741 CMakeFiles/ELEC5552-NewMCU.dir/user_modifiable/Device/STM32C552MET6/startup_stm32c552xx.c.obj
+ .debug_line    0x00017e80      0xeac CMakeFiles/ELEC5552-NewMCU.dir/stm32c5xx_drivers/hal/stm32c5xx_hal.c.obj
+ .debug_line    0x00018d2c     0x34d7 CMakeFiles/ELEC5552-NewMCU.dir/stm32c5xx_drivers/hal/stm32c5xx_hal_adc.c.obj
+ .debug_line    0x0001c203     0x1403 CMakeFiles/ELEC5552-NewMCU.dir/stm32c5xx_drivers/hal/stm32c5xx_hal_cortex.c.obj
+ .debug_line    0x0001d606     0x1623 CMakeFiles/ELEC5552-NewMCU.dir/stm32c5xx_drivers/hal/stm32c5xx_hal_dac.c.obj
+ .debug_line    0x0001ec29     0x2004 CMakeFiles/ELEC5552-NewMCU.dir/stm32c5xx_drivers/hal/stm32c5xx_hal_flash_itf.c.obj
+ .debug_line    0x00020c2d     0x10c3 CMakeFiles/ELEC5552-NewMCU.dir/stm32c5xx_drivers/hal/stm32c5xx_hal_gpio.c.obj
+ .debug_line    0x00021cf0     0x111d CMakeFiles/ELEC5552-NewMCU.dir/stm32c5xx_drivers/hal/stm32c5xx_hal_icache.c.obj
+ .debug_line    0x00022e0d     0x13ae CMakeFiles/ELEC5552-NewMCU.dir/stm32c5xx_drivers/hal/stm32c5xx_hal_pcd.c.obj
+ .debug_line    0x000241bb     0x30b0 CMakeFiles/ELEC5552-NewMCU.dir/stm32c5xx_drivers/hal/stm32c5xx_hal_rcc.c.obj
+ .debug_line    0x0002726b     0x2ca8 CMakeFiles/ELEC5552-NewMCU.dir/stm32c5xx_drivers/hal/stm32c5xx_hal_spi.c.obj
+ .debug_line    0x00029f13     0x512c CMakeFiles/ELEC5552-NewMCU.dir/stm32c5xx_drivers/hal/stm32c5xx_hal_tim.c.obj
+ .debug_line    0x0002f03f     0x224e CMakeFiles/ELEC5552-NewMCU.dir/stm32c5xx_drivers/hal/stm32c5xx_usb_drd_core.c.obj
+ .debug_line    0x0003128d      0x8c9 CMakeFiles/ELEC5552-NewMCU.dir/utilities/syscalls/syscalls.c.obj
+ .debug_line    0x00031b56      0x5a1 CMakeFiles/ELEC5552-NewMCU.dir/utilities/syscalls/sysmem.c.obj
+ .debug_line    0x000320f7      0x706 CMakeFiles/ELEC5552-NewMCU.dir/middleware/usbx/common/core/src/ux_system_error_handler.c.obj
+ .debug_line    0x000327fd      0x7b4 CMakeFiles/ELEC5552-NewMCU.dir/middleware/usbx/common/core/src/ux_system_initialize.c.obj
+ .debug_line    0x00032fb1      0x7c0 CMakeFiles/ELEC5552-NewMCU.dir/middleware/usbx/common/core/src/ux_utility_descriptor_parse.c.obj
+ .debug_line    0x00033771      0x714 CMakeFiles/ELEC5552-NewMCU.dir/middleware/usbx/common/core/src/ux_utility_long_get.c.obj
+ .debug_line    0x00033e85      0x70b CMakeFiles/ELEC5552-NewMCU.dir/middleware/usbx/common/core/src/ux_utility_memory_copy.c.obj
+ .debug_line    0x00034590      0x6ff CMakeFiles/ELEC5552-NewMCU.dir/middleware/usbx/common/core/src/ux_utility_short_get.c.obj
+ .debug_line    0x00034c8f     0x11f7 CMakeFiles/ELEC5552-NewMCU.dir/middleware/usbx/interfaces/usbx_stm32_device_controllers/ux_dcd_stm32_callback.c.obj
+ .debug_line    0x00035e86      0xd03 CMakeFiles/ELEC5552-NewMCU.dir/middleware/usbx/interfaces/usbx_stm32_device_controllers/ux_dcd_stm32_endpoint_stall.c.obj
+ .debug_line    0x00036b89      0xdd6 CMakeFiles/ELEC5552-NewMCU.dir/middleware/usbx/interfaces/usbx_stm32_device_controllers/ux_dcd_stm32_initialize_complete.c.obj
+ .debug_line    0x0003795f      0x771 CMakeFiles/ELEC5552-NewMCU.dir/middleware/usbx/common/core/src/ux_device_stack_disconnect.c.obj
+ .debug_line    0x000380d0      0x922 CMakeFiles/ELEC5552-NewMCU.dir/middleware/usbx/common/core/src/ux_device_stack_initialize.c.obj
+ .debug_line    0x000389f2      0x750 CMakeFiles/ELEC5552-NewMCU.dir/middleware/usbx/common/core/src/ux_device_stack_interface_delete.c.obj
+ .debug_line    0x00039142      0x7c0 CMakeFiles/ELEC5552-NewMCU.dir/middleware/usbx/common/core/src/ux_device_stack_transfer_run.c.obj
+ .debug_line    0x00039902      0x8c3 CMakeFiles/ELEC5552-NewMCU.dir/middleware/usbx/common/usbx_device_classes/src/ux_device_class_cdc_acm_write_run.c.obj
 
 .debug_str      0x00000000    0xf1e4f
  .debug_str     0x00000000    0xf1e4f CMakeFiles/ELEC5552-NewMCU.dir/main.c.obj

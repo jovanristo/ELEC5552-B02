@@ -837,14 +837,21 @@ bool Control_StartCV(void)
     float initial_reference_v =
         dut_voltage_v + CV_START_MARGIN_V;
 
-    Outputs_ClampEnable();
-    Outputs_SelectCV();
 
+    /* Keep MOSFETs disabled during configuration */
+    Outputs_ClampEnable();
+
+    /* Configure CV reference before selecting CV */
     if (!Outputs_SetVoltage(initial_reference_v))
     {
         Outputs_SetSafe();
         return false;
     }
+
+    /* Select CV mode and begin settling period */
+    Outputs_SelectCV();
+    cv_switch_start_ms = Timers_GetMillis();
+
 
     /* Configure timer from user-selected duration */
     uint32_t total_seconds = app->run_time_ms / 1000U;
