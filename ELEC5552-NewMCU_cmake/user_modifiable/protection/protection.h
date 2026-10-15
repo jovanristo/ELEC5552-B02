@@ -223,7 +223,7 @@ typedef struct
      * Current measured DUT power.
      *
      * This is calculated for monitoring.
-     
+
      */
     float total_power_w;
 
@@ -282,7 +282,8 @@ const ProtectionStatus_t *Protection_GetStatus(void);
 BatteryTempResult Protection_CheckExternalTemperature(
     const float temperature_c[EXTERNAL_THERMISTOR_COUNT],
     const bool valid[EXTERNAL_THERMISTOR_COUNT],
-    float cutoff_c);
+    float cutoff_c,
+    uint8_t probe_count);
 
 
 InternalTempResult Protection_CheckInternalTemperature(

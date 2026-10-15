@@ -21,6 +21,7 @@ void App_Init(void)
     app_state.user_current_max_a      = 32.0f;
     app_state.user_power_max_w        = 520.0f;
     app_state.user_battery_temp_max_c = 60.0f;
+    app_state.user_probe_count        = 4U;
 
     app_state.running = false;
     app_state.logging = false;

@@ -66,8 +66,12 @@ static ProtectionStatus_t protection_status;
 BatteryTempResult Protection_CheckExternalTemperature(
     const float temperature_c[EXTERNAL_THERMISTOR_COUNT],
     const bool valid[EXTERNAL_THERMISTOR_COUNT],
-    float cutoff_c)
+    float cutoff_c,
+    uint8_t probe_count)
 {
+    uint8_t working_count = 0U;
+
+
     if ((temperature_c == NULL) ||
         (valid == NULL) ||
         (!isfinite(cutoff_c)))
@@ -80,23 +84,42 @@ BatteryTempResult Protection_CheckExternalTemperature(
     }
 
 
+    if (probe_count > EXTERNAL_THERMISTOR_COUNT)
+    {
+        probe_count = EXTERNAL_THERMISTOR_COUNT;
+    }
+
+
+    /*
+     * 0 probes selected = no battery temperature checking
+     * (e.g. testing a power supply).
+     */
+    if (probe_count == 0U)
+    {
+        return (BatteryTempResult)
+        {
+            .fault = BATTERY_TEMP_OK,
+            .probe_index = 0U
+        };
+    }
+
+
+    /*
+     * Check every working probe.
+     * Broken probes are skipped, not treated as a fault.
+     */
     for (uint8_t i = 0U;
          i < EXTERNAL_THERMISTOR_COUNT;
          i++)
     {
-        /*
-         * A disconnected / invalid thermistor is
-         * treated as a fault.
-         */
         if ((!valid[i]) ||
             (!isfinite(temperature_c[i])))
         {
-            return (BatteryTempResult)
-            {
-                .fault = BATTERY_TEMP_INVALID_PROBE,
-                .probe_index = i
-            };
+            continue;
         }
+
+
+        working_count++;
 
 
         if (temperature_c[i] >= cutoff_c)
@@ -110,13 +133,25 @@ BatteryTempResult Protection_CheckExternalTemperature(
     }
 
 
+    /*
+     * User selected more probes than are working.
+     */
+    if (working_count < probe_count)
+    {
+        return (BatteryTempResult)
+        {
+            .fault = BATTERY_TEMP_INVALID_PROBE,
+            .probe_index = working_count
+        };
+    }
+
+
     return (BatteryTempResult)
     {
         .fault = BATTERY_TEMP_OK,
         .probe_index = 0U
     };
 }
-
 
 /* =========================================================
  * Internal heatsink / MOSFET temperature protection
@@ -501,12 +536,26 @@ void Protection_Update(bool test_running)
             internal_valid);
 
 
-    protection_status.external_temp =
-        Protection_CheckExternalTemperature(
-            external_temp,
-            external_valid,
-            battery_temp_max_c);
+     /*
+     * Battery probes are only checked while a test is running.
+     */
+    if (test_running)
+    {
+        protection_status.external_temp =
+            Protection_CheckExternalTemperature(
+                external_temp,
+                external_valid,
+                battery_temp_max_c,
+                app->user_probe_count);
+    }
+    else
+    {
+        protection_status.external_temp.fault =
+            BATTERY_TEMP_OK;
 
+        protection_status.external_temp.probe_index =
+            0U;
+    }
 
     /* =====================================================
      * Run electrical checks
