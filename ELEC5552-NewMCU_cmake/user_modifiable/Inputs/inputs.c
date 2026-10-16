@@ -39,7 +39,7 @@
  * ADC / DUT conversion constants
  * --------------------------------------------------------- */
 
-#define DUT_VOLTAGE_DIVIDER_RATIO   60.0f
+#define DUT_VOLTAGE_DIVIDER_RATIO   15.0f   /* 60:1 divider x 4 amplifier gain */
 
 #define DUT_VOLTAGE_OFFSET_V        0.0f
 #define DUT_VOLTAGE_SCALE           1.0f
@@ -357,7 +357,8 @@ static float Inputs_ConvertDUTVoltage(uint16_t raw_adc,
     /* Remove ADC-side voltage offset */
     adc_voltage -= offset_v;
 
-    /* Reverse the 60:1 divider and apply calibration scale */
+    /* Reverse the 15:1 sensing ratio (60:1 divider, x4 amplifier)
+       and apply calibration scale */
     dut_voltage =
         adc_voltage * DUT_VOLTAGE_DIVIDER_RATIO * scale;
 
