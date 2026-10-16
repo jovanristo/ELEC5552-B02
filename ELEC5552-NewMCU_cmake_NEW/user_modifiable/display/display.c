@@ -1,6 +1,7 @@
 #include "display.h"
 #include "app.h"
 #include "inputs.h"
+#include "control.h"
 
 #include "mx_spi3.h"
 #include "mx_gpio_default.h"
@@ -362,9 +363,9 @@ void Display_Update(void)
                     last_press_ms = now_ms;
                 }
             }
-        }
 
     }
+
     else if (page == 3U)
     {
         if (left)
@@ -456,6 +457,41 @@ void Display_Update(void)
         }
     }
 
+        else if (page == 5U)  /* Review / START */
+    {
+        if (left)
+        {
+            page = 4U;
+            last_press_ms = now_ms;
+        }
+        else if (ok)
+        {
+            if (Control_Start())
+            {
+                page = 6U;
+            }
+
+            last_press_ms = now_ms;
+        }
+    }
+    else if (page == 6U)  /* Running */
+    {
+        if (ok)
+        {
+            Control_Stop();
+            page = 7U;
+            last_press_ms = now_ms;
+        }
+    }
+    else if (page == 7U)  /* Finished */
+    {
+        if (left)
+        {
+            page = 0U;
+            last_press_ms = now_ms;
+        }
+    }
+    }
 
     /* Refresh display every 200 ms */
     if ((uint32_t)(now_ms - last_update_ms) < 200U)
@@ -604,11 +640,120 @@ void Display_Update(void)
             "RIGHT: Clear  LEFT: Back  OK: Next"
         );
     }
-    else
+
+    else if (page == 5U)  /* Review */
     {
-        lv_label_set_text(dut_label, "REVIEW SETTINGS");
-        lv_label_set_text(hint_label, "START screen next");
+        uint32_t voltage10 =
+            (uint32_t)(app->dut_voltage_v * 10.0f + 0.5f);
+
+        uint32_t time_s = app->run_time_ms / 1000U;
+
+        if (app->selected_mode == APP_MODE_CC)
+        {
+            uint32_t current100 =
+                (uint32_t)(app->current_setpoint_a * 100.0f + 0.5f);
+
+            uint32_t cutoff10 =
+                (uint32_t)(app->voltage_setpoint_v * 10.0f + 0.5f);
+
+            uint32_t power =
+                (uint32_t)(app->dut_voltage_v *
+                        app->current_setpoint_a + 0.5f);
+
+            lv_label_set_text_fmt(
+                dut_label,
+                "MODE: CC\n"
+                "DUT: %lu.%lu V\n"
+                "CURRENT: %lu.%02lu A\n"
+                "CUTOFF: %lu.%lu V\n"
+                "EST. POWER: %lu W\n"
+                "TIME: %02lu:%02lu:%02lu",
+                (unsigned long)(voltage10 / 10U),
+                (unsigned long)(voltage10 % 10U),
+                (unsigned long)(current100 / 100U),
+                (unsigned long)(current100 % 100U),
+                (unsigned long)(cutoff10 / 10U),
+                (unsigned long)(cutoff10 % 10U),
+                (unsigned long)power,
+                (unsigned long)(time_s / 3600U),
+                (unsigned long)((time_s % 3600U) / 60U),
+                (unsigned long)(time_s % 60U)
+            );
+        }
+        else
+        {
+            uint32_t target10 =
+                (uint32_t)(app->voltage_setpoint_v * 10.0f + 0.5f);
+
+            lv_label_set_text_fmt(
+                dut_label,
+                "MODE: CV\n"
+                "DUT: %lu.%lu V\n"
+                "TARGET: %lu.%lu V\n"
+                "CURRENT: -\n"
+                "POWER LIMIT: 500 W\n"
+                "TIME: %02lu:%02lu:%02lu",
+                (unsigned long)(voltage10 / 10U),
+                (unsigned long)(voltage10 % 10U),
+                (unsigned long)(target10 / 10U),
+                (unsigned long)(target10 % 10U),
+                (unsigned long)(time_s / 3600U),
+                (unsigned long)((time_s % 3600U) / 60U),
+                (unsigned long)(time_s % 60U)
+            );
+        }
+
+        lv_label_set_text(
+            hint_label,
+            "OK: START    LEFT: BACK"
+        );
     }
+    else if (page == 6U)  /* Running */
+    {
+        uint32_t v10 =
+            (uint32_t)(app->dut_voltage_v * 10.0f + 0.5f);
+
+        uint32_t i100 =
+            (uint32_t)(app->total_current_a * 100.0f + 0.5f);
+
+        uint32_t power =
+            (uint32_t)(app->power_w + 0.5f);
+
+        lv_label_set_text_fmt(
+            dut_label,
+            "%s RUNNING\n"
+            "VOLTAGE: %lu.%lu V\n"
+            "CURRENT: %lu.%02lu A\n"
+            "POWER: %lu W",
+            app->selected_mode == APP_MODE_CC ? "CC" : "CV",
+            (unsigned long)(v10 / 10U),
+            (unsigned long)(v10 % 10U),
+            (unsigned long)(i100 / 100U),
+            (unsigned long)(i100 % 100U),
+            (unsigned long)power
+        );
+
+        lv_label_set_text(hint_label, "OK: STOP");
+    }
+    else if (page == 7U)  /* Finished */
+    {
+        lv_label_set_text(
+            dut_label,
+            "RUN FINISHED\nLOAD DISABLED"
+        );
+
+        lv_label_set_text(
+            hint_label,
+            "LEFT: NEW RUN"
+        );
+    }
+
+    /* Detect automatic completion or protective shutdown */
+    if (page == 6U && !app->running)
+    {
+        page = 7U;
+    }
+
 }
 
 
