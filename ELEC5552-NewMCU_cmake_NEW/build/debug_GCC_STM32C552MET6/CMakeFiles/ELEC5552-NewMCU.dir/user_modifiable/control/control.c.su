@@ -1,7 +1,7 @@
-/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW/user_modifiable/control/control.c:49:6:Control_Init	16	static
-/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW/user_modifiable/control/control.c:68:6:Control_Update	144	static
-/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW/user_modifiable/control/control.c:647:6:Control_Start	24	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW/user_modifiable/control/control.c:49:6:Control_Init	8	static
 /Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW/user_modifiable/control/control.c:725:6:Control_StartCC	32	static
-/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW/user_modifiable/control/control.c:808:6:Control_StartCV	40	static
-/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW/user_modifiable/control/control.c:892:6:Control_Stop	16	static
-/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW/user_modifiable/control/control.c:927:16:Control_GetState	4	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW/user_modifiable/control/control.c:808:6:Control_StartCV	24	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW/user_modifiable/control/control.c:647:6:Control_Start	8	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW/user_modifiable/control/control.c:892:6:Control_Stop	8	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW/user_modifiable/control/control.c:68:6:Control_Update	40	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW/user_modifiable/control/control.c:927:16:Control_GetState	0	static

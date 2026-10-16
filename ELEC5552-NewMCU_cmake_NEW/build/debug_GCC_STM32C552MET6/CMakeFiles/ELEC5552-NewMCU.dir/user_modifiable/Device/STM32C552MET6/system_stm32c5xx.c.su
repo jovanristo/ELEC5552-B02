@@ -1,4 +1,2 @@
-/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW/stm32c5xx_dfp/Include/stm32c5xx.h:244:22:SCB_SetVTOR	16	static
-/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW/stm32c5xx_dfp/Include/stm32c5xx.h:383:22:SCB_EnableFPU	4	static
-/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW/user_modifiable/Device/STM32C552MET6/system_stm32c5xx.c:148:6:SystemInit	8	static
-/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW/user_modifiable/Device/STM32C552MET6/system_stm32c5xx.c:196:6:SystemCoreClockUpdate	16	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW/user_modifiable/Device/STM32C552MET6/system_stm32c5xx.c:148:6:SystemInit	0	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW/user_modifiable/Device/STM32C552MET6/system_stm32c5xx.c:196:6:SystemCoreClockUpdate	0	static
