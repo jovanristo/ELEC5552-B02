@@ -90,6 +90,7 @@ int main(void)
       Fan_Update();
       Logger_Update();
       Control_Update();
+      Protection_Update(45.0f);
 
       uint32_t now_ms = Timers_GetMillis();
 

@@ -1,4 +1,5 @@
 #include "fan.h"
+#include "protection.h"
 
 #include "inputs.h"
 #include "timers.h"
@@ -124,7 +125,7 @@ void Fan_Update(void)
      * Fan temperature control
      * ----------------------------------------------------- */
 
-    if (!valid_temp)
+    if (!Protection_IsOK() || !valid_temp)
     {
         /* Sensor problem -> run fan at full speed */
         Fan_SetDuty(100.0f);

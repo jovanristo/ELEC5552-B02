@@ -2,6 +2,7 @@
 #include "app.h"
 #include "inputs.h"
 #include "control.h"
+#include "protection.h"
 #include "timers.h"
 
 #include "mx_spi3.h"
@@ -223,9 +224,13 @@ void Display_Update(void)
     static uint32_t last_update_ms = 0U;
     static uint32_t last_press_ms = 0U;
 
-    /* 0 = Connect DUT, 1 = Mode selection, 2 = Settings */
+    /* Pages: 0-5 setup, 6 running, 7 finished, 8 fault */
     static uint8_t page = 0U;
     static AppMode_t pending_mode = APP_MODE_NONE;
+    /* Preserve the original fault cause even after sensors recover. */
+    static ProtectionStatus_t fault_snapshot;
+    static bool fault_clear_timing = false;
+    static uint32_t fault_clear_since_ms = 0U;
 
     static bool last_ok = false;
     static bool last_1 = false;
@@ -248,6 +253,37 @@ void Display_Update(void)
         dut_label == NULL || hint_label == NULL)
     {
         return;
+    }
+
+    const ProtectionStatus_t *protection = Protection_GetStatus();
+
+    /* Faults take priority over every menu page, including normal STOP. */
+    if (protection != NULL && protection->fault_latched && page != 8U)
+    {
+        fault_snapshot = *protection;
+        Control_Stop();                  /* Clamp MOSFETs and stop timer. */
+        page = 8U;
+        fault_clear_timing = false;
+        last_press_ms = now_ms;
+    }
+
+    /* Require stable, fault-free readings before allowing acknowledgement. */
+    if (page == 8U)
+    {
+        if (protection != NULL &&
+            protection->fault_latched &&
+            protection->fault == PROTECTION_OK)
+        {
+            if (!fault_clear_timing)
+            {
+                fault_clear_timing = true;
+                fault_clear_since_ms = now_ms;
+            }
+        }
+        else
+        {
+            fault_clear_timing = false;
+        }
     }
 
     /* Detect new button presses */
@@ -521,6 +557,57 @@ void Display_Update(void)
         }
     }
 
+    else if (page == 7U)  /* Finished: reset user settings */
+    {
+        if (ok)
+        {
+            page = 0U;
+            pending_mode = APP_MODE_NONE;
+
+            current_entry = 0U;
+            voltage_entry = 0U;
+            timer_entry = 0U;
+            timer_editing = false;
+
+            app->selected_mode = APP_MODE_NONE;
+            app->current_setpoint_a = 0.0f;
+            app->voltage_setpoint_v = 0.0f;
+            app->run_time_ms = 60000U;
+
+            last_press_ms = now_ms;
+        }
+    }
+    else if (page == 8U)  /* Fault acknowledgement */
+    {
+        if (ok && protection != NULL &&
+            protection->fault_latched &&
+            fault_clear_timing &&
+            (uint32_t)(now_ms - fault_clear_since_ms) >= 500U)
+        {
+            /* Does not restart the load; checked sensors are now normal. */
+            Protection_Reset();
+            page = 0U;
+            pending_mode = APP_MODE_NONE;
+            current_entry = 0U;
+            voltage_entry = 0U;
+            timer_entry = 0U;
+            timer_editing = false;
+            app->selected_mode = APP_MODE_NONE;
+            app->current_setpoint_a = 0.0f;
+            app->voltage_setpoint_v = 0.0f;
+            app->run_time_ms = 60000U;
+            fault_clear_timing = false;
+            last_press_ms = now_ms;
+        }
+    }
+    } /* End button debounce */
+
+    /* Detect automatic completion or protective shutdown */
+    if (page == 6U && !app->running)
+    {
+        page = 7U;
+    }
+
     /* Refresh display every 200 ms */
     if ((uint32_t)(now_ms - last_update_ms) < 200U)
     {
@@ -528,6 +615,13 @@ void Display_Update(void)
     }
 
     last_update_ms = now_ms;
+
+    /* Restore normal label colour after leaving a red fault screen. */
+    if (page != 0U && page != 8U)
+    {
+        lv_obj_set_style_text_color(
+            dut_label, lv_color_hex(0xFFFFFF), 0);
+    }
 
     if (page == 0U)
     {
@@ -832,6 +926,7 @@ void Display_Update(void)
         {
             lv_label_set_text(hint_label, "OK: STOP");
         }
+
     }
     else if (page == 7U)  /* Finished */
     {
@@ -842,16 +937,74 @@ void Display_Update(void)
 
         lv_label_set_text(
             hint_label,
-            "LEFT: NEW RUN"
+            "OK: RESET"
         );
     }
-
-    /* Detect automatic completion or protective shutdown */
-    if (page == 6U && !app->running)
+    else if (page == 8U)  /* Latched protection fault */
     {
-        page = 7U;
-    }
+        lv_obj_set_style_text_color(
+            dut_label, lv_color_hex(0xFF4444), 0);
 
+        if (fault_snapshot.fault == PROTECTION_INTERNAL_TEMP_FAULT)
+        {
+            uint32_t probe = fault_snapshot.internal_temp.probe_index;
+            probe = (probe < 3U) ? (probe + 1U) : (probe + 5U);
+            const char *reason =
+                (fault_snapshot.internal_temp.fault == INTERNAL_TEMP_OVER_LIMIT)
+                ? "OVER TEMPERATURE" : "INVALID SENSOR";
+            lv_label_set_text_fmt(dut_label,
+                "PROTECTION FAULT\nHEATSINK TEMP\nPROBE %lu: %s\nLOAD DISABLED",
+                (unsigned long)probe, reason);
+        }
+        else if (fault_snapshot.fault == PROTECTION_EXTERNAL_TEMP_FAULT)
+        {
+            uint32_t probe =
+                (uint32_t)fault_snapshot.external_temp.probe_index + 4U;
+            const char *reason =
+                (fault_snapshot.external_temp.fault == BATTERY_TEMP_OVER_LIMIT)
+                ? "OVER TEMPERATURE" : "INVALID SENSOR";
+            lv_label_set_text_fmt(dut_label,
+                "PROTECTION FAULT\nDUT TEMPERATURE\nPROBE %lu: %s\nLOAD DISABLED",
+                (unsigned long)probe, reason);
+        }
+        else if (fault_snapshot.fault == PROTECTION_CURRENT_FAULT)
+        {
+            if (fault_snapshot.current.fault == CURRENT_OVER_LIMIT)
+            {
+                lv_label_set_text(dut_label,
+                    "PROTECTION FAULT\nOVERCURRENT\nLOAD DISABLED");
+            }
+            else
+            {
+                lv_label_set_text_fmt(dut_label,
+                    "PROTECTION FAULT\nCURRENT SENSOR %lu\nINVALID READING\nLOAD DISABLED",
+                    (unsigned long)fault_snapshot.current.channel_index + 1UL);
+            }
+        }
+        else if (fault_snapshot.fault == PROTECTION_VOLTAGE_FAULT)
+        {
+            const char *reason =
+                (fault_snapshot.voltage == VOLTAGE_OVER_LIMIT)
+                ? "OVERVOLTAGE" : "INVALID VOLTAGE";
+            lv_label_set_text_fmt(dut_label,
+                "PROTECTION FAULT\n%s\nLOAD DISABLED", reason);
+        }
+        else
+        {
+            lv_label_set_text(dut_label,
+                "PROTECTION FAULT\nLOAD DISABLED");
+        }
+
+        if (fault_clear_timing &&
+            (uint32_t)(now_ms - fault_clear_since_ms) >= 500U)
+        {
+            lv_label_set_text(hint_label, "OK: RESET AFTER CHECKS");
+        }
+        else
+        {
+            lv_label_set_text(hint_label,
+                "FAULT ACTIVE - CHECK DUT / SENSORS");
+        }
     }
 }
 
