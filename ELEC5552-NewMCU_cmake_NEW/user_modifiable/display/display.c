@@ -2,6 +2,7 @@
 #include "app.h"
 #include "inputs.h"
 #include "control.h"
+#include "timers.h"
 
 #include "mx_spi3.h"
 #include "mx_gpio_default.h"
@@ -235,6 +236,8 @@ void Display_Update(void)
     static uint32_t voltage_entry = 0U;
     static bool last_digits[10] = {false};
     static bool last_right = false;
+    static bool last_up = false;
+    static bool last_down = false;
 
     uint32_t now_ms = HAL_GetTick();
 
@@ -281,6 +284,20 @@ void Display_Update(void)
 
     bool right = in->button_right && !last_right;
     last_right = in->button_right;
+
+    bool up = in->button_up && !last_up;
+    bool down = in->button_down && !last_down;
+
+    last_up = in->button_up;
+    last_down = in->button_down;
+
+    /* STOP must not be blocked by keypad debounce */
+    if (page == 6U && ok)
+    {
+        Control_Stop();
+        page = 7U;
+        last_press_ms = now_ms;
+    }
 
     /* Basic debounce */
     if ((uint32_t)(now_ms - last_press_ms) >= 120U)
@@ -476,21 +493,32 @@ void Display_Update(void)
     }
     else if (page == 6U)  /* Running */
     {
-        if (ok)
+        if (Control_GetState() == CONTROL_STATE_CC)
         {
-            Control_Stop();
-            page = 7U;
-            last_press_ms = now_ms;
+            uint32_t max_entry =
+                (uint32_t)(app->max_current_a * 100.0f + 0.5f);
+
+            bool changed = false;
+
+            if (up && current_entry < max_entry)
+            {
+                current_entry++;
+                changed = true;
+            }
+            else if (down && current_entry > 1U)
+            {
+                current_entry--;
+                changed = true;
+            }
+
+            if (changed)
+            {
+                app->current_setpoint_a =
+                    (float)current_entry / 100.0f;
+
+                last_press_ms = now_ms;
+            }
         }
-    }
-    else if (page == 7U)  /* Finished */
-    {
-        if (left)
-        {
-            page = 0U;
-            last_press_ms = now_ms;
-        }
-    }
     }
 
     /* Refresh display every 200 ms */
@@ -719,21 +747,91 @@ void Display_Update(void)
         uint32_t power =
             (uint32_t)(app->power_w + 0.5f);
 
+        TimerHMS_t remaining = Timers_RunTimerGetRemainingHMS();
+
+        float max_internal = 0.0f;
+        float max_external = 0.0f;
+        bool internal_valid = false;
+        bool external_valid = false;
+
+        for (uint32_t i = 0U; i < NUM_THERMISTORS; i++)
+        {
+            if (!in->thermistor_valid[i])
+                continue;
+
+            float temp = app->temperature_c[i];
+
+            /* External thermistors: 4-7 (array indexes 3-6) */
+            if (i >= 3U && i <= 6U)
+            {
+                if (!external_valid || temp > max_external)
+                    max_external = temp;
+
+                external_valid = true;
+            }
+            else
+            {
+                if (!internal_valid || temp > max_internal)
+                    max_internal = temp;
+
+                internal_valid = true;
+            }
+        }
+
+        /* Show -- if no valid temperature measurement exists */
+        char internal_text[12] = "--";
+        char external_text[12] = "--";
+
+        if (internal_valid)
+        {
+            lv_snprintf(internal_text, sizeof(internal_text),
+                        "%ld", (long)(max_internal +
+                        (max_internal >= 0.0f ? 0.5f : -0.5f)));
+        }
+
+        if (external_valid)
+        {
+            lv_snprintf(external_text, sizeof(external_text),
+                        "%ld", (long)(max_external +
+                        (max_external >= 0.0f ? 0.5f : -0.5f)));
+        }
+
         lv_label_set_text_fmt(
             dut_label,
             "%s RUNNING\n"
             "VOLTAGE: %lu.%lu V\n"
             "CURRENT: %lu.%02lu A\n"
-            "POWER: %lu W",
+            "POWER: %lu W\n"
+            "TIME LEFT: %02lu:%02lu:%02lu\n"
+            "FAN: %lu RPM\n"
+            "TEMP INT: %s C   EXT: %s C",
             app->selected_mode == APP_MODE_CC ? "CC" : "CV",
             (unsigned long)(v10 / 10U),
             (unsigned long)(v10 % 10U),
             (unsigned long)(i100 / 100U),
             (unsigned long)(i100 % 100U),
-            (unsigned long)power
+            (unsigned long)power,
+            (unsigned long)remaining.hours,
+            (unsigned long)remaining.minutes,
+            (unsigned long)remaining.seconds,
+            (unsigned long)app->fan_rpm,
+            internal_text,
+            external_text
         );
 
-        lv_label_set_text(hint_label, "OK: STOP");
+        if (Control_GetState() == CONTROL_STATE_CC)
+        {
+            lv_label_set_text_fmt(
+                hint_label,
+                "SET: %lu.%02lu A   UP/DOWN: 0.01 A   OK: STOP",
+                (unsigned long)(current_entry / 100U),
+                (unsigned long)(current_entry % 100U)
+            );
+        }
+        else
+        {
+            lv_label_set_text(hint_label, "OK: STOP");
+        }
     }
     else if (page == 7U)  /* Finished */
     {
@@ -754,8 +852,8 @@ void Display_Update(void)
         page = 7U;
     }
 
+    }
 }
-
 
 /* =========================================================
  * LVGL flush callback
