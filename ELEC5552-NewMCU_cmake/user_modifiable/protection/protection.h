@@ -39,7 +39,7 @@
  * Provisional value.
  * Confirm during thermal testing.
  */
-#define INTERNAL_HEATSINK_CUTOFF_C       100.0f
+#define INTERNAL_HEATSINK_CUTOFF_C       80.0f
 
 
 /*
