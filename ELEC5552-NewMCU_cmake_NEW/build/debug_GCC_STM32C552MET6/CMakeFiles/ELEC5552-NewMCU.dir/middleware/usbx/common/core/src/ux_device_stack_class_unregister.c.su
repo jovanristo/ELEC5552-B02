@@ -1,2 +1,2 @@
-/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW/middleware/usbx/common/core/src/ux_device_stack_class_unregister.c:70:7:_ux_device_stack_class_unregister	80	static
-/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW/middleware/usbx/common/core/src/ux_device_stack_class_unregister.c:177:7:_uxe_device_stack_class_unregister	16	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW/middleware/usbx/common/core/src/ux_device_stack_class_unregister.c:70:7:_ux_device_stack_class_unregister	72	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW/middleware/usbx/common/core/src/ux_device_stack_class_unregister.c:177:7:_uxe_device_stack_class_unregister	0	static

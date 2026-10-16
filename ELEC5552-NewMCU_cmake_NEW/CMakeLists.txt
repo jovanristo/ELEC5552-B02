@@ -49,8 +49,8 @@ target_compile_definitions(${CMAKE_PROJECT_NAME} PUBLIC
   # Add additional defined symbols here
 )
 
-target_compile_options(${CMAKE_PROJECT_NAME} PUBLIC
-  # Add additional compiler flags here
+target_compile_options(ELEC5552-NewMCU PRIVATE
+    -Os
 )
 
 target_link_options(${CMAKE_PROJECT_NAME} PUBLIC
