@@ -84,12 +84,12 @@ static bool Inputs_ConvertThermistor(uint16_t raw_adc, float beta_k, float *temp
  
 #define THERMISTOR_SUPPLY_V      2.5f
 #define THERMISTOR_PULLDOWN_OHM  5100.0f
-#define THERMISTOR_R25_OHM       10000.0f
+#define THERMISTOR_R25_OHM       9693.0f
 #define THERMISTOR_T25_K         298.15f
 
 /* Thermistor-specific parameters */
-#define INTERNAL_THERMISTOR_BETA_K   3950.0f  
-#define EXTERNAL_THERMISTOR_BETA_K   3950.0f 
+#define INTERNAL_THERMISTOR_BETA_K   2738.23f  
+#define EXTERNAL_THERMISTOR_BETA_K   2738.23f 
 
 
 
