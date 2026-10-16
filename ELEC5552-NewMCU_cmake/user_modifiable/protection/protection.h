@@ -61,7 +61,7 @@
 
 #define PROTECTION_POWER_LIMIT_W         520.0f
 
-#define PROTECTION_BATTERY_TEMP_LIMIT_C  60.0f
+#define PROTECTION_BATTERY_TEMP_LIMIT_C  50.0f
 
 
 /* =========================================================
