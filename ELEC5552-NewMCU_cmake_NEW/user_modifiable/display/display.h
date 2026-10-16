@@ -9,5 +9,6 @@
 
 /* Requires lv_init() and lv_tick_set_cb() to be called first in main.c. */
 bool Display_Init(void);
+void Display_Update(void);
 
 #endif /* DISPLAY_H */

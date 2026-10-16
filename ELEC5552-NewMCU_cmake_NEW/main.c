@@ -79,7 +79,6 @@ int main(void)
     {
         return -1;
     }
-    lv_init();
 
     uint32_t last_lvgl_ms = Timers_GetMillis();
 
@@ -87,7 +86,7 @@ int main(void)
 
       Inputs_Update();
       App_Update();
-
+      Display_Update();
       Fan_Update();
       Logger_Update();
       Control_Update();

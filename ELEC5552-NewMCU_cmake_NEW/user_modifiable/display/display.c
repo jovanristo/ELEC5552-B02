@@ -1,4 +1,6 @@
 #include "display.h"
+#include "app.h"
+#include "inputs.h"
 
 #include "mx_spi3.h"
 #include "mx_gpio_default.h"
@@ -20,6 +22,10 @@
 
 
 static hal_spi_handle_t *display_spi = NULL;
+static lv_obj_t *dut_label = NULL;
+static lv_obj_t *hint_label = NULL;
+static uint32_t timer_entry = 0U;
+static bool timer_editing = false;
 
 /*
  * LVGL renders in RGB565.
@@ -184,23 +190,425 @@ bool Display_Init(void)
     );
     lv_obj_set_style_bg_opa(screen, LV_OPA_COVER, 0);
 
-    lv_obj_t *label = lv_label_create(screen);
 
-    lv_label_set_text(
-        label,
-        "LVGL WORKING"
-    );
-
+    /* Screen title */
+    lv_obj_t *title = lv_label_create(screen);
+    lv_label_set_text(title, "DC ELECTRONIC LOAD");
     lv_obj_set_style_text_color(
-        label,
-        lv_color_hex(0xFFFFFF),
-        0
-    );
+        title, lv_color_hex(0xFFFFFF), 0);
+    lv_obj_align(title, LV_ALIGN_TOP_MID, 0, 35);
 
-    lv_obj_center(label);
+    /* DUT connection status */
+    dut_label = lv_label_create(screen);
+    lv_label_set_text(dut_label, "CONNECT DUT");
+    lv_obj_set_style_text_color(
+        dut_label, lv_color_hex(0xFFFFFF), 0);
+    lv_obj_center(dut_label);
+
+    /* User instructions */
+    hint_label = lv_label_create(screen);
+    lv_label_set_text(hint_label, "Waiting for DUT voltage...");
+    lv_obj_set_style_text_color(
+        hint_label, lv_color_hex(0xAAAAAA), 0);
+    lv_obj_align(hint_label, LV_ALIGN_BOTTOM_MID, 0, -40);
 
 
     return true;
+}
+
+void Display_Update(void)
+{
+    static uint32_t last_update_ms = 0U;
+    static uint32_t last_press_ms = 0U;
+
+    /* 0 = Connect DUT, 1 = Mode selection, 2 = Settings */
+    static uint8_t page = 0U;
+    static AppMode_t pending_mode = APP_MODE_NONE;
+
+    static bool last_ok = false;
+    static bool last_1 = false;
+    static bool last_2 = false;
+    static bool last_left = false;
+
+    static uint32_t current_entry = 0U;
+    static uint32_t voltage_entry = 0U;
+    static bool last_digits[10] = {false};
+    static bool last_right = false;
+
+    uint32_t now_ms = HAL_GetTick();
+
+    AppState_t *app = App_GetState();
+    const Inputs_t *in = Inputs_Get();
+
+    if (app == NULL || in == NULL ||
+        dut_label == NULL || hint_label == NULL)
+    {
+        return;
+    }
+
+    /* Detect new button presses */
+    bool ok = in->button_ok && !last_ok;
+    bool key1 = in->button_1 && !last_1;
+    bool key2 = in->button_2 && !last_2;
+    bool left = in->button_left && !last_left;
+
+    last_ok = in->button_ok;
+    last_1 = in->button_1;
+    last_2 = in->button_2;
+    last_left = in->button_left;
+
+    /* Detect newly pressed numerical key */
+    const bool keys[10] = {
+        in->button_0, in->button_1,
+        in->button_2, in->button_3,
+        in->button_4, in->button_5,
+        in->button_6, in->button_7,
+        in->button_8, in->button_9
+    };
+
+    int digit = -1;
+
+    for (uint32_t i = 0U; i < 10U; i++)
+    {
+        if (keys[i] && !last_digits[i])
+        {
+            digit = (int)i;
+        }
+
+        last_digits[i] = keys[i];
+    }
+
+    bool right = in->button_right && !last_right;
+    last_right = in->button_right;
+
+    /* Basic debounce */
+    if ((uint32_t)(now_ms - last_press_ms) >= 120U)
+    {
+        if (page == 0U)
+        {
+            if (app->dut_connected && ok)
+            {
+                page = 1U;
+                last_press_ms = now_ms;
+            }
+        }
+        else if (page == 1U)
+        {
+            if (key1)
+            {
+                pending_mode = APP_MODE_CC;
+                last_press_ms = now_ms;
+            }
+            else if (key2)
+            {
+                pending_mode = APP_MODE_CV;
+                last_press_ms = now_ms;
+            }
+            else if (left)
+            {
+                page = 0U;
+                last_press_ms = now_ms;
+            }
+            else if (ok && pending_mode != APP_MODE_NONE)
+            {
+                if (App_SelectMode(pending_mode))
+                {
+                    current_entry = 0U;
+                    voltage_entry = 0U;
+
+                    /* CC needs current entry, CV goes directly to voltage */
+                    page = (pending_mode == APP_MODE_CC) ? 2U : 3U;
+                }
+                last_press_ms = now_ms;
+            }
+        }
+        else if (page == 2U)
+        {
+            if (left)
+            {
+                page = 1U;
+                last_press_ms = now_ms;
+            }
+            else if (app->selected_mode == APP_MODE_CC)
+            {
+                if (right)
+                {
+                    /* Clear entered current */
+                    current_entry = 0U;
+                    app->current_setpoint_a = 0.0f;
+                    last_press_ms = now_ms;
+                }
+                else if (digit >= 0)
+                {
+                    /* Append digit in units of 0.01 A */
+                    uint32_t next = current_entry * 10U +
+                                    (uint32_t)digit;
+
+                    uint32_t max_entry =
+                        (uint32_t)(app->max_current_a * 100.0f + 0.5f);
+
+                    if (next <= max_entry)
+                    {
+                        current_entry = next;
+                        app->current_setpoint_a =
+                            (float)current_entry / 100.0f;
+                    }
+
+                    last_press_ms = now_ms;
+                }
+                else if (ok && current_entry > 0U)
+                {
+                    page = 3U; /* Voltage settings next */
+                    last_press_ms = now_ms;
+                }
+            }
+        }
+
+    }
+    else if (page == 3U)
+    {
+        if (left)
+        {
+            page = (app->selected_mode == APP_MODE_CC) ? 2U : 1U;
+            last_press_ms = now_ms;
+        }
+        else if (right)
+        {
+            voltage_entry = 0U;
+            app->voltage_setpoint_v = 0.0f;
+            last_press_ms = now_ms;
+        }
+        else if (digit >= 0)
+        {
+            /* Voltage entered in units of 0.1 V */
+            uint32_t next = voltage_entry * 10U +
+                            (uint32_t)digit;
+
+            uint32_t max_entry =
+                (uint32_t)(app->max_voltage_v * 10.0f + 0.05f);
+
+            if (next <= max_entry)
+            {
+                voltage_entry = next;
+                app->voltage_setpoint_v =
+                    (float)voltage_entry / 10.0f;
+            }
+
+            last_press_ms = now_ms;
+        }
+        else if (ok &&
+                (app->selected_mode == APP_MODE_CC ||
+                voltage_entry > 0U))
+        {
+            page = 4U;  /* Timer settings next */
+            last_press_ms = now_ms;
+        }
+    }
+    else if (page == 4U)
+    {
+        if (left)
+        {
+            page = 3U;
+            last_press_ms = now_ms;
+        }
+        else if (right)
+        {
+            timer_entry = 0U;
+            timer_editing = true;
+            last_press_ms = now_ms;
+        }
+        else if (digit >= 0)
+        {
+            /* Enter time as HHMMSS */
+            uint32_t next = timer_editing ?
+                timer_entry * 10U + (uint32_t)digit :
+                (uint32_t)digit;
+
+            if (next <= 999999U)
+            {
+                timer_entry = next;
+                timer_editing = true;
+            }
+
+            last_press_ms = now_ms;
+        }
+        else if (ok)
+        {
+            /* Keep existing duration if unchanged */
+            bool valid = !timer_editing;
+
+            if (timer_editing)
+            {
+                uint32_t hours = timer_entry / 10000U;
+                uint32_t minutes = (timer_entry / 100U) % 100U;
+                uint32_t seconds = timer_entry % 100U;
+
+                valid = App_SetRunTime(hours, minutes, seconds);
+            }
+
+            if (valid)
+            {
+                page = 5U;  /* Review and START next */
+                timer_editing = false;
+            }
+
+            last_press_ms = now_ms;
+        }
+    }
+
+
+    /* Refresh display every 200 ms */
+    if ((uint32_t)(now_ms - last_update_ms) < 200U)
+    {
+        return;
+    }
+
+    last_update_ms = now_ms;
+
+    if (page == 0U)
+    {
+        if (app->dut_connected)
+        {
+            uint32_t v10 =
+                (uint32_t)(app->dut_voltage_v * 10.0f + 0.5f);
+
+            lv_label_set_text_fmt(
+                dut_label, "DUT: %lu.%lu V",
+                (unsigned long)(v10 / 10U),
+                (unsigned long)(v10 % 10U));
+
+            lv_obj_set_style_text_color(
+                dut_label, lv_color_hex(0x00CC66), 0);
+
+            lv_label_set_text(
+                hint_label, "Press OK to continue");
+        }
+        else
+        {
+            lv_label_set_text(dut_label, "CONNECT DUT");
+            lv_obj_set_style_text_color(
+                dut_label, lv_color_hex(0xFFFFFF), 0);
+            lv_label_set_text(
+                hint_label, "Waiting for DUT voltage...");
+        }
+    }
+    else if (page == 1U)
+    {
+        if (pending_mode == APP_MODE_CC)
+        {
+            lv_label_set_text(dut_label, "MODE: CC");
+        }
+        else if (pending_mode == APP_MODE_CV)
+        {
+            lv_label_set_text(dut_label, "MODE: CV");
+        }
+        else
+        {
+            lv_label_set_text(dut_label, "SELECT MODE");
+        }
+
+        lv_obj_set_style_text_color(
+            dut_label, lv_color_hex(0xFFFFFF), 0);
+
+        lv_label_set_text(
+            hint_label, "1: CC  2: CV  OK: Confirm  LEFT: Back");
+    }
+    else if (page == 2U && app->selected_mode == APP_MODE_CC)
+    {
+        lv_label_set_text_fmt(
+            dut_label,
+            "SET CURRENT: %lu.%02lu A",
+            (unsigned long)(current_entry / 100U),
+            (unsigned long)(current_entry % 100U)
+        );
+
+        uint32_t max_entry =
+            (uint32_t)(app->max_current_a * 100.0f + 0.5f);
+
+        lv_label_set_text_fmt(
+            hint_label,
+            "MAX %lu.%02lu A  |  0500 = 5.00 A\n"
+            "RIGHT: Clear  LEFT: Back  OK: Next",
+            (unsigned long)(max_entry / 100U),
+            (unsigned long)(max_entry % 100U)
+        );
+    }
+    else if (page == 2U)
+    {
+        lv_label_set_text(dut_label, "CV VOLTAGE SETTINGS");
+        lv_label_set_text(hint_label, "Next step");
+    }
+    
+    else if (page == 3U)
+    {
+        uint32_t max_entry =
+            (uint32_t)(app->max_voltage_v * 10.0f + 0.05f);
+
+        if (app->selected_mode == APP_MODE_CC)
+        {
+            lv_label_set_text_fmt(
+                dut_label,
+                "CC CUTOFF: %lu.%lu V",
+                (unsigned long)(voltage_entry / 10U),
+                (unsigned long)(voltage_entry % 10U)
+            );
+        }
+        else
+        {
+            lv_label_set_text_fmt(
+                dut_label,
+                "CV TARGET: %lu.%lu V",
+                (unsigned long)(voltage_entry / 10U),
+                (unsigned long)(voltage_entry % 10U)
+            );
+        }
+
+        lv_label_set_text_fmt(
+            hint_label,
+            "MAX %lu.%lu V  |  200 = 20.0 V\n"
+            "RIGHT: Clear  LEFT: Back  OK: Next",
+            (unsigned long)(max_entry / 10U),
+            (unsigned long)(max_entry % 10U)
+        );
+    }
+    else if (page == 4U)
+    {
+        uint32_t hours, minutes, seconds;
+
+        if (timer_editing)
+        {
+            hours = timer_entry / 10000U;
+            minutes = (timer_entry / 100U) % 100U;
+            seconds = timer_entry % 100U;
+        }
+        else
+        {
+            uint32_t total = app->run_time_ms / 1000U;
+
+            hours = total / 3600U;
+            minutes = (total % 3600U) / 60U;
+            seconds = total % 60U;
+        }
+
+        lv_label_set_text_fmt(
+            dut_label,
+            "RUN TIME: %02lu:%02lu:%02lu",
+            (unsigned long)hours,
+            (unsigned long)minutes,
+            (unsigned long)seconds
+        );
+
+        lv_label_set_text(
+            hint_label,
+            "Enter HHMMSS (max 24h)\n"
+            "RIGHT: Clear  LEFT: Back  OK: Next"
+        );
+    }
+    else
+    {
+        lv_label_set_text(dut_label, "REVIEW SETTINGS");
+        lv_label_set_text(hint_label, "START screen next");
+    }
 }
 
 
