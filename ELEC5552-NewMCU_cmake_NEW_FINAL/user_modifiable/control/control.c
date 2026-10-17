@@ -4,7 +4,6 @@
 #include "outputs.h"
 #include "protection.h"
 #include "timers.h"
-#include "logger.h"
 
 #include <stddef.h>
 #include <math.h>
@@ -68,20 +67,6 @@ void Control_Init(void)
 
 void Control_Update(void)
 {
-    /* Stop and latch a DUT-loss indication on collapse/absence of voltage.
-       A low voltage alone cannot prove physical disconnection. */
-    if (control_state != CONTROL_STATE_IDLE)
-    {
-        AppState_t *active = App_GetState();
-        if (active == NULL || !isfinite(active->dut_voltage_v) ||
-            active->dut_voltage_v < 0.5f)
-        {
-            Control_Stop();
-            if (active != NULL) active->dut_lost_during_run = true;
-            return;
-        }
-    }
-
     switch (control_state)
     {
         /* -------------------------------------------------
@@ -686,11 +671,6 @@ bool Control_Start(void)
         return false;
     }
 
-    if (!App_ExternalProbesReady())
-    {
-        return false;
-    }
-
     /* Validate user setpoints */
     float current_a = app->current_setpoint_a;
     float voltage_v = app->voltage_setpoint_v;
@@ -761,8 +741,6 @@ bool Control_StartCC(void)
         return false;
     }
 
-    if (!App_ExternalProbesReady()) return false;
-
     float dut_voltage_v = app->dut_voltage_v;
     float requested_current_a = app->current_setpoint_a;
 
@@ -801,7 +779,7 @@ bool Control_StartCC(void)
     );
 
     /* Start run timer */
-    if (!Logger_Start(app->sample_period_ms))
+    if (!Timers_RunTimerStart())
     {
         Outputs_SetSafe();
         return false;
@@ -817,7 +795,6 @@ bool Control_StartCC(void)
     // Release the MOSFET clamp.
     Outputs_ClampDisable();
 
-    app->dut_lost_during_run = false;
     app->running = true;
 
     return true;
@@ -842,8 +819,6 @@ bool Control_StartCV(void)
     {
         return false;
     }
-
-    if (!App_ExternalProbesReady()) return false;
 
     float dut_voltage_v = app->dut_voltage_v;
     float target_v = app->voltage_setpoint_v;
@@ -889,7 +864,7 @@ bool Control_StartCV(void)
     );
 
     /* Start run timer */
-    if (!Logger_Start(app->sample_period_ms))
+    if (!Timers_RunTimerStart())
     {
         Outputs_SetSafe();
         return false;
@@ -904,7 +879,6 @@ bool Control_StartCV(void)
 
     // CV_STARTUP checks measurements before releasing the clamp.
     control_state = CONTROL_STATE_CV_STARTUP;
-    app->dut_lost_during_run = false;
     app->running = true;
 
     return true;
@@ -933,7 +907,7 @@ void Control_Stop(void)
     cv_low_current_start_ms = 0U;
 
 
-    Logger_Stop();  /* Also stops the shared run timer; retains RAM log. */
+    Timers_RunTimerStop();
 
     control_state = CONTROL_STATE_IDLE;
 

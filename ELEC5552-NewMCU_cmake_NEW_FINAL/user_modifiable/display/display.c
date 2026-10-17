@@ -4,9 +4,6 @@
 #include "control.h"
 #include "protection.h"
 #include "timers.h"
-#include "logger.h"
-#include <math.h>
-#include <stdlib.h>
 
 #include "mx_spi3.h"
 #include "mx_gpio_default.h"
@@ -227,10 +224,8 @@ void Display_Update(void)
     static uint32_t last_update_ms = 0U;
     static uint32_t last_press_ms = 0U;
 
-    /* Pages 0-5 setup, 6 run, 7 finish, 8 fault, 9 probes, 10 DUT lost */
+    /* Pages: 0-5 setup, 6 running, 7 finished, 8 fault */
     static uint8_t page = 0U;
-    static uint8_t run_view = 0U;  /* 0=summary, 1=pairs, 2=heatsinks, 3=external */
-    static bool probe_setup_invalid = false;
     static AppMode_t pending_mode = APP_MODE_NONE;
     /* Preserve the original fault cause even after sensors recover. */
     static ProtectionStatus_t fault_snapshot;
@@ -343,23 +338,7 @@ void Display_Update(void)
     /* Basic debounce */
     if ((uint32_t)(now_ms - last_press_ms) >= 120U)
     {
-        if (page == 9U) /* Select external DUT probes */
-        {
-            if (left) { page = 4U; last_press_ms = now_ms; }
-            else if (digit >= 0 && digit <= 4)
-            {
-                app->external_probe_count = (uint8_t)digit;
-                probe_setup_invalid = false;
-                last_press_ms = now_ms;
-            }
-            else if (ok)
-            {
-                probe_setup_invalid = !App_ExternalProbesReady();
-                if (!probe_setup_invalid) page = 5U;
-                last_press_ms = now_ms;
-            }
-        }
-        else if (page == 0U)
+        if (page == 0U)
         {
             if (app->dut_connected && ok)
             {
@@ -523,7 +502,7 @@ void Display_Update(void)
 
             if (valid)
             {
-                page = 9U;  /* Select 0-4 external probes next */
+                page = 5U;  /* Review and START next */
                 timer_editing = false;
             }
 
@@ -535,7 +514,7 @@ void Display_Update(void)
     {
         if (left)
         {
-            page = 9U;
+            page = 4U;
             last_press_ms = now_ms;
         }
         else if (ok)
@@ -543,7 +522,6 @@ void Display_Update(void)
             if (Control_Start())
             {
                 page = 6U;
-                run_view = 0U;
             }
 
             last_press_ms = now_ms;
@@ -551,8 +529,6 @@ void Display_Update(void)
     }
     else if (page == 6U)  /* Running */
     {
-        if (left) { run_view = (run_view + 3U) % 4U; last_press_ms = now_ms; }
-        else if (right) { run_view = (run_view + 1U) % 4U; last_press_ms = now_ms; }
         if (Control_GetState() == CONTROL_STATE_CC)
         {
             uint32_t max_entry =
@@ -581,10 +557,9 @@ void Display_Update(void)
         }
     }
 
-    else if (page == 7U || page == 10U) /* Finished or DUT lost */
+    else if (page == 7U)  /* Finished: reset user settings */
     {
-        if (key1) { Logger_RetryUpload(); last_press_ms = now_ms; }
-        else if (ok && Logger_GetUploadStatus() != LOGGER_UPLOAD_SENDING)
+        if (ok)
         {
             page = 0U;
             pending_mode = APP_MODE_NONE;
@@ -630,7 +605,7 @@ void Display_Update(void)
     /* Detect automatic completion or protective shutdown */
     if (page == 6U && !app->running)
     {
-        page = app->dut_lost_during_run ? 10U : 7U;
+        page = 7U;
     }
 
     /* Refresh display every 200 ms */
@@ -668,15 +643,11 @@ void Display_Update(void)
         }
         else
         {
-            bool above_rating = isfinite(app->dut_voltage_v) &&
-                                app->dut_voltage_v > 30.0f;
-            lv_label_set_text(dut_label,
-                above_rating ? "DUT ABOVE 30 V" : "CONNECT DUT");
+            lv_label_set_text(dut_label, "CONNECT DUT");
             lv_obj_set_style_text_color(
                 dut_label, lv_color_hex(0xFFFFFF), 0);
-            lv_label_set_text(hint_label,
-                above_rating ? "DISCONNECT - VOLTAGE OUT OF RANGE" :
-                               "Waiting for DUT voltage...");
+            lv_label_set_text(
+                hint_label, "Waiting for DUT voltage...");
         }
     }
     else if (page == 1U)
@@ -792,19 +763,6 @@ void Display_Update(void)
         );
     }
 
-    else if (page == 9U) /* External probe selection */
-    {
-        lv_label_set_text_fmt(dut_label,
-            "EXTERNAL DUT PROBES\nSELECTED: %u / 4\n"
-            "FIRST %u PROBES REQUIRED\n"
-            "TEMPERATURE LIMIT: 45 C",
-            (unsigned int)app->external_probe_count,
-            (unsigned int)app->external_probe_count);
-        lv_label_set_text(hint_label,
-            probe_setup_invalid ?
-            "CHECK SELECTED PROBES / TEMP\n0-4: Select   OK: Retry   LEFT: Back" :
-            "0-4: Select   OK: Confirm   LEFT: Back");
-    }
     else if (page == 5U)  /* Review */
     {
         uint32_t voltage10 =
@@ -831,8 +789,7 @@ void Display_Update(void)
                 "CURRENT: %lu.%02lu A\n"
                 "CUTOFF: %lu.%lu V\n"
                 "EST. POWER: %lu W\n"
-                "TIME: %02lu:%02lu:%02lu\n"
-                "EXTERNAL PROBES: %u",
+                "TIME: %02lu:%02lu:%02lu",
                 (unsigned long)(voltage10 / 10U),
                 (unsigned long)(voltage10 % 10U),
                 (unsigned long)(current100 / 100U),
@@ -842,8 +799,7 @@ void Display_Update(void)
                 (unsigned long)power,
                 (unsigned long)(time_s / 3600U),
                 (unsigned long)((time_s % 3600U) / 60U),
-                (unsigned long)(time_s % 60U),
-                (unsigned int)app->external_probe_count
+                (unsigned long)(time_s % 60U)
             );
         }
         else
@@ -858,16 +814,14 @@ void Display_Update(void)
                 "TARGET: %lu.%lu V\n"
                 "CURRENT: -\n"
                 "POWER LIMIT: 500 W\n"
-                "TIME: %02lu:%02lu:%02lu\n"
-                "EXTERNAL PROBES: %u",
+                "TIME: %02lu:%02lu:%02lu",
                 (unsigned long)(voltage10 / 10U),
                 (unsigned long)(voltage10 % 10U),
                 (unsigned long)(target10 / 10U),
                 (unsigned long)(target10 % 10U),
                 (unsigned long)(time_s / 3600U),
                 (unsigned long)((time_s % 3600U) / 60U),
-                (unsigned long)(time_s % 60U),
-                (unsigned int)app->external_probe_count
+                (unsigned long)(time_s % 60U)
             );
         }
 
@@ -876,120 +830,115 @@ void Display_Update(void)
             "OK: START    LEFT: BACK"
         );
     }
-    else if (page == 6U)  /* Running, 4 read-only data views */
+    else if (page == 6U)  /* Running */
     {
+        uint32_t v10 =
+            (uint32_t)(app->dut_voltage_v * 10.0f + 0.5f);
+
+        uint32_t i100 =
+            (uint32_t)(app->total_current_a * 100.0f + 0.5f);
+
+        uint32_t power =
+            (uint32_t)(app->power_w + 0.5f);
+
         TimerHMS_t remaining = Timers_RunTimerGetRemainingHMS();
-        if (run_view == 0U)
+
+        float max_internal = 0.0f;
+        float max_external = 0.0f;
+        bool internal_valid = false;
+        bool external_valid = false;
+
+        for (uint32_t i = 0U; i < NUM_THERMISTORS; i++)
         {
-            uint32_t v10 = (uint32_t)(app->dut_voltage_v * 10.0f + 0.5f);
-            uint32_t i100 = (uint32_t)(app->total_current_a * 100.0f + 0.5f);
-            uint32_t power = (uint32_t)(app->power_w + 0.5f);
-            lv_label_set_text_fmt(dut_label,
-                "%s RUNNING - SUMMARY\n"
-                "DUT: %lu.%lu V  (CONNECTED)\n"
-                "CURRENT: %lu.%02lu A\nPOWER: %lu W\n"
-                "TIME LEFT: %02lu:%02lu:%02lu\n"
-                "FAN: %lu RPM",
-                app->selected_mode == APP_MODE_CC ? "CC" : "CV",
-                (unsigned long)(v10/10U), (unsigned long)(v10%10U),
-                (unsigned long)(i100/100U), (unsigned long)(i100%100U),
-                (unsigned long)power,
-                (unsigned long)remaining.hours, (unsigned long)remaining.minutes,
-                (unsigned long)remaining.seconds, (unsigned long)app->fan_rpm);
+            if (!in->thermistor_valid[i])
+                continue;
+
+            float temp = app->temperature_c[i];
+
+            /* External thermistors: 4-7 (array indexes 3-6) */
+            if (i >= 3U && i <= 6U)
+            {
+                if (!external_valid || temp > max_external)
+                    max_external = temp;
+
+                external_valid = true;
+            }
+            else
+            {
+                if (!internal_valid || temp > max_internal)
+                    max_internal = temp;
+
+                internal_valid = true;
+            }
         }
-        else if (run_view == 1U)
+
+        /* Show -- if no valid temperature measurement exists */
+        char internal_text[12] = "--";
+        char external_text[12] = "--";
+
+        if (internal_valid)
         {
-            uint32_t i0 = (uint32_t)(app->current_stage_a[0]*100.0f+0.5f);
-            uint32_t i1 = (uint32_t)(app->current_stage_a[1]*100.0f+0.5f);
-            uint32_t i2 = (uint32_t)(app->current_stage_a[2]*100.0f+0.5f);
-            uint32_t i3 = (uint32_t)(app->current_stage_a[3]*100.0f+0.5f);
-            lv_label_set_text_fmt(dut_label,
-                "MEASURED PAIR CURRENTS\n"
-                "PAIR 1: %lu.%02lu A\n"
-                "PAIR 2: %lu.%02lu A\n"
-                "PAIR 3: %lu.%02lu A\n"
-                "PAIR 4: %lu.%02lu A\n"
-                "8 stages, 4 measured pair currents",
-                (unsigned long)(i0/100U),(unsigned long)(i0%100U),
-                (unsigned long)(i1/100U),(unsigned long)(i1%100U),
-                (unsigned long)(i2/100U),(unsigned long)(i2%100U),
-                (unsigned long)(i3/100U),(unsigned long)(i3%100U));
+            lv_snprintf(internal_text, sizeof(internal_text),
+                        "%ld", (long)(max_internal +
+                        (max_internal >= 0.0f ? 0.5f : -0.5f)));
+        }
+
+        if (external_valid)
+        {
+            lv_snprintf(external_text, sizeof(external_text),
+                        "%ld", (long)(max_external +
+                        (max_external >= 0.0f ? 0.5f : -0.5f)));
+        }
+
+        lv_label_set_text_fmt(
+            dut_label,
+            "%s RUNNING\n"
+            "VOLTAGE: %lu.%lu V\n"
+            "CURRENT: %lu.%02lu A\n"
+            "POWER: %lu W\n"
+            "TIME LEFT: %02lu:%02lu:%02lu\n"
+            "FAN: %lu RPM\n"
+            "TEMP INT: %s C   EXT: %s C",
+            app->selected_mode == APP_MODE_CC ? "CC" : "CV",
+            (unsigned long)(v10 / 10U),
+            (unsigned long)(v10 % 10U),
+            (unsigned long)(i100 / 100U),
+            (unsigned long)(i100 % 100U),
+            (unsigned long)power,
+            (unsigned long)remaining.hours,
+            (unsigned long)remaining.minutes,
+            (unsigned long)remaining.seconds,
+            (unsigned long)app->fan_rpm,
+            internal_text,
+            external_text
+        );
+
+        if (Control_GetState() == CONTROL_STATE_CC)
+        {
+            lv_label_set_text_fmt(
+                hint_label,
+                "SET: %lu.%02lu A   UP/DOWN: 0.01 A   OK: STOP",
+                (unsigned long)(current_entry / 100U),
+                (unsigned long)(current_entry % 100U)
+            );
         }
         else
         {
-            const uint8_t internal_ids[8] = {0U,1U,2U,7U,8U,9U,10U,11U};
-            uint8_t count = (run_view == 2U) ? 8U : app->external_probe_count;
-            char content[260];
-            uint32_t used = 0U;
-            float sum = 0.0f, maximum = -1000.0f;
-            uint8_t valid_count = 0U;
-            used = (uint32_t)lv_snprintf(content,sizeof(content),
-                "%s\n",run_view == 2U ? "HEATSINK TEMPERATURES" : "EXTERNAL DUT TEMPERATURES");
-            if (count == 0U && run_view == 3U)
-                used += (uint32_t)lv_snprintf(content+used,sizeof(content)-used,
-                    "NO EXTERNAL PROBES SELECTED\n");
-            for (uint8_t j = 0U; j < count && used < sizeof(content)-25U; ++j)
-            {
-                uint8_t idx = run_view == 2U ? internal_ids[j] : (uint8_t)(j+3U);
-                if (in->thermistor_valid[idx] && isfinite(app->temperature_c[idx]))
-                {
-                    float temp = app->temperature_c[idx];
-                    long t10 = (long)(temp*10.0f + (temp >= 0 ? 0.5f : -0.5f));
-                    used += (uint32_t)lv_snprintf(content+used,sizeof(content)-used,
-                        "%s%u: %ld.%01ld C%s",
-                        run_view == 2U ? "H" : "E",(unsigned int)(j+1U),
-                        t10/10, labs(t10%10), (j%2U==1U) ? "\n" : "   ");
-                    sum += temp;
-                    if (temp > maximum) maximum = temp;
-                    ++valid_count;
-                }
-                else
-                    used += (uint32_t)lv_snprintf(content+used,sizeof(content)-used,
-                        "%s%u: -- C%s",
-                        run_view == 2U ? "H" : "E",(unsigned int)(j+1U),
-                        (j%2U==1U) ? "\n" : "   ");
-            }
-            if (used < sizeof(content)-40U)
-            {
-                if (valid_count)
-                {
-                    long avg10 = (long)(sum*10.0f/(float)valid_count + 0.5f);
-                    long max10 = (long)(maximum*10.0f + 0.5f);
-                    lv_snprintf(content+used,sizeof(content)-used,
-                        "\nAVG: %ld.%01ld C   MAX: %ld.%01ld C",
-                        avg10/10, labs(avg10%10), max10/10, labs(max10%10));
-                }
-                else lv_snprintf(content+used,sizeof(content)-used,"\nAVG: -- C");
-            }
-            lv_label_set_text(dut_label,content);
+            lv_label_set_text(hint_label, "OK: STOP");
         }
-        if (Control_GetState() == CONTROL_STATE_CC)
-        {
-            lv_label_set_text_fmt(hint_label,
-                "L/R: VIEW  UP/DN: %lu.%02lu A  OK: STOP",
-                (unsigned long)(current_entry/100U),
-                (unsigned long)(current_entry%100U));
-        }
-        else lv_label_set_text(hint_label,"LEFT/RIGHT: VIEW   OK: STOP");
+
     }
-    else if (page == 7U || page == 10U)  /* Finished / DUT voltage lost */
+    else if (page == 7U)  /* Finished */
     {
-        const char *upload = "LOG: NOT AVAILABLE";
-        switch (Logger_GetUploadStatus())
-        {
-            case LOGGER_UPLOAD_WAITING_USB: upload = "USB: WAIT FOR PC/CDC"; break;
-            case LOGGER_UPLOAD_SENDING: upload = "USB: UPLOADING CSV"; break;
-            case LOGGER_UPLOAD_COMPLETE: upload = "USB: CSV TX COMPLETE"; break;
-            default: break;
-        }
-        lv_label_set_text_fmt(dut_label,
-            "%s\nLOAD DISABLED\nSAVED: %lu RECORDS\n%s",
-            page == 10U ? "DUT VOLTAGE LOST" : "RUN FINISHED",
-            (unsigned long)Logger_GetSavedCount(), upload);
-        lv_label_set_text(hint_label,
-            Logger_GetUploadStatus() == LOGGER_UPLOAD_SENDING ?
-            "UPLOADING - WAIT FOR USB TX" :
-            "1: RETRY USB   OK: DISCARD / NEW RUN");
+        lv_label_set_text(
+            dut_label,
+            "RUN FINISHED\nLOAD DISABLED"
+        );
+
+        lv_label_set_text(
+            hint_label,
+            "OK: RESET"
+        );
     }
     else if (page == 8U)  /* Latched protection fault */
     {

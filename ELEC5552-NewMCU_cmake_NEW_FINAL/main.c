@@ -27,7 +27,6 @@
 #include "app.h"
 #include "timers.h"
 #include "lvgl.h"
-#include "mx_usbx_app.h"
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
@@ -85,15 +84,13 @@ int main(void)
 
     while (1) {
 
-      /* Drive USBX standalone device state machine (no RTOS). */
-      app_usbx_process();
       Inputs_Update();
       App_Update();
-      Protection_Update(45.0f);
-      Control_Update();
-      Logger_Update();
       Display_Update();
       Fan_Update();
+      Logger_Update();
+      Control_Update();
+      Protection_Update(45.0f);
 
       uint32_t now_ms = Timers_GetMillis();
 

@@ -274,8 +274,7 @@ const ProtectionStatus_t *Protection_GetStatus(void);
 BatteryTempResult Protection_CheckExternalTemperature(
     const float temperature_c[EXTERNAL_THERMISTOR_COUNT],
     const bool valid[EXTERNAL_THERMISTOR_COUNT],
-    float cutoff_c,
-    uint8_t enabled_count);
+    float cutoff_c);
 
 
 InternalTempResult Protection_CheckInternalTemperature(

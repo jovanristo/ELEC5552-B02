@@ -1,7 +1,6 @@
 #include "protection.h"
 
 #include "inputs.h"
-#include "app.h"
 #include "outputs.h"
 
 #include <math.h>
@@ -67,13 +66,11 @@ static ProtectionStatus_t protection_status;
 BatteryTempResult Protection_CheckExternalTemperature(
     const float temperature_c[EXTERNAL_THERMISTOR_COUNT],
     const bool valid[EXTERNAL_THERMISTOR_COUNT],
-    float cutoff_c,
-    uint8_t enabled_count)
+    float cutoff_c)
 {
     if ((temperature_c == NULL) ||
         (valid == NULL) ||
-        (!isfinite(cutoff_c)) ||
-        (enabled_count > EXTERNAL_THERMISTOR_COUNT))
+        (!isfinite(cutoff_c)))
     {
         return (BatteryTempResult)
         {
@@ -84,7 +81,7 @@ BatteryTempResult Protection_CheckExternalTemperature(
 
 
     for (uint8_t i = 0U;
-         i < enabled_count;
+         i < EXTERNAL_THERMISTOR_COUNT;
          i++)
     {
         /*
@@ -467,15 +464,11 @@ void Protection_Update(float external_cutoff_c)
             internal_valid);
 
 
-    const AppState_t *app = App_GetState();
-    uint8_t enabled_external = (app != NULL && app->running)
-        ? app->external_probe_count : 0U;
     protection_status.external_temp =
         Protection_CheckExternalTemperature(
             external_temp,
             external_valid,
-            external_cutoff_c,
-            enabled_external);
+            external_cutoff_c);
 
 
     /* =====================================================

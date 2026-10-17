@@ -35,17 +35,4 @@ uint32_t Logger_GetRequestedSamplePeriod(void);
 uint32_t Logger_GetSamplePeriod(void);
 
 
-typedef enum
-{
-    LOGGER_UPLOAD_NONE = 0,
-    LOGGER_UPLOAD_WAITING_USB,
-    LOGGER_UPLOAD_SENDING,
-    LOGGER_UPLOAD_COMPLETE
-} LoggerUploadStatus_t;
-
-LoggerUploadStatus_t Logger_GetUploadStatus(void);
-uint32_t Logger_GetSavedCount(void);
-/* Resend from the first line if the host was not capturing the transfer. */
-bool Logger_RetryUpload(void);
-
 #endif /* LOGGER_H */
