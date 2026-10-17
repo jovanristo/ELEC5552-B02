@@ -1,0 +1,4 @@
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_FINAL/generated/hal/mx_usb_drd_fs.c:33:19:mx_usb_drd_fs_device_init	24	static,ignoring_inline_asm
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_FINAL/generated/hal/mx_usb_drd_fs.c:71:6:mx_usb_drd_fs_device_deinit	0	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_FINAL/generated/hal/mx_usb_drd_fs.c:81:19:mx_usb_drd_fs_device_gethandle	0	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_FINAL/generated/hal/mx_usb_drd_fs.c:89:6:USB_DRD_FS_IRQHandler	0	static

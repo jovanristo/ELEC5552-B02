@@ -1,0 +1,14 @@
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_FINAL/stm32c5xx_drivers/hal/stm32c5xx_hal.c:231:14:HAL_DeInit	0	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_FINAL/stm32c5xx_drivers/hal/stm32c5xx_hal.c:274:21:HAL_InitTick	24	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_FINAL/stm32c5xx_drivers/hal/stm32c5xx_hal.c:306:14:HAL_UpdateCoreClock	8	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_FINAL/stm32c5xx_drivers/hal/stm32c5xx_hal.c:207:14:HAL_Init	8	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_FINAL/stm32c5xx_drivers/hal/stm32c5xx_hal.c:342:13:HAL_IncTick	0	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_FINAL/stm32c5xx_drivers/hal/stm32c5xx_hal.c:353:17:HAL_GetTick	0	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_FINAL/stm32c5xx_drivers/hal/stm32c5xx_hal.c:362:10:HAL_GetTickPrio	0	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_FINAL/stm32c5xx_drivers/hal/stm32c5xx_hal.c:371:17:HAL_GetTickFreq	0	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_FINAL/stm32c5xx_drivers/hal/stm32c5xx_hal.c:385:13:HAL_Delay	16	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_FINAL/stm32c5xx_drivers/hal/stm32c5xx_hal.c:412:13:HAL_Delay_NoISR	8	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_FINAL/stm32c5xx_drivers/hal/stm32c5xx_hal.c:426:13:HAL_SuspendTick	0	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_FINAL/stm32c5xx_drivers/hal/stm32c5xx_hal.c:440:13:HAL_ResumeTick	0	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_FINAL/stm32c5xx_drivers/hal/stm32c5xx_hal.c:459:10:HAL_GetVersion	0	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_FINAL/stm32c5xx_drivers/hal/stm32c5xx_hal.c:480:14:HAL_GetDeviceUniqueID	0	static

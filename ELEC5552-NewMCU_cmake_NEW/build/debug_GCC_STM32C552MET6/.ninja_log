@@ -135,8 +135,8 @@
 2256	2327	1792135611913643533	CMakeFiles/ELEC5552-NewMCU.dir/middleware/usbx/common/usbx_device_classes/src/ux_device_class_cdc_acm_write_run.c.obj	1f225449dfd8f2b7
 1772	2305	1792135611429137321	CMakeFiles/ELEC5552-NewMCU.dir/middleware/usbx/interfaces/usbx_stm32_device_controllers/ux_dcd_stm32_transfer_run.c.obj	3a9629f427c646b
 1682	2160	1792135611339535787	CMakeFiles/ELEC5552-NewMCU.dir/middleware/usbx/interfaces/usbx_stm32_device_controllers/ux_dcd_stm32_register_callback.c.obj	a49d629e3870e5f6
-300	571	1792143781859787979	ELEC5552-NewMCU.elf	14abf54193bd73e3
-41	297	1792143781601574944	CMakeFiles/ELEC5552-NewMCU.dir/user_modifiable/display/display.c.obj	d5b0da10aec5c42e
+376	646	1792144306371797011	ELEC5552-NewMCU.elf	14abf54193bd73e3
+44	370	1792144306040417321	CMakeFiles/ELEC5552-NewMCU.dir/user_modifiable/display/display.c.obj	d5b0da10aec5c42e
 20	252	1791794507477498139	middleware/lvgl/CMakeFiles/lvgl_thorvg.dir/src/libs/thorvg/tvgInitializer.cpp.obj	48d3f872b3ca5697
 18	254	1791794507475534756	middleware/lvgl/CMakeFiles/lvgl_thorvg.dir/src/libs/thorvg/tvgAccessor.cpp.obj	cc936bd821853202
 19	255	1791794507475932216	middleware/lvgl/CMakeFiles/lvgl_thorvg.dir/src/libs/thorvg/tvgAnimation.cpp.obj	8afd904ce785cd54
@@ -1102,5 +1102,3 @@
 17061	17242	1791794524517870970	middleware/lvgl/CMakeFiles/lvgl_demos.dir/demos/widgets/lv_demo_widgets_components.c.obj	934170586399a883
 16944	17277	1791794524401544947	middleware/lvgl/CMakeFiles/lvgl_demos.dir/demos/vector_graphic/assets/img_demo_vector_avatar.c.obj	63bd9024cac96e77
 17277	17300	1791794524734068036	middleware/lvgl/liblvgl_demos.a	94148da17e891959
-44	370	1792144306040417321	CMakeFiles/ELEC5552-NewMCU.dir/user_modifiable/display/display.c.obj	d5b0da10aec5c42e
-376	646	1792144306371797011	ELEC5552-NewMCU.elf	14abf54193bd73e3

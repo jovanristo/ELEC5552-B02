@@ -1,0 +1,4 @@
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_FINAL/stm32c5xx_drivers/ll/stm32c5xx_ll_bus.h:878:22:LL_AHB2_GRP1_EnableClock	8	static,ignoring_inline_asm
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_FINAL/generated/hal/mx_spi3.c:32:19:mx_spi3_init	64	static,ignoring_inline_asm
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_FINAL/generated/hal/mx_spi3.c:110:6:mx_spi3_deinit	8	static,ignoring_inline_asm
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_FINAL/generated/hal/mx_spi3.c:125:19:mx_spi3_gethandle	0	static

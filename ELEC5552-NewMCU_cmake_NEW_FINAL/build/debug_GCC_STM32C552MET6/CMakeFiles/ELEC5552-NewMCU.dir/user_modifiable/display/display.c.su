@@ -1,0 +1,5 @@
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_FINAL/user_modifiable/display/display.c:1255:13:Display_SendData	16	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_FINAL/user_modifiable/display/display.c:1225:13:Display_SendCommand	16	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_FINAL/user_modifiable/display/display.c:1066:13:Display_Flush	48	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_FINAL/user_modifiable/display/display.c:75:6:Display_Init	56	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_FINAL/user_modifiable/display/display.c:225:6:Display_Update	416	static

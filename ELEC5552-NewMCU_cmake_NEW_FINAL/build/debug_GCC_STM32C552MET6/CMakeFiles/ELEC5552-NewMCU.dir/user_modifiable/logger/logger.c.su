@@ -1,0 +1,11 @@
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_FINAL/user_modifiable/logger/logger.c:20:17:Logger_StoragePeriod	8	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_FINAL/user_modifiable/logger/logger.c:32:13:Logger_RecordNow	88	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_FINAL/user_modifiable/logger/logger.c:49:6:Logger_Start	16	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_FINAL/user_modifiable/logger/logger.c:71:6:Logger_Stop	16	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_FINAL/user_modifiable/logger/logger.c:140:6:Logger_Update	160	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_FINAL/user_modifiable/logger/logger.c:161:6:Logger_IsRunning	0	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_FINAL/user_modifiable/logger/logger.c:162:10:Logger_GetRequestedSamplePeriod	0	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_FINAL/user_modifiable/logger/logger.c:163:10:Logger_GetSamplePeriod	0	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_FINAL/user_modifiable/logger/logger.c:164:22:Logger_GetUploadStatus	0	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_FINAL/user_modifiable/logger/logger.c:165:10:Logger_GetSavedCount	0	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_FINAL/user_modifiable/logger/logger.c:166:6:Logger_RetryUpload	16	static

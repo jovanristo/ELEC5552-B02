@@ -1,0 +1,5 @@
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_FINAL/user_modifiable/usb/usb.c:14:6:USB_CDC_Activate	0	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_FINAL/user_modifiable/usb/usb.c:24:6:USB_CDC_Deactivate	0	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_FINAL/user_modifiable/usb/usb.c:34:6:USB_IsConnected	0	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_FINAL/user_modifiable/usb/usb.c:44:6:USB_Send	24	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_FINAL/user_modifiable/usb/usb.c:72:6:USB_SendString	8	static

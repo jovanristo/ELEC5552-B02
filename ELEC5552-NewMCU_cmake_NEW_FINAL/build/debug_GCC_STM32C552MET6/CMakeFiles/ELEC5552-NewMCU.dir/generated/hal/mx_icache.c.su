@@ -1,0 +1,3 @@
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_FINAL/generated/hal/mx_icache.c:34:22:mx_icache_init	8	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_FINAL/generated/hal/mx_icache.c:46:6:mx_icache_deinit	0	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_FINAL/generated/hal/mx_icache.c:51:22:mx_icache_gethandle	0	static

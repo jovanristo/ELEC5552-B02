@@ -1,0 +1,4 @@
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_FINAL/user_modifiable/Device/STM32C552MET6/startup_stm32c552xx.c:277:13:HardFault_Handler	0	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_FINAL/user_modifiable/Device/STM32C552MET6/startup_stm32c552xx.c:256:25:Reset_Handler	8	static,ignoring_inline_asm
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_FINAL/user_modifiable/Device/STM32C552MET6/startup_stm32c552xx.c:299:13:Default_IRQHandler_Hook	0	static
+/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_FINAL/user_modifiable/Device/STM32C552MET6/startup_stm32c552xx.c:288:6:Default_IRQHandler	8	static

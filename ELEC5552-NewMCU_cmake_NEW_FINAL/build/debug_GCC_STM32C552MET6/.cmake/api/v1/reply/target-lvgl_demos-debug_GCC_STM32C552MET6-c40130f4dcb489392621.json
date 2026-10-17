@@ -1,0 +1,861 @@
+{
+	"archive" : {},
+	"artifacts" : 
+	[
+		{
+			"path" : "middleware/lvgl/liblvgl_demos.a"
+		}
+	],
+	"backtrace" : 3,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_library",
+			"include",
+			"target_link_libraries",
+			"set_target_properties",
+			"include_directories",
+			"target_include_directories"
+		],
+		"files" : 
+		[
+			"middleware/lvgl/env_support/cmake/main.cmake",
+			"middleware/lvgl/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 1
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 31,
+				"parent" : 0
+			},
+			{
+				"file" : 0,
+				"parent" : 1
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 366,
+				"parent" : 2
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 373,
+				"parent" : 2
+			},
+			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 372,
+				"parent" : 2
+			},
+			{
+				"command" : 4,
+				"file" : 0,
+				"line" : 298,
+				"parent" : 2
+			},
+			{
+				"command" : 5,
+				"file" : 0,
+				"line" : 368,
+				"parent" : 2
+			}
+		]
+	},
+	"codemodelVersion" : 
+	{
+		"major" : 2,
+		"minor" : 10
+	},
+	"compileDependencies" : 
+	[
+		{
+			"backtrace" : 4,
+			"id" : "lvgl::@4f0b596485a892ab5f8d"
+		}
+	],
+	"compileGroups" : 
+	[
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "-fdata-sections -ffunction-sections -Wl,--gc-sections -Wno-comment"
+				}
+			],
+			"defines" : 
+			[
+				{
+					"backtrace" : 5,
+					"define" : "LV_CONF_INCLUDE_SIMPLE"
+				},
+				{
+					"backtrace" : 5,
+					"define" : "LV_KCONFIG_IGNORE"
+				},
+				{
+					"backtrace" : 5,
+					"define" : "LV_LVGL_H_INCLUDE_SIMPLE"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 6,
+					"path" : "/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_FINAL/middleware/lvgl/include/lvgl"
+				},
+				{
+					"backtrace" : 6,
+					"isSystem" : true,
+					"path" : "/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_FINAL"
+				},
+				{
+					"backtrace" : 6,
+					"isSystem" : true,
+					"path" : "/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_FINAL/middleware/lvgl/include"
+				},
+				{
+					"backtrace" : 7,
+					"isSystem" : true,
+					"path" : "/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_FINAL/middleware/lvgl/demos"
+				},
+				{
+					"backtrace" : 4,
+					"isSystem" : true,
+					"path" : "/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_FINAL/middleware/lvgl"
+				},
+				{
+					"backtrace" : 4,
+					"isSystem" : true,
+					"path" : "/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_FINAL/build/debug_GCC_STM32C552MET6/middleware/lvgl"
+				}
+			],
+			"language" : "C",
+			"sourceIndexes" : 
+			[
+				0,
+				1,
+				2,
+				3,
+				4,
+				5,
+				6,
+				7,
+				8,
+				9,
+				10,
+				11,
+				12,
+				13,
+				14,
+				15,
+				16,
+				17,
+				18,
+				19,
+				20,
+				21,
+				22,
+				23,
+				24,
+				25,
+				26,
+				27,
+				28,
+				29,
+				30,
+				31,
+				32,
+				33,
+				34,
+				35,
+				36,
+				37,
+				38,
+				39,
+				40,
+				41,
+				42,
+				43,
+				44,
+				45,
+				46,
+				47,
+				48,
+				49,
+				50,
+				51,
+				52,
+				53,
+				54,
+				55,
+				56,
+				57,
+				58,
+				59,
+				60,
+				61,
+				62,
+				63,
+				64,
+				65,
+				66,
+				67,
+				68,
+				69,
+				70,
+				71,
+				72,
+				73,
+				74,
+				75,
+				76,
+				77,
+				78,
+				79,
+				80,
+				81,
+				82,
+				83
+			]
+		}
+	],
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 4,
+			"id" : "lvgl::@4f0b596485a892ab5f8d"
+		}
+	],
+	"id" : "lvgl_demos::@4f0b596485a892ab5f8d",
+	"interfaceLinkLibraries" : 
+	[
+		{
+			"backtrace" : 4,
+			"id" : "lvgl::@4f0b596485a892ab5f8d"
+		}
+	],
+	"linkLibraries" : 
+	[
+		{
+			"backtrace" : 4,
+			"id" : "lvgl::@4f0b596485a892ab5f8d"
+		}
+	],
+	"name" : "lvgl_demos",
+	"nameOnDisk" : "liblvgl_demos.a",
+	"paths" : 
+	{
+		"build" : "middleware/lvgl",
+		"source" : "middleware/lvgl"
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "Source Files",
+			"sourceIndexes" : 
+			[
+				0,
+				1,
+				2,
+				3,
+				4,
+				5,
+				6,
+				7,
+				8,
+				9,
+				10,
+				11,
+				12,
+				13,
+				14,
+				15,
+				16,
+				17,
+				18,
+				19,
+				20,
+				21,
+				22,
+				23,
+				24,
+				25,
+				26,
+				27,
+				28,
+				29,
+				30,
+				31,
+				32,
+				33,
+				34,
+				35,
+				36,
+				37,
+				38,
+				39,
+				40,
+				41,
+				42,
+				43,
+				44,
+				45,
+				46,
+				47,
+				48,
+				49,
+				50,
+				51,
+				52,
+				53,
+				54,
+				55,
+				56,
+				57,
+				58,
+				59,
+				60,
+				61,
+				62,
+				63,
+				64,
+				65,
+				66,
+				67,
+				68,
+				69,
+				70,
+				71,
+				72,
+				73,
+				74,
+				75,
+				76,
+				77,
+				78,
+				79,
+				80,
+				81,
+				82,
+				83
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/benchmark/assets/img_benchmark_avatar.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/benchmark/assets/img_benchmark_lvgl_logo_argb.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/benchmark/assets/img_benchmark_lvgl_logo_rgb.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/benchmark/assets/lv_font_benchmark_montserrat_12_aligned.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/benchmark/assets/lv_font_benchmark_montserrat_14_aligned.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/benchmark/assets/lv_font_benchmark_montserrat_16_aligned.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/benchmark/assets/lv_font_benchmark_montserrat_18_aligned.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/benchmark/assets/lv_font_benchmark_montserrat_20_aligned.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/benchmark/assets/lv_font_benchmark_montserrat_24_aligned.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/benchmark/assets/lv_font_benchmark_montserrat_26_aligned.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/benchmark/lv_demo_benchmark.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/gltf/lv_demo_gltf.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/keypad_encoder/lv_demo_keypad_encoder.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/lv_demos.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/music/assets/img_lv_demo_music_btn_corner_large.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/music/assets/img_lv_demo_music_btn_list_pause.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/music/assets/img_lv_demo_music_btn_list_pause_large.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/music/assets/img_lv_demo_music_btn_list_play.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/music/assets/img_lv_demo_music_btn_list_play_large.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/music/assets/img_lv_demo_music_btn_loop.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/music/assets/img_lv_demo_music_btn_loop_large.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/music/assets/img_lv_demo_music_btn_next.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/music/assets/img_lv_demo_music_btn_next_large.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/music/assets/img_lv_demo_music_btn_pause.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/music/assets/img_lv_demo_music_btn_pause_large.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/music/assets/img_lv_demo_music_btn_play.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/music/assets/img_lv_demo_music_btn_play_large.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/music/assets/img_lv_demo_music_btn_prev.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/music/assets/img_lv_demo_music_btn_prev_large.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/music/assets/img_lv_demo_music_btn_rnd.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/music/assets/img_lv_demo_music_btn_rnd_large.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/music/assets/img_lv_demo_music_corner_left.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/music/assets/img_lv_demo_music_corner_left_large.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/music/assets/img_lv_demo_music_corner_right.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/music/assets/img_lv_demo_music_corner_right_large.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/music/assets/img_lv_demo_music_cover_1.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/music/assets/img_lv_demo_music_cover_1_large.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/music/assets/img_lv_demo_music_cover_2.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/music/assets/img_lv_demo_music_cover_2_large.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/music/assets/img_lv_demo_music_cover_3.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/music/assets/img_lv_demo_music_cover_3_large.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/music/assets/img_lv_demo_music_icon_1.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/music/assets/img_lv_demo_music_icon_1_large.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/music/assets/img_lv_demo_music_icon_2.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/music/assets/img_lv_demo_music_icon_2_large.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/music/assets/img_lv_demo_music_icon_3.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/music/assets/img_lv_demo_music_icon_3_large.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/music/assets/img_lv_demo_music_icon_4.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/music/assets/img_lv_demo_music_icon_4_large.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/music/assets/img_lv_demo_music_list_border.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/music/assets/img_lv_demo_music_list_border_large.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/music/assets/img_lv_demo_music_logo.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/music/assets/img_lv_demo_music_slider_knob.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/music/assets/img_lv_demo_music_slider_knob_large.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/music/assets/img_lv_demo_music_wave_bottom.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/music/assets/img_lv_demo_music_wave_bottom_large.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/music/assets/img_lv_demo_music_wave_top.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/music/assets/img_lv_demo_music_wave_top_large.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/music/lv_demo_music.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/music/lv_demo_music_list.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/music/lv_demo_music_main.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/render/assets/img_render_arc_bg.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/render/assets/img_render_lvgl_logo_argb8888.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/render/assets/img_render_lvgl_logo_argb8888_premultiplied.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/render/assets/img_render_lvgl_logo_i1.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/render/assets/img_render_lvgl_logo_l8.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/render/assets/img_render_lvgl_logo_rgb565.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/render/assets/img_render_lvgl_logo_rgb565_swapped.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/render/assets/img_render_lvgl_logo_rgb565a8.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/render/assets/img_render_lvgl_logo_rgb888.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/render/assets/img_render_lvgl_logo_xrgb8888.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/render/lv_demo_render.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/stress/lv_demo_stress.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/vector_graphic/assets/img_demo_vector_avatar.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/vector_graphic/lv_demo_vector_graphic.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/widgets/assets/img_clothes.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/widgets/assets/img_demo_widgets_avatar.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/widgets/assets/img_demo_widgets_needle.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/widgets/assets/img_lvgl_logo.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/widgets/lv_demo_widgets.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/widgets/lv_demo_widgets_analytics.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/widgets/lv_demo_widgets_components.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/widgets/lv_demo_widgets_profile.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 3,
+			"compileGroupIndex" : 0,
+			"path" : "middleware/lvgl/demos/widgets/lv_demo_widgets_shop.c",
+			"sourceGroupIndex" : 0
+		}
+	],
+	"type" : "STATIC_LIBRARY"
+}
