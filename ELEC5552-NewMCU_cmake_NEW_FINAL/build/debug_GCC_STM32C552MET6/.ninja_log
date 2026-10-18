@@ -574,7 +574,7 @@
 716	861	1792234743466006620	CMakeFiles/ELEC5552-NewMCU.dir/user_modifiable/Device/STM32C552MET6/system_stm32c5xx.c.obj	9acb206189a463c0
 763	907	1792234743513503308	CMakeFiles/ELEC5552-NewMCU.dir/user_modifiable/Device/STM32C552MET6/startup_stm32c552xx.c.obj	ee9e89e9fe7ae3e2
 624	938	1792234743374355713	CMakeFiles/ELEC5552-NewMCU.dir/generated/hal/mx_tim8.c.obj	1211cf1c275a72a2
-24	763	1792234742774576448	CMakeFiles/ELEC5552-NewMCU.dir/main.c.obj	128d1b74d5c83342
+44	330	1792307512188723962	CMakeFiles/ELEC5552-NewMCU.dir/main.c.obj	128d1b74d5c83342
 534	850	1792234743284183185	CMakeFiles/ELEC5552-NewMCU.dir/generated/hal/mx_spi3.c.obj	17170fb90f2657e0
 688	979	1792234743438742578	CMakeFiles/ELEC5552-NewMCU.dir/generated/middleware/mx_usbx_app.c.obj	6a52c2933e70bc10
 569	918	1792234743318998084	CMakeFiles/ELEC5552-NewMCU.dir/generated/hal/mx_tim1.c.obj	8de69e5c646d3b1f
@@ -1101,6 +1101,6 @@
 13909	14166	1792210596064668625	middleware/lvgl/CMakeFiles/lvgl_demos.dir/demos/widgets/lv_demo_widgets_shop.c.obj	2f0218cf6156abfe
 13666	14186	1792210595821079357	middleware/lvgl/CMakeFiles/lvgl_demos.dir/demos/vector_graphic/assets/img_demo_vector_avatar.c.obj	a31c84290b61bc6e
 14186	14258	1792210596341239712	middleware/lvgl/liblvgl_demos.a	94148da17e891959
-226	621	1792305146938231513	ELEC5552-NewMCU.elf	bc8e54d52daf6b1f
-44	330	1792307512188723962	CMakeFiles/ELEC5552-NewMCU.dir/main.c.obj	128d1b74d5c83342
 332	700	1792307512476781756	ELEC5552-NewMCU.elf	bc8e54d52daf6b1f
+33	157	1792309255586655555	CMakeFiles/ELEC5552-NewMCU.dir/user_modifiable/logger/logger.c.obj	880698a53cf2bbe2
+33	245	1792309255586194553	CMakeFiles/ELEC5552-NewMCU.dir/main.c.obj	128d1b74d5c83342
