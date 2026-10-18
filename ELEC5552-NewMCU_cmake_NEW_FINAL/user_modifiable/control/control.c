@@ -27,6 +27,16 @@ static uint32_t cc_last_update_ms = 0U;
 #define CV_RAMP_RATE_V_PER_S 0.1f
 #define CV_RAMP_UPDATE_MS 50U
 #define CV_RAMP_MAX_STEP_MS 100U
+/* Absolute measured limits for all operating modes. */
+#define CV_POWER_LIMIT_W 500.0f
+#define CV_TOTAL_CURRENT_LIMIT_A 30.0f
+/* Each measured channel represents TWO MOSFETs, not one. */
+#define CV_PAIR_CURRENT_LIMIT_A 7.5f
+/* Begin adjusting the CV reference before a measured hard limit is reached.
+ * This is an operating headroom, not a higher permitted rating. */
+#define CV_BACKOFF_START_FRACTION 0.98f
+#define CV_BACKOFF_STEP_V 0.02f
+#define CV_MAX_REFERENCE_V 30.0f
 
 static uint32_t cv_last_update_ms = 0U;
 static bool cv_startup_enabled = false;
@@ -40,6 +50,75 @@ static bool cv_low_current_timing = false;
 
 static uint32_t cv_start_ms = 0U;
 static uint32_t cv_low_current_start_ms = 0U;
+
+/* Increase CV reference to reduce the demanded current.
+ * This sampled-data adjustment cannot prevent fast analogue transients.
+ */
+static bool Control_CVBackOff(void)
+{
+    if (!isfinite(cv_reference_v) ||
+        cv_reference_v >= CV_MAX_REFERENCE_V)
+    {
+        return false;
+    }
+
+    cv_reference_v += CV_BACKOFF_STEP_V;
+
+    if (cv_reference_v > CV_MAX_REFERENCE_V)
+    {
+        cv_reference_v = CV_MAX_REFERENCE_V;
+    }
+
+    return Outputs_SetVoltage(cv_reference_v);
+}
+
+/* CV supervisory limits, using the four TWO-MOSFET pair measurements.
+ * Returns false at an absolute limit or invalid measurement (shutdown).
+ * Below the absolute limits, back_off is true when any limit is close.
+ */
+static bool Control_CVCheckLimits(const AppState_t *app,
+                                  float voltage_v,
+                                  float total_current_a,
+                                  bool *back_off)
+{
+    if (app == NULL || back_off == NULL ||
+        !isfinite(voltage_v) || voltage_v <= 0.0f ||
+        !isfinite(total_current_a) || total_current_a < 0.0f)
+    {
+        return false;
+    }
+
+    float power_w = voltage_v * total_current_a;
+
+    if (!isfinite(power_w) ||
+        power_w >= CV_POWER_LIMIT_W ||
+        total_current_a >= CV_TOTAL_CURRENT_LIMIT_A)
+    {
+        return false;
+    }
+
+    *back_off = (power_w >= CV_POWER_LIMIT_W * CV_BACKOFF_START_FRACTION) ||
+                (total_current_a >= CV_TOTAL_CURRENT_LIMIT_A * CV_BACKOFF_START_FRACTION);
+
+    for (uint32_t i = 0U; i < 4U; i++)
+    {
+        float pair_current_a = app->current_stage_a[i];
+
+        if (!isfinite(pair_current_a) ||
+            pair_current_a < 0.0f ||
+            pair_current_a >= CV_PAIR_CURRENT_LIMIT_A)
+        {
+            return false;
+        }
+
+        if (pair_current_a >= CV_PAIR_CURRENT_LIMIT_A * CV_BACKOFF_START_FRACTION)
+        {
+            *back_off = true;
+        }
+    }
+
+    return true;
+}
 
 
 /* =========================================================
@@ -142,8 +221,10 @@ void Control_Update(void)
                 }
             }
 
-            if (!current_valid)
+            if (!current_valid ||
+                (app->dut_voltage_v * app->total_current_a) >= CV_POWER_LIMIT_W)
             {
+                /* CC also uses a measured 500 W hard shutdown. */
                 Control_Stop();
                 break;
             }
@@ -276,7 +357,7 @@ void Control_Update(void)
                 rebound_voltage_v <= 0.0f ||
                 target_voltage_v <= 0.0f ||
                 target_voltage_v > rebound_voltage_v ||
-                rebound_voltage_v > (30.0f - CV_START_MARGIN_V))
+                rebound_voltage_v > CV_MAX_REFERENCE_V)
             {
                 Control_Stop();
                 break;
@@ -284,6 +365,11 @@ void Control_Update(void)
 
             // Set CV reference above recovered DUT voltage.
             cv_reference_v = rebound_voltage_v + CV_START_MARGIN_V;
+            if (cv_reference_v > CV_MAX_REFERENCE_V)
+            {
+                // At 30 V, the full startup margin is not available.
+                cv_reference_v = CV_MAX_REFERENCE_V;
+            }
 
             // Configure DAC while MOSFETs remain clamped.
             if (!Outputs_SetVoltage(cv_reference_v))
@@ -333,66 +419,27 @@ void Control_Update(void)
             float target_v = app->voltage_setpoint_v;
             float current_a = app->total_current_a;
             // A voltage-only run requires an externally current-limited PSU.
-            // Use 30 A solely as an emergency software abort threshold.
-            
-            float requested_a = cv_auto_stop ?
-                app->current_setpoint_a : 30.0f;
+            // CV uses the 500 W measured-power ceiling; current-sensing
+            // channels and the 30 A check remain separate safety checks.
 
             // Validate measurements and setpoints.
             if (!isfinite(voltage_v) ||
                 !isfinite(target_v) ||
                 !isfinite(current_a) ||
-                !isfinite(requested_a) ||
                 !isfinite(cv_reference_v) ||
                 voltage_v <= 0.0f ||
                 voltage_v > 30.0f ||
                 target_v <= 0.0f ||
                 target_v > cv_reference_v ||
-                current_a < 0.0f ||
-                requested_a <= 0.0f)
+                current_a < 0.0f)
             {
                 Control_Stop();
                 break;
             }
 
-            // Check all four measured MOSFET pairs.
-            for (uint32_t i = 0U; i < 4U; i++)
-            {
-                float pair_current_a = app->current_stage_a[i];
-
-                if (!isfinite(pair_current_a) ||
-                    pair_current_a < 0.0f ||
-                    pair_current_a >= 7.5f)
-                {
-                    Control_Stop();
-                    break;
-                }
-            }
-
-            // Stop if any protection check has disabled the load.
-            if (control_state != CONTROL_STATE_CV_STARTUP)
-            {
-                break;
-            }
-
-            // Determine allowed current.
-            float max_current_a = requested_a;
-
-            if (max_current_a > 30.0f)
-            {
-                max_current_a = 30.0f;
-            }
-
-            float power_current_limit_a = 500.0f / voltage_v;
-
-            if (max_current_a > power_current_limit_a)
-            {
-                max_current_a = power_current_limit_a;
-            }
-
-            // Stop on measured current or power limit.
-            if (current_a >= max_current_a ||
-                current_a * voltage_v >= 500.0f)
+            // All three CV limits: 500 W total, 30 A total, 7.5 A per pair.
+            bool cv_back_off = false;
+            if (!Control_CVCheckLimits(app, voltage_v, current_a, &cv_back_off))
             {
                 Control_Stop();
                 break;
@@ -411,10 +458,9 @@ void Control_Update(void)
                 float safe_initial_v =
                     voltage_v + CV_START_MARGIN_V;
 
-                if (safe_initial_v > 30.0f)
+                if (safe_initial_v > CV_MAX_REFERENCE_V)
                 {
-                    Control_Stop();
-                    break;
+                    safe_initial_v = CV_MAX_REFERENCE_V;
                 }
 
                 // Account for any further voltage rebound.
@@ -452,13 +498,18 @@ void Control_Update(void)
                 elapsed_ms = CV_RAMP_MAX_STEP_MS;
             }
 
-            // Pause ramp when approaching current limit.
-            if (current_a >= 0.9f * max_current_a)
+            // Approach any limit: raise CV reference to reduce demand.
+            // At the absolute limit Control_CVCheckLimits has already stopped.
+            if (cv_back_off)
             {
+                if (!Control_CVBackOff())
+                {
+                    Control_Stop();
+                }
                 break;
             }
 
-            // Gradually decrease the CV reference.
+            // Otherwise, continue slowly towards the requested voltage.
             float voltage_step_v =
                 CV_RAMP_RATE_V_PER_S *
                 ((float)elapsed_ms / 1000.0f);
@@ -533,54 +584,33 @@ void Control_Update(void)
                 break;
             }
 
-            // Check the four current-sensing pairs.
-            for (uint32_t i = 0U; i < 4U; i++)
-            {
-                float pair_a = app->current_stage_a[i];
-
-                if (!isfinite(pair_a) ||
-                    pair_a < 0.0f ||
-                    pair_a >= 7.5f)
-                {
-                    Control_Stop();
-                    break;
-                }
-            }
-
-            if (control_state != CONTROL_STATE_CV)
-            {
-                break;
-            }
-
-            // Battery discharge retains its user-requested current limit.
-            // In standalone CV, 30 A is only a software abort threshold:
-            // an external supply must provide its own current limit.
-            float allowed_current_a = 30.0f;
-
-            if (cv_auto_stop)
-            {
-                float requested_a = app->current_setpoint_a;
-
-                if (!isfinite(requested_a) || requested_a <= 0.0f)
-                {
-                    Control_Stop();
-                    break;
-                }
-
-                if (requested_a < allowed_current_a)
-                {
-                    allowed_current_a = requested_a;
-                }
-            }
-
-            if (current_a >= allowed_current_a ||
-                (current_a * voltage_v) >= 500.0f)
+            // Apply the same limits in steady-state CV as in CV_STARTUP.
+            bool cv_back_off = false;
+            if (!Control_CVCheckLimits(app, voltage_v, current_a, &cv_back_off))
             {
                 Control_Stop();
                 break;
             }
 
-            // Maintain the requested voltage reference.
+            // If any limit is approaching, back off and re-enter the ramp.
+            // Do not force the user target while current/power is constrained.
+            if (cv_back_off)
+            {
+                if (!Control_CVBackOff())
+                {
+                    Control_Stop();
+                    break;
+                }
+
+                cv_last_update_ms = Timers_GetMillis();
+                cv_startup_enabled = true; // Clamp already released.
+                cv_low_current_timing = false;
+                cv_low_current_start_ms = 0U;
+                control_state = CONTROL_STATE_CV_STARTUP;
+                break;
+            }
+
+            // No limit approaching: maintain the requested voltage reference.
             if (!Outputs_SetVoltage(target_v))
             {
                 Control_Stop();
@@ -828,7 +858,7 @@ bool Control_StartCV(void)
     if (!isfinite(dut_voltage_v) ||
         !isfinite(target_v) ||
         dut_voltage_v <= 0.0f ||
-        dut_voltage_v > (30.0f - CV_START_MARGIN_V) ||
+        dut_voltage_v > CV_MAX_REFERENCE_V ||
         target_v <= 0.0f ||
         target_v >= dut_voltage_v)
     {
@@ -837,7 +867,11 @@ bool Control_StartCV(void)
 
     float initial_reference_v =
         dut_voltage_v + CV_START_MARGIN_V;
-
+    if (initial_reference_v > CV_MAX_REFERENCE_V)
+    {
+        // Full startup margin cannot be provided at the 30 V limit.
+        initial_reference_v = CV_MAX_REFERENCE_V;
+    }
 
     /* Keep MOSFETs disabled during configuration */
     Outputs_ClampEnable();
