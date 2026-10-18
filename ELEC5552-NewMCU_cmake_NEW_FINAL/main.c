@@ -27,6 +27,7 @@
 #include "app.h"
 #include "timers.h"
 #include "lvgl.h"
+#include "mx_usbx_app.h"
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
@@ -68,6 +69,10 @@ int main(void)
     }
 
     Control_Init();
+    if (app_usbx_init() != UX_SUCCESS)
+    {
+        return -1;
+    }
 
 
     lv_init();
@@ -84,6 +89,7 @@ int main(void)
 
     while (1) {
 
+      app_usbx_process();
       Inputs_Update();
       App_Update();
       Display_Update();
