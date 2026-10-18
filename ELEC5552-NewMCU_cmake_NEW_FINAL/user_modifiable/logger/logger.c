@@ -298,40 +298,56 @@ void Logger_Update(void)
 
     if (usb_connected)
     {
-        char line[200];
+        /* Include all twelve temperature measurements in the CSV output.
+         * Local RAM storage already contains these values.
+         */
+        char line[320];
+        int length = snprintf(
+            line, sizeof(line),
+            "%lu,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f",
+            (unsigned long)sample.time_ms,
+            sample.dut_voltage_v,
+            sample.total_current_a,
+            sample.current_side11_a,
+            sample.current_side12_a,
+            sample.current_side21_a,
+            sample.current_side22_a
+        );
 
-        int length =
-            snprintf(
-                line,
-                sizeof(line),
-
-                "%lu,"
-                "%.3f,"
-                "%.3f,"
-                "%.3f,"
-                "%.3f,"
-                "%.3f,"
-                "%.3f\r\n",
-
-                (unsigned long)sample.time_ms,
-
-                sample.dut_voltage_v,
-                sample.total_current_a,
-
-                sample.current_side11_a,
-                sample.current_side12_a,
-                sample.current_side21_a,
-                sample.current_side22_a
-            );
-
-
-        if (length > 0)
+        if (length < 0 || (size_t)length >= sizeof(line))
         {
-            USB_Send(
-                (const uint8_t *)line,
-                (uint32_t)length
-            );
+            return; /* Do not send a truncated CSV record. */
         }
+
+        /* Append the eight internal and four external temperatures. */
+        for (uint32_t i = 0U; i < NUM_THERMISTORS; i++)
+        {
+            int added = snprintf(
+                line + length,
+                sizeof(line) - (size_t)length,
+                ",%.2f",
+                sample.temperature_c[i]
+            );
+
+            if (added < 0 || (size_t)added >= sizeof(line) - (size_t)length)
+            {
+                return; /* Do not send a truncated CSV record. */
+            }
+            length += added;
+        }
+
+        if (sizeof(line) - (size_t)length < 3U)
+        {
+            return;
+        }
+        line[length++] = '\r';
+        line[length++] = '\n';
+        line[length] = '\0';
+
+        /* Existing USB_Send() may return before a non-blocking transfer
+         * completes; reliable delivery still needs separate handling.
+         */
+        USB_Send((const uint8_t *)line, (uint32_t)length);
     }
 
 
