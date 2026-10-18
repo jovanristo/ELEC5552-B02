@@ -360,14 +360,14 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "ELEC5552-NewMCU::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-ELEC5552-NewMCU-debug_GCC_STM32C552MET6-76bf875abf2ac945ad58.json",
+					"jsonFile" : "target-ELEC5552-NewMCU-debug_GCC_STM32C552MET6-a02e7c1a6071b1f7ab27.json",
 					"name" : "ELEC5552-NewMCU",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 9,
 					"id" : "lvgl::@4f0b596485a892ab5f8d",
-					"jsonFile" : "target-lvgl-debug_GCC_STM32C552MET6-391a80ee08e6626042d4.json",
+					"jsonFile" : "target-lvgl-debug_GCC_STM32C552MET6-d6fade389b58a8a31f38.json",
 					"name" : "lvgl",
 					"projectIndex" : 0
 				},

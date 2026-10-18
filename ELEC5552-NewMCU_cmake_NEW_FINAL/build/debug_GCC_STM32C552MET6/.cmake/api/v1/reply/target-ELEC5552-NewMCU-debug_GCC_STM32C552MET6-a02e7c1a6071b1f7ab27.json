@@ -80,7 +80,7 @@
 			{
 				"command" : 3,
 				"file" : 0,
-				"line" : 75,
+				"line" : 77,
 				"parent" : 0
 			},
 			{
@@ -117,7 +117,7 @@
 			{
 				"command" : 4,
 				"file" : 0,
-				"line" : 52,
+				"line" : 54,
 				"parent" : 0
 			},
 			{
@@ -135,7 +135,7 @@
 			{
 				"command" : 6,
 				"file" : 0,
-				"line" : 34,
+				"line" : 35,
 				"parent" : 0
 			},
 			{
@@ -661,6 +661,10 @@
 					"path" : "/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_FINAL/user_modifiable/display"
 				},
 				{
+					"backtrace" : 19,
+					"path" : "/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_FINAL/user_modifiable/user_limits"
+				},
+				{
 					"backtrace" : 8,
 					"path" : "/Users/tommorrissey/Documents/GitHub/ELEC5552-B02/ELEC5552-NewMCU_cmake_NEW_FINAL/generated/hal/."
 				},
@@ -828,7 +832,8 @@
 				134,
 				135,
 				136,
-				137
+				137,
+				138
 			]
 		}
 	],
@@ -1129,7 +1134,8 @@
 				134,
 				135,
 				136,
-				137
+				137,
+				138
 			]
 		},
 		{
@@ -1217,6 +1223,12 @@
 			"backtrace" : 23,
 			"compileGroupIndex" : 0,
 			"path" : "user_modifiable/display/display.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 23,
+			"compileGroupIndex" : 0,
+			"path" : "user_modifiable/user_limits/user_limits.c",
 			"sourceGroupIndex" : 0
 		},
 		{
