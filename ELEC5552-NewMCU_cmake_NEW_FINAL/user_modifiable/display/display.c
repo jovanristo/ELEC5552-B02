@@ -4,6 +4,7 @@
 #include "control.h"
 #include "protection.h"
 #include "timers.h"
+#include "user_limits.h"
 
 #include "mx_spi3.h"
 #include "mx_gpio_default.h"
@@ -930,10 +931,29 @@ void Display_Update(void)
     }
     else if (page == 7U)  /* Finished */
     {
-        lv_label_set_text(
-            dut_label,
-            "RUN FINISHED\nLOAD DISABLED"
-        );
+        /* Show the reason if the user band (REQ-10) stopped the run. */
+        UserLimitResult_t band = UserLimits_GetLastResult();
+
+        if (band == USER_LIMIT_OK)
+        {
+            lv_label_set_text(
+                dut_label,
+                "RUN FINISHED\nLOAD DISABLED"
+            );
+        }
+        else
+        {
+            const char *reason =
+                (band == USER_LIMIT_BELOW_BAND) ? "BELOW SET RANGE" :
+                (band == USER_LIMIT_ABOVE_BAND) ? "ABOVE SET RANGE" :
+                                                  "DID NOT REACH SETPOINT";
+
+            lv_label_set_text_fmt(
+                dut_label,
+                "RUN STOPPED\n%s\nLOAD DISABLED",
+                reason
+            );
+        }
 
         lv_label_set_text(
             hint_label,

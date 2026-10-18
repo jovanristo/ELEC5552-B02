@@ -4,6 +4,7 @@
 #include "outputs.h"
 #include "protection.h"
 #include "timers.h"
+#include "user_limits.h"
 
 #include <stddef.h>
 #include <math.h>
@@ -28,7 +29,7 @@ static uint32_t cc_last_update_ms = 0U;
 #define CV_RAMP_UPDATE_MS 50U
 #define CV_RAMP_MAX_STEP_MS 100U
 /* Absolute measured limits for all operating modes. */
-#define CV_POWER_LIMIT_W 500.0f
+#define CV_POWER_LIMIT_W 510.0f
 #define CV_TOTAL_CURRENT_LIMIT_A 30.0f
 /* Each measured channel represents TWO MOSFETs, not one. */
 #define CV_PAIR_CURRENT_LIMIT_A 7.5f
@@ -289,6 +290,25 @@ void Control_Update(void)
             }
 
             /*
+             * User band (REQ-10): measured current must stay
+             * within +/-1 A of the commanded current.
+             *
+             * The band is centred on cc_command_a (ramped and
+             * power-capped), so it follows the soft-start ramp
+             * and the 500 W cap without causing a stop.
+             * A change in the user setpoint re-arms the band.
+             */
+            if (UserLimits_Update(app->current_setpoint_a,
+                                  cc_command_a,
+                                  USER_LIMIT_CURRENT_BAND_A,
+                                  app->total_current_a,
+                                  now_ms) != USER_LIMIT_OK)
+            {
+                Control_Stop();
+                break;
+            }
+
+            /*
             * If a voltage target has been set and the DUT has
             * discharged down to that voltage, transition to CV.
             */
@@ -536,6 +556,14 @@ void Control_Update(void)
                 cv_low_current_start_ms = 0U;
                 cv_start_ms = now_ms;
 
+                /*
+                 * Start the voltage band (REQ-10) now that the
+                 * reference has reached the target. It arms once
+                 * the DUT voltage enters target +/-1 V.
+                 * Also restarts the band after a CV back-off.
+                 */
+                UserLimits_Start(target_v, now_ms);
+
                 control_state = CONTROL_STATE_CV;
             }
 
@@ -612,6 +640,20 @@ void Control_Update(void)
 
             // No limit approaching: maintain the requested voltage reference.
             if (!Outputs_SetVoltage(target_v))
+            {
+                Control_Stop();
+                break;
+            }
+
+            /*
+             * User band (REQ-10): DUT voltage must stay within
+             * target +/-1 V once it has settled.
+             */
+            if (UserLimits_Update(target_v,
+                                  target_v,
+                                  USER_LIMIT_VOLTAGE_BAND_V,
+                                  voltage_v,
+                                  Timers_GetMillis()) != USER_LIMIT_OK)
             {
                 Control_Stop();
                 break;
@@ -819,6 +861,12 @@ bool Control_StartCC(void)
     cc_command_a = 0.0f;
     cc_last_update_ms = Timers_GetMillis();
 
+    /*
+     * Start the current band (REQ-10). It follows the
+     * soft-start ramp and arms once the current is in band.
+     */
+    UserLimits_Start(app->current_setpoint_a, cc_last_update_ms);
+
     // Enter CC mode.
     control_state = CONTROL_STATE_CC;
 
@@ -910,6 +958,12 @@ bool Control_StartCV(void)
     cv_auto_stop = false;  // No automatic current-taper termination.
     cv_low_current_timing = false;
     cv_low_current_start_ms = 0U;
+
+    /*
+     * Clear any previous band stop reason. The voltage band
+     * itself starts when CV_STARTUP reaches the target.
+     */
+    UserLimits_Start(target_v, cv_last_update_ms);
 
     // CV_STARTUP checks measurements before releasing the clamp.
     control_state = CONTROL_STATE_CV_STARTUP;
