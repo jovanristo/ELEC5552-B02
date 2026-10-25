@@ -4587,18 +4587,26 @@ solution:
                 {
                   "_foreignKey": "PB12",
                   "basic": {
-                    "mode": "INPUT",
+                    "mode": "OUTPUT",
                     "pull": "DOWN",
-                    "enable_exti": false
+                    "enable_exti": false,
+                    "output_active_state": "SET",
+                    "output_init_state": "SET",
+                    "output_type": "PUSHPULL",
+                    "speed": "LOW"
                   },
                   "label_name": []
                 },
                 {
                   "_foreignKey": "PB13",
                   "basic": {
-                    "mode": "INPUT",
+                    "mode": "OUTPUT",
                     "pull": "DOWN",
-                    "enable_exti": false
+                    "enable_exti": false,
+                    "output_active_state": "SET",
+                    "output_init_state": "SET",
+                    "output_type": "PUSHPULL",
+                    "speed": "LOW"
                   },
                   "label_name": []
                 },
@@ -5675,7 +5683,7 @@ solution:
                       "entity": "peripheral.interconnect.input trigger",
                       "queryId": "a571b3c6-7741-425c-b41e-bceca6de7a6b"
                     },
-                    "output_buffer": true,
+                    "output_buffer": false,
                     "data_sign_format": "UNSIGNED",
                     "output_connection": "EXTERNAL"
                   },

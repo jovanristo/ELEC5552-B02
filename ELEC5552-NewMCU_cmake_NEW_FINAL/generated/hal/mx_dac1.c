@@ -63,7 +63,7 @@ hal_dac_handle_t *mx_dac1_init(void)
   /* ========== Channel 1 ========== */
   dac_channel_config.alignment         = HAL_DAC_DATA_ALIGN_12_BITS_RIGHT;
   dac_channel_config.trigger           = HAL_DAC_TRIGGER_NONE;
-  dac_channel_config.output_buffer     = HAL_DAC_OUTPUT_BUFFER_ENABLED;
+  dac_channel_config.output_buffer     = HAL_DAC_OUTPUT_BUFFER_DISABLED;
   dac_channel_config.output_connection = HAL_DAC_OUTPUT_CONNECTION_EXTERNAL;
   dac_channel_config.data_sign_format  = HAL_DAC_SIGN_FORMAT_UNSIGNED;
   if (HAL_DAC_SetConfigChannel(&hDAC1, HAL_DAC_CHANNEL_1, &dac_channel_config) != HAL_OK)

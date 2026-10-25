@@ -606,7 +606,7 @@ void Control_Update(void)
                 voltage_v > 30.0f ||
                 current_a < 0.0f ||
                 target_v <= 0.0f ||
-                target_v > app->max_voltage_v)
+                target_v > CV_MAX_REFERENCE_V)
             {
                 Control_Stop();
                 break;

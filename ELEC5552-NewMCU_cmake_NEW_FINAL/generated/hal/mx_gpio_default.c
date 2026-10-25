@@ -53,14 +53,6 @@ system_status_t mx_gpio_default_init(void)
     return SYSTEM_PERIPHERAL_ERROR;
   }
 
-  /* Configure PA14 GPIO pin in input mode */
-  gpio_config.mode            = HAL_GPIO_MODE_INPUT;
-  gpio_config.pull            = HAL_GPIO_PULL_DOWN;
-  if (HAL_GPIO_Init(HAL_GPIOA, HAL_GPIO_PIN_14, &gpio_config) != HAL_OK)
-  {
-    return SYSTEM_PERIPHERAL_ERROR;
-  }
-
   /*
     GPIO pin labels :
     PB3   ---------> BUTTON_DOWN
@@ -84,12 +76,19 @@ system_status_t mx_gpio_default_init(void)
     PB12  ---------> SW_SEL
     PB13  ---------> MODE_SEL
     */
-  /* Configure PB12, PB13 GPIO pins in input mode */
-  gpio_config.mode            = HAL_GPIO_MODE_INPUT;
-  gpio_config.pull            = HAL_GPIO_PULL_DOWN;
-  if (HAL_GPIO_Init(HAL_GPIOB, SW_SEL_PIN | MODE_SEL_PIN, &gpio_config) != HAL_OK)
+  /* Configure PB12, PB13 GPIO pins in output mode */
+  /* MOSFET clamp and CC/CV selection */
+  gpio_config.mode = HAL_GPIO_MODE_OUTPUT;
+  gpio_config.speed = HAL_GPIO_SPEED_FREQ_LOW;
+  gpio_config.pull = HAL_GPIO_PULL_NO;
+  gpio_config.output_type = HAL_GPIO_OUTPUT_PUSHPULL;
+  gpio_config.init_state = HAL_GPIO_PIN_SET;
+
+  if (HAL_GPIO_Init(HAL_GPIOB,
+      SW_SEL_PIN | MODE_SEL_PIN,
+      &gpio_config) != HAL_OK)
   {
-    return SYSTEM_PERIPHERAL_ERROR;
+      return SYSTEM_PERIPHERAL_ERROR;
   }
 
   /*
@@ -177,7 +176,7 @@ system_status_t mx_gpio_default_init(void)
 system_status_t mx_gpio_default_deinit(void)
 {
   /* De-initialize pins of GPIOA port */
-  HAL_GPIO_DeInit(HAL_GPIOA, USB_VBUS_PIN | HAL_GPIO_PIN_14);
+  HAL_GPIO_DeInit(HAL_GPIOA, USB_VBUS_PIN);
 
   /* De-initialize pins of GPIOB port */
   HAL_GPIO_DeInit(HAL_GPIOB, BUTTON_DOWN_PIN | BUTTON_OK_PIN | BUTTON_0_PIN | BUTTON_1_PIN | BUTTON_2_PIN | BUTTON_3_PIN | BUTTON_4_PIN | SW_SEL_PIN | MODE_SEL_PIN);

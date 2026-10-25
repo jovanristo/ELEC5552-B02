@@ -90,13 +90,18 @@ int main(void)
     while (1) {
 
       app_usbx_process();
+
       Inputs_Update();
       App_Update();
+
+      Protection_Update(45.0f);
+
       Display_Update();
+      Control_Update();
+
       Fan_Update();
       Logger_Update();
-      Control_Update();
-      Protection_Update(45.0f);
+      
 
       uint32_t now_ms = Timers_GetMillis();
 
