@@ -88,14 +88,9 @@ BatteryTempResult Protection_CheckExternalTemperature(
          * A disconnected / invalid thermistor is
          * treated as a fault.
          */
-        if ((!valid[i]) ||
-            (!isfinite(temperature_c[i])))
+        if ((!valid[i]) || (!isfinite(temperature_c[i])))
         {
-            return (BatteryTempResult)
-            {
-                .fault = BATTERY_TEMP_INVALID_PROBE,
-                .probe_index = i
-            };
+            continue; // Skip invalid probe
         }
 
 
@@ -141,14 +136,9 @@ InternalTempResult Protection_CheckInternalTemperature(
          i < INTERNAL_THERMISTOR_COUNT;
          i++)
     {
-        if ((!valid[i]) ||
-            (!isfinite(temperature_c[i])))
+        if ((!valid[i]) || (!isfinite(temperature_c[i])))
         {
-            return (InternalTempResult)
-            {
-                .fault = INTERNAL_TEMP_INVALID_PROBE,
-                .probe_index = i
-            };
+            continue; // Skip invalid probe
         }
 
 

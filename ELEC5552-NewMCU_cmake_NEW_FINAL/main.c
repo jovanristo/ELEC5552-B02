@@ -69,48 +69,75 @@ int main(void)
     }
 
     Control_Init();
-    if (app_usbx_init() != UX_SUCCESS)
-    {
-        return -1;
-    }
 
+    bool usb_ok = (app_usbx_init() == UX_SUCCESS);
 
     lv_init();
 
     // Use the existing firmware millisecond timer.
     lv_tick_set_cb(Timers_GetMillis);
 
-    if (!Display_Init())
-    {
-        return -1;
-    }
+    bool display_ok = Display_Init();
 
     uint32_t last_lvgl_ms = Timers_GetMillis();
 
-    while (1) {
+    bool fallback_started = false;
 
-      app_usbx_process();
+    while (1)
+    {
+        if (usb_ok)
+        {
+            app_usbx_process();
+        }
 
-      Inputs_Update();
-      App_Update();
+        Inputs_Update();
+        App_Update();
 
-      Protection_Update(45.0f);
+        Protection_Update(45.0f);
 
-      Display_Update();
-      Control_Update();
+        if (!display_ok)
+        {
+            const Inputs_t *in = Inputs_Get();
+            AppState_t *app = App_GetState();
 
-      Fan_Update();
-      Logger_Update();
-      
+            if (in->button_left)
+            {
+                Control_Stop();
+            }
+            else if (!fallback_started &&
+                    in->button_ok &&
+                    app->dut_connected &&
+                    Protection_IsOK())
+            {
+                App_SelectMode(APP_MODE_CC);
+                app->current_setpoint_a = 0.5f;
+                App_SetRunTime(0, 0, 10);
 
-      uint32_t now_ms = Timers_GetMillis();
+                if (Control_Start())
+                {
+                    fallback_started = true;
+                }
+            }
 
-      if ((uint32_t)(now_ms - last_lvgl_ms) >= 5U)
-      {
-          lv_timer_handler();
-          last_lvgl_ms = now_ms;
-      }
+        }
 
+        if (display_ok)
+        {
+            Display_Update();
+        }
+
+        Control_Update();
+        Fan_Update();
+        Logger_Update();
+
+        uint32_t now_ms = Timers_GetMillis();
+
+        if (display_ok &&
+            (uint32_t)(now_ms - last_lvgl_ms) >= 5U)
+        {
+            lv_timer_handler();
+            last_lvgl_ms = now_ms;
+        }
     }
   }
 } /* end main */
